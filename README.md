@@ -1,24 +1,9 @@
-# cr
+# 教室借用系統
 
-## Project setup
-```
-npm install
-```
-
-### Compiles and hot-reloads for development
+## client test
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 如果 code 看不懂請直接 discord 私 @runnywolf 
+記得附截圖
