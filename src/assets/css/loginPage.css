@@ -1,0 +1,60 @@
+.login{
+  width: 400px; height: 600px;
+  margin: 10px;
+  background-color: #fffc; backdrop-filter: blur(20px);
+  border-radius: 20px; box-shadow: 0 0 12px #000c;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+.login-title{
+  font-size: 30px; font-weight: bold; text-align: center;
+}
+.login-title-register{
+  font-size: 14px;
+}
+.login-inputbox{
+  height: 300px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.login-inputbox > input{
+  height: 40px; width: 280px;
+  border: 1px solid #888; border-radius: 20px; box-shadow: 0 0 4px #000b;
+  font-family: monospace; font-size: 20px; text-align: center;
+}
+.login-inputbox > input:not(:first-child){
+  margin-top: 8px;
+}
+.login-option{
+  margin-top: 2px; padding: 0 6px;
+  display: flex; justify-content: space-between;
+  font-size: 14px; font-weight: bold;
+}
+.login-option > div:hover{
+  color: #00f;
+}
+.login-warning{
+  color: #f00; font-weight: bold; text-align: center;
+}
+.login-button{
+  border: none;
+  box-shadow: 0 0 6px #000b;
+}
+.login-button:hover{
+  background-color: #555;
+}
+.register{
+  padding-bottom: 42px;
+}
+.register-backButton{
+  position: relative; right: 148px; bottom: 60px;
+  font-weight: bold; font-size: 18px;
+  display: flex; align-items: center;
+}
+.register-backButton:hover{
+  color: #00f;
+}
+.register-backButton-backIcon{
+  margin: 2px 6px 0 0;
+}
+.register-title{
+  font-size: 24px; color:#666; font-weight: bold; font-style: italic; text-align: center;
+}
