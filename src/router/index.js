@@ -2,11 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   { path: '/login', name: 'loginPage', component: () => import('../views/LoginView.vue') },
-  { path: '/', name: 'floorPage', component: () => import('../views/FloorView.vue') },
-  
-  { path: '/search', name: 'searchPage', redirect: '/login' },
-  { path: '/status', name: 'statusPage', redirect: '/login' },
-  { path: '/save', name: 'savePage', redirect: '/login' },
+  { path: '/', name: 'floorPage', component: () => import('../views/MainView.vue') },
+  { path: '/search', name: 'searchPage', component: () => import('../views/MainView.vue') },
+  { path: '/status', name: 'statusPage', component: () => import('../views/MainView.vue') },
+  { path: '/save', name: 'savePage', component: () => import('../views/MainView.vue') },
   { path: '/:pathMatch(.*)', name: 'notFound', redirect: '/login', hidden: true }
 ]
 

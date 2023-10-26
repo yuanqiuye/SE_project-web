@@ -1,6 +1,5 @@
 .login{
   width: 400px; height: 600px;
-  margin: 10px;
   background-color: #fffc; backdrop-filter: blur(20px);
   border-radius: 20px; box-shadow: 0 0 12px #000c;
   display: flex; flex-direction: column; justify-content: center; align-items: center;
