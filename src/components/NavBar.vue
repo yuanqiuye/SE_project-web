@@ -24,10 +24,8 @@
 </template>
 
 <script>
-  function userLogout(){ // 與後端連接
-    alert("userLogout");
-  }
-  
+  import { userLogout } from '@/api/api';
+
   export default{
     data(){
       return {
@@ -54,7 +52,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .navBar{
     min-width: min-content;
     padding: 4px 0;

@@ -5,7 +5,7 @@
 <style>
   body{
     width: 100%; height: 100%;
-    background-image: url('assets/classroom.jpg');
+    background-image: url('assets/img/classroom.jpg');
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;

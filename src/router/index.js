@@ -1,17 +1,29 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from "vue-router"
 
 const routes = [
-  { path: '/login', name: 'loginPage', component: () => import('../views/LoginView.vue') },
-  { path: '/', name: 'floorPage', component: () => import('../views/MainView.vue') },
-  { path: '/search', name: 'searchPage', component: () => import('../views/MainView.vue') },
-  { path: '/status', name: 'statusPage', component: () => import('../views/MainView.vue') },
-  { path: '/save', name: 'savePage', component: () => import('../views/MainView.vue') },
-  { path: '/:pathMatch(.*)', name: 'notFound', redirect: '/login', hidden: true }
+  {
+    path: "/", component: () => import("../views/LoginView.vue"),
+    children: [
+      { path: "", redirect: "/login" },
+      { path: "login", name: "loginPage", component: () => import("../components/login/LoginBox.vue") },
+      { path: "register", name: "registerPage", component: () => import("../components/login/RegisterBox.vue") }
+    ]
+  },
+  {
+    path: "/", component: () => import("../views/MainView.vue"),
+    children: [
+      { path: "floor", name: "floorPage" },
+      { path: "search", name: "searchPage" },
+      { path: "status", name: "statusPage" },
+      { path: "save", name: "savePage" },
+    ]
+  },
+  { path: "/:pathMatch(.*)", name: "notFound", redirect: "/login", hidden: true }
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
 
 export default router
