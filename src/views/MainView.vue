@@ -24,7 +24,7 @@
   }
   .page{
     width: fit-content; height: fit-content; max-height: 100%;
-    margin-top: 10px; padding: 8px;
+    margin: 10px; padding: 8px;
     background-color: #fffc; backdrop-filter: blur(20px);
     border-radius: 6px; box-shadow: 0 0 8px #0006;
     font-size: 16px;
@@ -45,5 +45,10 @@
   }
   .page::-webkit-scrollbar-thumb:hover{
     background-color: #000b;
+  }
+</style>
+<style>
+  .box-shadow{
+    box-shadow: 0 0 6px #0008;
   }
 </style>
