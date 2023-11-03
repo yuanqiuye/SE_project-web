@@ -3,8 +3,6 @@
   <div class="pageWrapper">
     <div class="page">
       <router-view></router-view>
-      test<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-      <br><br><br><br><br><br><br><br><br><br><br><br>
     </div>
   </div>
 </template>
