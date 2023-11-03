@@ -3,12 +3,14 @@
   <div class="pageWrapper">
     <div class="page">
       <router-view></router-view>
+      test<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+      <br><br><br><br><br><br><br><br><br><br><br><br>
     </div>
   </div>
 </template>
 
 <script>
-  import NavBar from "./../components/NavBar.vue";
+  import NavBar from "./../components/main/NavBar.vue";
 
   export default{
     components: {
@@ -19,12 +21,31 @@
 
 <style scoped>
   .pageWrapper{
-    display: flex; justify-content: center; align-items: center;
+    height: calc(100% - 90px);
+    display: flex; justify-content: center;
   }
   .page{
-    margin: 10px; padding: 8px;
+    width: fit-content; height: fit-content; max-height: 100%;
+    margin-top: 10px; padding: 8px;
     background-color: #fffc; backdrop-filter: blur(20px);
     border-radius: 6px; box-shadow: 0 0 8px #0006;
     font-size: 16px;
+    overflow: auto; overflow-x: hidden;
+  }
+  .page::-webkit-scrollbar{
+    width: 16px;
+  }
+  .page::-webkit-scrollbar-track{
+    margin: 1px 0;
+    background-color: none;
+  }
+  .page::-webkit-scrollbar-thumb{
+    border: 4px solid #0000;
+    border-radius: 100px;
+    background-clip: padding-box;
+    background-color: #0006;
+  }
+  .page::-webkit-scrollbar-thumb:hover{
+    background-color: #000b;
   }
 </style>
