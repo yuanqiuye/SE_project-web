@@ -54,14 +54,13 @@
 
 <style scoped>
   .navBar{
-    min-width: min-content;
     padding: 4px 0;
     background-color: #fd9;
     border: 2px #ec8 solid;
     display: flex; justify-content: center;
   }
   .navBar > a{
-    width: 80px; height: 60px;
+    width: 80px; min-width: 80px; height: 60px;
     margin: 0 4px !important;
     white-space: nowrap;
   }
