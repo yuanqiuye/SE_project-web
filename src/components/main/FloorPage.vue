@@ -27,7 +27,7 @@
       人數&nbsp;:<br>
       器材&nbsp;:
     </div>
-    <span class="classroomInfo-save ts-icon is-star-icon"></span>
+    <span class="classroomInfo-save ts-icon is-star-icon" :style="{color:saveButton?'#ff0':'#fff'}" @click="save()"></span>
   </div>
   <div class="reserve">
     <div class="reserve-schedule box">
@@ -40,14 +40,20 @@
 </template>
 
 <script>
+  import { updateSave } from '@/api/floor';
+
   export default{
     data(){
       return{
-        building: "ins"
+        building: "ins",
+        saveButton: false
       }
     },
     methods: {
-      
+      save(){
+        let nextState = !this.saveButton;
+        if (updateSave("userName", nextState) == 1) this.saveButton = nextState;
+      }
     },
   }
 </script>
@@ -96,7 +102,7 @@
   .classroomInfo-save{
     margin: -4px -2px 0 0;
     border: none;
-    color: #ff0; font-size: 22px;
+    color: #ff0; font-size: 20px;
     -webkit-text-stroke: 1px #666;
   }
   .reserve{

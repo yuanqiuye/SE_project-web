@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import { getPasswordHint, userLogin } from "@/api/api.js"
+  import { getPasswordHint, userLogin } from "@/api/login"
 
   export default{
     data(){

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { userRegister } from '@/api/api';
+  import { userRegister } from '@/api/login';
 
   export default{
     data(){

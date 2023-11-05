@@ -24,7 +24,7 @@
 </template>
 
 <script>
-  import { userLogout } from '@/api/api';
+  import { userLogout } from '@/api/login';
 
   export default{
     data(){
