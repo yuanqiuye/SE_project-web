@@ -1,6 +1,6 @@
 <template>
   <div class="ts-center">
-    <div class="building box ts-selection is-circular">
+    <div class="building borderShadow ts-selection is-accent is-circular">
       <label class="item">
         <input type="radio" name="building" @click="building='ins';" checked>
         <div class="text">資工系館&nbsp;(INS)</div>
@@ -33,8 +33,25 @@
     <div class="reserve-schedule box">
       課表
     </div>
+    <div class="reserve-confirm box" style="display:none;">
+      <span class="reserve-confirm-emptyText">
+        <span class="ts-icon is-plus-icon is-huge"></span>
+        目前沒有選取任何時段，請直接點選左側的課表。
+      </span>
+    </div>
     <div class="reserve-confirm box">
-      +選擇時段按鈕
+      <span class="reserve-confirm-text">
+        <span class="reserve-confirm-title">[ 已選擇 ]</span><br>
+        <span>
+          資工系館 105 視聽教室<br>
+          星期三 13:10~15:00 ( 306~307 )<br>
+          ( 此為範例 )
+        </span>
+      </span>
+      <div class="reserve-confirm-buttons">
+        <button class="borderShadow ts-button is-accent">送出申請</button>
+        <button class="borderShadow ts-button is-accent is-secondary">取消並重置</button>
+      </div>
     </div>
   </div>
 </template>
@@ -66,12 +83,11 @@
     background-color: #ddd;
   }
   .floor{
-    width: fit-content;
     margin-top: 8px;
     display: flex; justify-content: space-between;
   }
   .floor-main{
-    width: 600px; height: 200px;
+    height: 200px;
   }
   .floor-toggle{
     width: 50px;
@@ -117,7 +133,39 @@
     width: 400px; height: 600px;
   }
   .reserve-confirm{
-    height: fit-content;
-    margin-left: 8px;
+    width: 300px; height: fit-content;
+    margin-left: 8px; padding: 8px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .reserve-confirm-emptyText{
+    margin-bottom: 8px;
+    font-size: 12px;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .reserve-confirm-emptyText > span.ts-icon{
+    margin-bottom: -10px;
+  }
+  .reserve-confirm-title{
+    font-size: 18px; font-weight: bold;
+  }
+  .reserve-confirm-text{
+    margin: 12px 0;
+    font-size: 16px; text-align: center;
+  }
+  .reserve-confirm-buttons{
+    margin: 12px 0;
+    display: flex; justify-content: space-around;
+  }
+  .reserve-confirm-buttons > button{
+    border: none;
+  }
+  .reserve-confirm-buttons > button:nth-child(1):hover{
+    background-color: #46c;
+  }
+  .reserve-confirm-buttons > button:nth-child(2){
+    margin-left: 16px;
+  }
+  .reserve-confirm-buttons > button:nth-child(2):hover{
+    background-color: #ddd;
   }
 </style>

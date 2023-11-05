@@ -3,6 +3,9 @@
 </template>
 
 <style>
+  html{
+    --ts-accent-color: #24c;
+  }
   body{
     width: 100%; height: 100%;
     background-image: url('assets/img/classroom.jpg');

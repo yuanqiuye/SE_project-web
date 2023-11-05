@@ -52,4 +52,7 @@
     background-color: #fff;
     border-radius: 6px; box-shadow: 0 0 4px #0006;
   }
+  .borderShadow{
+    box-shadow: 0 0 4px #0006;
+  }
 </style>
