@@ -23,18 +23,18 @@
   </div>
   <div class="classroomInfo box">
     <div class="classroomInfo-data">
-      教室名稱&nbsp;:<br>
+      教室名稱&nbsp;: maybe做表格?<br>
       人數&nbsp;:<br>
       器材&nbsp;:
     </div>
-    <span class="classroomInfo-save ts-icon is-star-icon" :style="{color:saveButton?'#ff0':'#fff'}" @click="save()"></span>
+    <span class="classroomInfo-save ts-icon is-star-icon" :class="saveButton?'classroomInfo-save-saved':''" @click="save()"></span>
   </div>
   <div class="reserve">
     <div class="reserve-schedule box">
       課表
     </div>
     <div class="reserve-confirm box">
-      test
+      +選擇時段按鈕
     </div>
   </div>
 </template>
@@ -102,8 +102,12 @@
   .classroomInfo-save{
     margin: -4px -2px 0 0;
     border: none;
-    color: #ff0; font-size: 20px;
+    color: #fff; font-size: 20px;
     -webkit-text-stroke: 1px #666;
+  }
+  .classroomInfo-save-saved{
+    color: #f80;
+    -webkit-text-stroke: 1px;
   }
   .reserve{
     margin-top: 8px;
