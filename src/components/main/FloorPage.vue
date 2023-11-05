@@ -22,12 +22,27 @@
     </div>
   </div>
   <div class="classroomInfo box">
-    <div class="classroomInfo-data">
-      教室名稱&nbsp;: maybe做表格?<br>
-      人數&nbsp;:<br>
-      器材&nbsp;:
+    <div class="classroomInfo-data borderShadow ts-box">
+      <table class="ts-table is-definition">
+        <tbody>
+          <tr>
+            <td><strong>教室名稱</strong></td>
+            <td class="classroomInfo-data-name">
+              <span>105 視聽教室</span>
+              <span class="classroomInfo-save ts-icon is-star-icon" :class="saveButton?'classroomInfo-save-saved':''" @click="save()"></span>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>人數</strong></td>
+            <td>70</td>
+          </tr>
+          <tr>
+            <td><strong>器材</strong></td>
+            <td>數位多功能講桌</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    <span class="classroomInfo-save ts-icon is-star-icon" :class="saveButton?'classroomInfo-save-saved':''" @click="save()"></span>
   </div>
   <div class="reserve">
     <div class="reserve-schedule box">
@@ -44,8 +59,7 @@
         <span class="reserve-confirm-title">[ 已選擇 ]</span><br>
         <span>
           資工系館 105 視聽教室<br>
-          星期三 13:10~15:00 ( 306~307 )<br>
-          ( 此為範例 )
+          星期三 13:10~15:00 ( 306~307 )
         </span>
       </span>
       <div class="reserve-confirm-buttons">
@@ -109,14 +123,20 @@
     margin: 16px 0;
   }
   .classroomInfo{
-    margin-top: 8px; padding: 4px 8px;
-    display: flex; justify-content: space-between;
+    margin-top: 8px; padding: 8px;
   }
   .classroomInfo-data{
-    
+    font-size: 16px;
+  }
+  .classroomInfo-data > table > tbody > tr > td:first-child{
+    width: 100px;
+  }
+  .classroomInfo-data-name{
+    padding-bottom: 0;
+    display: flex;
   }
   .classroomInfo-save{
-    margin: -4px -2px 0 0;
+    margin: -6px 0 0 6px;
     border: none;
     color: #fff; font-size: 20px;
     -webkit-text-stroke: 1px #666;
