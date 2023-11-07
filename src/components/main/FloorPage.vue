@@ -26,18 +26,18 @@
       <table class="ts-table is-definition">
         <tbody>
           <tr>
-            <td><strong>教室名稱</strong></td>
+            <td>教室名稱</td>
             <td class="classroomInfo-data-name">
               <span>105 視聽教室</span>
               <span class="classroomInfo-save ts-icon is-star-icon" :class="saveButton?'classroomInfo-save-saved':''" @click="save()"></span>
             </td>
           </tr>
           <tr>
-            <td><strong>人數</strong></td>
+            <td>人數</td>
             <td>70</td>
           </tr>
           <tr>
-            <td><strong>器材</strong></td>
+            <td>器材</td>
             <td>數位多功能講桌</td>
           </tr>
         </tbody>
@@ -46,7 +46,20 @@
   </div>
   <div class="reserve">
     <div class="reserve-schedule box">
-      課表
+      <div class="borderShadow ts-box">
+        <table class="ts-table is-definition is-celled">
+          <thead>
+            <tr>
+              <th></th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(item, rowIndex) in scheduleTableData" :key="rowIndex">
+              <td v-html="item"></td><td></td><td></td><td></td><td></td><td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
     <div class="reserve-confirm box" style="display:none;">
       <span class="reserve-confirm-emptyText">
@@ -77,13 +90,34 @@
     data(){
       return{
         building: "ins",
-        saveButton: false
+        saveButton: false,
+        scheduleTableData: []
       }
+    },
+    created(){
+      this.initScheduleTable();
     },
     methods: {
       save(){
         let nextState = !this.saveButton;
         if (updateSave("userName", nextState) == 1) this.saveButton = nextState;
+      },
+      initScheduleTable(){
+        const timePeriod = [
+          "06:20 ~ 08:10",
+          "08:20 ~ 09:10",
+          "09:20 ~ 10:10",
+          "10:20 ~ 11:10",
+          "11:15 ~ 12:05",
+          "12:10 ~ 13:00",
+          "13:10 ~ 14:00",
+          "14:10 ~ 15:00",
+          "15:10 ~ 16:00",
+          "16:05 ~ 16:55",
+        ];
+        timePeriod.forEach((v, i) => {
+          this.scheduleTableData.push(`<div style="font-size:14px;">第&nbsp;&nbsp;${i}&nbsp;&nbsp;堂</div>${v}`);
+        });
       }
     },
   }
@@ -130,6 +164,7 @@
   }
   .classroomInfo-data > table > tbody > tr > td:first-child{
     width: 100px;
+    font-weight: bold;
   }
   .classroomInfo-data-name{
     padding-bottom: 0;
@@ -150,7 +185,11 @@
     display: flex;
   }
   .reserve-schedule{
-    width: 400px; height: 600px;
+    padding: 8px;
+    white-space: nowrap;
+  }
+  .reserve-schedule table.ts-table > tbody > tr > td:first-child{
+    font-size: 11px; text-align: center;
   }
   .reserve-confirm{
     width: 300px; height: fit-content;
