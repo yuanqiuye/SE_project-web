@@ -47,7 +47,7 @@
   <div class="reserve">
     <div class="reserve-schedule box">
       <div class="borderShadow ts-box">
-        <table class="ts-table is-definition is-celled">
+        <table class="ts-table is-definition is-celled" @click="clickScheduleTable">
           <thead>
             <tr>
               <th></th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th>
@@ -55,7 +55,8 @@
           </thead>
           <tbody>
             <tr v-for="(item, rowIndex) in scheduleTableData" :key="rowIndex">
-              <td v-html="item"></td><td></td><td></td><td></td><td></td><td></td>
+              <td v-html="item"></td>
+              <td v-for="columnIndex in 5" :key="columnIndex"></td>
             </tr>
           </tbody>
         </table>
@@ -85,13 +86,14 @@
 
 <script>
   import { updateSave } from '@/api/floor';
-
+  
   export default{
     data(){
       return{
         building: "ins",
         saveButton: false,
-        scheduleTableData: []
+        scheduleTableData: [],
+        selectedPeriod: []
       }
     },
     created(){
@@ -118,6 +120,20 @@
         timePeriod.forEach((v, i) => {
           this.scheduleTableData.push(`<div style="font-size:14px;">第&nbsp;&nbsp;${i}&nbsp;&nbsp;節</div>${v}`);
         });
+      },
+      setCellBgColor(e_table, day, period, color){
+        e_table.rows[period].cells[day].style.backgroundColor = color;
+      },
+      clickScheduleTable(event){
+        const e_cell = event.target;
+        if (!(e_cell.tagName == "TD")) return;
+        
+        const day = e_cell.cellIndex;
+        const period = e_cell.parentNode.rowIndex-1;
+        if (!(day >= 1 && period >= 0)) return;
+        
+        const e_table = e_cell.parentNode.parentNode;
+        this.setCellBgColor(e_table, day, period, "#aaf");
       }
     },
   }
