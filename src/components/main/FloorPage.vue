@@ -116,7 +116,7 @@
           "16:05 ~ 16:55",
         ];
         timePeriod.forEach((v, i) => {
-          this.scheduleTableData.push(`<div style="font-size:14px;">第&nbsp;&nbsp;${i}&nbsp;&nbsp;堂</div>${v}`);
+          this.scheduleTableData.push(`<div style="font-size:14px;">第&nbsp;&nbsp;${i}&nbsp;&nbsp;節</div>${v}`);
         });
       }
     },
@@ -189,6 +189,7 @@
     white-space: nowrap;
   }
   .reserve-schedule table.ts-table > tbody > tr > td:first-child{
+    padding: 6px;
     font-size: 11px; text-align: center;
   }
   .reserve-confirm{
