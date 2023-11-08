@@ -1,6 +1,6 @@
 <template>
   <div class="ts-center">
-    <div class="building borderShadow ts-selection is-accent is-circular">
+    <div class="building borderShadow ts-selection is-accent is-circular" @click="clickBuildingOption()">
       <label class="item">
         <input type="radio" name="building" @click="building='ins';" checked>
         <div class="text">資工系館&nbsp;(INS)</div>
@@ -28,17 +28,17 @@
           <tr>
             <td>教室名稱</td>
             <td class="classroomInfo-data-name">
-              <span>105 視聽教室</span>
+              {{ classroom.name }}
               <span class="classroomInfo-save ts-icon is-star-icon" :class="saveButton?'classroomInfo-save-saved':''" @click="save()"></span>
             </td>
           </tr>
           <tr>
             <td>人數</td>
-            <td>70</td>
+            <td>{{ classroom.number }}</td>
           </tr>
           <tr>
             <td>器材</td>
-            <td>數位多功能講桌</td>
+            <td>{{ classroom.equipment }}</td>
           </tr>
         </tbody>
       </table>
@@ -75,7 +75,7 @@
       <span class="reserve-confirm-text">
         <span class="reserve-confirm-title">[ 已選擇 ]</span><br>
         <span>
-          {{ confirm.building }}&nbsp;{{ confirm.classroomName }}<br>
+          {{ confirm.building }}&nbsp;{{ classroom.name }}<br>
           {{ confirm.day }}&nbsp;{{ confirm.time }}&nbsp;(&nbsp;{{ confirm.period }}&nbsp;)
         </span>
       </span>
@@ -98,6 +98,7 @@
     data(){
       return{
         building: "ins",
+        classroom: { name: "105 視聽教室", number: "70", equipment: "數位多功能講桌" }, // example data
         saveButton: false,
         scheduleTableData: [],
         sDP: { day: null, startPeriod: null, endPeriod: null }, // selected day & period
@@ -108,6 +109,9 @@
       this.initScheduleTable();
     },
     methods: {
+      clickBuildingOption(){
+        this.resetsDP();
+      },
       save(){
         let nextState = !this.saveButton;
         if (updateSave("userName", nextState) == 1) this.saveButton = nextState;
@@ -122,6 +126,7 @@
         e_table.rows[period].cells[day].style.backgroundColor = color;
       },
       resetsDP(){
+        if (!(this.sDP.day != null)) return;
         for (let i = this.sDP.startPeriod; i <= this.sDP.endPeriod; i++) this.setCellBgColor(this.sDP.day, i, "#fff0");
         this.sDP = { day: null, startPeriod: null, endPeriod: null };
         this.updateConfirmBox();
@@ -155,9 +160,10 @@
         this.confirm.enable = (this.sDP.day != null);
         if (!this.confirm.enable) return;
         
-        const nthDay = ["", "星期一", "星期二", "星期三", "星期四", "星期五"];
-        this.confirm.building = "資工系館"; // example
-        this.confirm.classroomName = "105 視聽教室"; // example
+        const building = { "ins": "資工系館", "ecg": "電綜大樓" };
+        const nthDay = [ "", "星期一", "星期二", "星期三", "星期四", "星期五" ];
+        
+        this.confirm.building = building[this.building];
         this.confirm.day = nthDay[this.sDP.day]; // 暫定
         this.confirm.time = `${PeriodStartTime[this.sDP.startPeriod]}~${PeriodStartTime[this.sDP.endPeriod+1]}`;
         const startPeriod = `${100*this.sDP.day + this.sDP.startPeriod}`;
@@ -217,7 +223,7 @@
     display: flex;
   }
   .classroomInfo-save{
-    margin: -6px 0 0 6px;
+    margin: -5.5px 0 0 6px;
     border: none;
     color: #fff; font-size: 20px;
     -webkit-text-stroke: 1px #666;
