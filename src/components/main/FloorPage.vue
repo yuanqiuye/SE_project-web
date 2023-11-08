@@ -47,13 +47,13 @@
   <div class="reserve">
     <div class="reserve-schedule box">
       <div class="borderShadow ts-box">
-        <table class="ts-table is-definition is-celled" @click="clickScheduleTable">
+        <table class="ts-table is-definition is-celled">
           <thead>
             <tr>
               <th></th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody ref="scheduleTable" @click="clickScheduleTable">
             <tr v-for="(item, rowIndex) in scheduleTableData" :key="rowIndex">
               <td v-html="item"></td>
               <td v-for="columnIndex in 5" :key="columnIndex"></td>
@@ -93,7 +93,7 @@
         building: "ins",
         saveButton: false,
         scheduleTableData: [],
-        selectedPeriod: []
+        sDP: { day: null, startPeriod: null, endPeriod: null } // selected day & period
       }
     },
     created(){
@@ -121,8 +121,13 @@
           this.scheduleTableData.push(`<div style="font-size:14px;">第&nbsp;&nbsp;${i}&nbsp;&nbsp;節</div>${v}`);
         });
       },
-      setCellBgColor(e_table, day, period, color){
+      setCellBgColor(day, period, color){
+        const e_table = this.$refs.scheduleTable;
         e_table.rows[period].cells[day].style.backgroundColor = color;
+      },
+      resetsDP(){
+        for (let i = this.sDP.startPeriod; i <= this.sDP.endPeriod; i++) this.setCellBgColor(this.sDP.day, i, "#fff0");
+        this.sDP = { day: null, startPeriod: null, endPeriod: null };
       },
       clickScheduleTable(event){
         const e_cell = event.target;
@@ -132,8 +137,20 @@
         const period = e_cell.parentNode.rowIndex-1;
         if (!(day >= 1 && period >= 0)) return;
         
-        const e_table = e_cell.parentNode.parentNode;
-        this.setCellBgColor(e_table, day, period, "#aaf");
+        // if (!()) return; // 無法選取的格子
+        
+        if (this.sDP.day == null){
+          this.sDP = { day: day, startPeriod: period, endPeriod: period };
+        }
+        else if (day == this.sDP.day && period >= this.sDP.startPeriod-1 && period <= this.sDP.endPeriod+1){
+          if (period == this.sDP.startPeriod-1) this.sDP.startPeriod -= 1;
+          if (period == this.sDP.endPeriod+1) this.sDP.endPeriod += 1;
+        }
+        else{
+          this.resetsDP();
+          this.sDP = { day: day, startPeriod: period, endPeriod: period };
+        }
+        this.setCellBgColor(day, period, "#aaf");
       }
     },
   }
@@ -204,9 +221,12 @@
     padding: 8px;
     white-space: nowrap;
   }
-  .reserve-schedule table.ts-table > tbody > tr > td:first-child{
+  .reserve-schedule table td, th{
+    text-align: center; vertical-align: middle;
+  }
+  .reserve-schedule table td:first-child{
     padding: 6px;
-    font-size: 11px; text-align: center;
+    font-size: 11px;
   }
   .reserve-confirm{
     width: 300px; height: fit-content;
