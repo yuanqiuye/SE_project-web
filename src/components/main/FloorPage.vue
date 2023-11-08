@@ -15,10 +15,10 @@
     <div class="floor-main">
       <div>&lt; 平面圖 &gt;</div>
     </div>
-    <div class="floor-toggle">
-      <span class="ts-icon is-angle-up-icon"></span>
-      <span class="floor-toggle-nth">1F</span>
-      <span class="ts-icon is-angle-down-icon"></span>
+    <div class="floor-switch">
+      <span class="ts-icon is-angle-up-icon" @click="clickSwitchFloorButton('up')"></span>
+      <span class="floor-switch-nth">{{ floor }}</span>
+      <span class="ts-icon is-angle-down-icon" @click="clickSwitchFloorButton('down')"></span>
     </div>
   </div>
   <div class="classroomInfo box">
@@ -29,7 +29,11 @@
             <td>教室名稱</td>
             <td class="classroomInfo-data-name">
               {{ classroom.name }}
-              <span class="classroomInfo-save ts-icon is-star-icon" :class="saveButton?'classroomInfo-save-saved':''" @click="save()"></span>
+              <span
+                class="classroomInfo-save ts-icon is-star-icon"
+                :class="saveButton?'classroomInfo-save-saved':''"
+                @click="clickSaveButton()"
+              ></span>
             </td>
           </tr>
           <tr>
@@ -88,7 +92,7 @@
 </template>
 
 <script>
-  const PeriodStartTime = [
+  const periodStartTime = [
     "06:20", "08:20", "09:20", "10:20", "11:15", "12:10", "13:10", "14:10", "15:10", "16:05"
   ];
 
@@ -98,6 +102,7 @@
     data(){
       return{
         building: "ins",
+        floor: "1F",
         classroom: { name: "105 視聽教室", number: "70", equipment: "數位多功能講桌" }, // example data
         saveButton: false,
         scheduleTableData: [],
@@ -112,13 +117,17 @@
       clickBuildingOption(){
         this.resetsDP();
       },
-      save(){
+      clickSwitchFloorButton(switchType){
+        if (switchType == "up") alert("up");
+        else if (switchType == "down") alert("down");
+      },
+      clickSaveButton(){
         let nextState = !this.saveButton;
-        if (updateSave("userName", nextState) == 1) this.saveButton = nextState;
+        if (updateSave(nextState) == 1) this.saveButton = nextState;
       },
       initScheduleTable(){
-        for (let i = 0; i <= PeriodStartTime.length-2; i++){
-          this.scheduleTableData.push({ period: i, startTime: PeriodStartTime[i], endTime: PeriodStartTime[i+1] });
+        for (let i = 0; i <= periodStartTime.length-2; i++){
+          this.scheduleTableData.push({ period: i, startTime: periodStartTime[i], endTime: periodStartTime[i+1] });
         }
       },
       setCellBgColor(day, period, color){
@@ -165,7 +174,7 @@
         
         this.confirm.building = building[this.building];
         this.confirm.day = nthDay[this.sDP.day]; // 暫定
-        this.confirm.time = `${PeriodStartTime[this.sDP.startPeriod]}~${PeriodStartTime[this.sDP.endPeriod+1]}`;
+        this.confirm.time = `${periodStartTime[this.sDP.startPeriod]}~${periodStartTime[this.sDP.endPeriod+1]}`;
         const startPeriod = `${100*this.sDP.day + this.sDP.startPeriod}`;
         if (this.sDP.startPeriod == this.sDP.endPeriod) this.confirm.period = startPeriod;
         else this.confirm.period = `${startPeriod}~${100*this.sDP.day + this.sDP.endPeriod}`;
@@ -189,23 +198,23 @@
     width: 100%;
     display: flex; justify-content: center; align-items: center;
   }
-  .floor-toggle{
+  .floor-switch{
     width: 50px;
     margin: 4px 0; padding: 8px 0;
     border-left: 1px #ccc solid;
     font-size: 20px; color: #000; font-weight: bold;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
   }
-  .floor-toggle > span.ts-icon{
+  .floor-switch > span.ts-icon{
     width: 30px; height: 30px;
     border-radius: 4px;
     color: #666;
     display: flex; justify-content: center; align-items: center;
   }
-  .floor-toggle > span.ts-icon:hover{
+  .floor-switch > span.ts-icon:hover{
     background-color: #ddd;
   }
-  .floor-toggle-nth{
+  .floor-switch-nth{
     margin: 16px 0;
   }
   .classroomInfo{

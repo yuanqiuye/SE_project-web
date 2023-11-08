@@ -2,7 +2,7 @@ export function getClassroomData(){
   
 }
 
-export function updateSave(/* user, isSave */){
+export function updateSave(/* isSave */){
   return 1;
 }
 /* return:
