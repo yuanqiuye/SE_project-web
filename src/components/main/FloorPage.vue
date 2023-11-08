@@ -13,7 +13,7 @@
   </div>
   <div class="floor box">
     <div class="floor-main">
-      平面圖
+      <div>&lt; 平面圖 &gt;</div>
     </div>
     <div class="floor-toggle">
       <span class="ts-icon is-angle-up-icon"></span>
@@ -55,36 +55,43 @@
           </thead>
           <tbody ref="scheduleTable" @click="clickScheduleTable">
             <tr v-for="(item, rowIndex) in scheduleTableData" :key="rowIndex">
-              <td v-html="item"></td>
+              <td>
+                <div>第&nbsp;&nbsp;{{ item.period }}&nbsp;&nbsp;節</div>
+                {{ item.startTime }}&nbsp;~&nbsp;{{ item.endTime }}
+              </td>
               <td v-for="columnIndex in 5" :key="columnIndex"></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div class="reserve-confirm box" style="display:none;">
+    <div class="reserve-confirm box" v-show="!confirm.enable">
       <span class="reserve-confirm-emptyText">
         <span class="ts-icon is-plus-icon is-huge"></span>
         目前沒有選取任何時段，請直接點選左側的課表。
       </span>
     </div>
-    <div class="reserve-confirm box">
+    <div class="reserve-confirm box" v-show="confirm.enable">
       <span class="reserve-confirm-text">
         <span class="reserve-confirm-title">[ 已選擇 ]</span><br>
         <span>
-          資工系館 105 視聽教室<br>
-          星期三 13:10~15:00 ( 306~307 )
+          {{ confirm.building }}&nbsp;{{ confirm.classroomName }}<br>
+          {{ confirm.day }}&nbsp;{{ confirm.time }}&nbsp;(&nbsp;{{ confirm.period }}&nbsp;)
         </span>
       </span>
       <div class="reserve-confirm-buttons">
         <button class="borderShadow ts-button is-accent">送出申請</button>
-        <button class="borderShadow ts-button is-accent is-secondary">取消並重置</button>
+        <button class="borderShadow ts-button is-accent is-secondary" @click="resetsDP()">取消並重置</button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  const PeriodStartTime = [
+    "06:20", "08:20", "09:20", "10:20", "11:15", "12:10", "13:10", "14:10", "15:10", "16:05"
+  ];
+
   import { updateSave } from '@/api/floor';
   
   export default{
@@ -93,7 +100,8 @@
         building: "ins",
         saveButton: false,
         scheduleTableData: [],
-        sDP: { day: null, startPeriod: null, endPeriod: null } // selected day & period
+        sDP: { day: null, startPeriod: null, endPeriod: null }, // selected day & period
+        confirm: { enable: false, building: "", classroomName: "", day: "", time: "", period: "" }
       }
     },
     created(){
@@ -105,21 +113,9 @@
         if (updateSave("userName", nextState) == 1) this.saveButton = nextState;
       },
       initScheduleTable(){
-        const timePeriod = [
-          "06:20 ~ 08:10",
-          "08:20 ~ 09:10",
-          "09:20 ~ 10:10",
-          "10:20 ~ 11:10",
-          "11:15 ~ 12:05",
-          "12:10 ~ 13:00",
-          "13:10 ~ 14:00",
-          "14:10 ~ 15:00",
-          "15:10 ~ 16:00",
-          "16:05 ~ 16:55",
-        ];
-        timePeriod.forEach((v, i) => {
-          this.scheduleTableData.push(`<div style="font-size:14px;">第&nbsp;&nbsp;${i}&nbsp;&nbsp;節</div>${v}`);
-        });
+        for (let i = 0; i <= PeriodStartTime.length-2; i++){
+          this.scheduleTableData.push({ period: i, startTime: PeriodStartTime[i], endTime: PeriodStartTime[i+1] });
+        }
       },
       setCellBgColor(day, period, color){
         const e_table = this.$refs.scheduleTable;
@@ -128,6 +124,7 @@
       resetsDP(){
         for (let i = this.sDP.startPeriod; i <= this.sDP.endPeriod; i++) this.setCellBgColor(this.sDP.day, i, "#fff0");
         this.sDP = { day: null, startPeriod: null, endPeriod: null };
+        this.updateConfirmBox();
       },
       clickScheduleTable(event){
         const e_cell = event.target;
@@ -151,8 +148,23 @@
           this.sDP = { day: day, startPeriod: period, endPeriod: period };
         }
         this.setCellBgColor(day, period, "#aaf");
+        
+        this.updateConfirmBox();
+      },
+      updateConfirmBox(){
+        this.confirm.enable = (this.sDP.day != null);
+        if (!this.confirm.enable) return;
+        
+        const nthDay = ["", "星期一", "星期二", "星期三", "星期四", "星期五"];
+        this.confirm.building = "資工系館"; // example
+        this.confirm.classroomName = "105 視聽教室"; // example
+        this.confirm.day = nthDay[this.sDP.day]; // 暫定
+        this.confirm.time = `${PeriodStartTime[this.sDP.startPeriod]}~${PeriodStartTime[this.sDP.endPeriod+1]}`;
+        const startPeriod = `${100*this.sDP.day + this.sDP.startPeriod}`;
+        if (this.sDP.startPeriod == this.sDP.endPeriod) this.confirm.period = startPeriod;
+        else this.confirm.period = `${startPeriod}~${100*this.sDP.day + this.sDP.endPeriod}`;
       }
-    },
+    }
   }
 </script>
 
@@ -168,11 +180,12 @@
     display: flex; justify-content: space-between;
   }
   .floor-main{
-    height: 200px;
+    width: 100%;
+    display: flex; justify-content: center; align-items: center;
   }
   .floor-toggle{
     width: 50px;
-    margin: 4px 0;
+    margin: 4px 0; padding: 8px 0;
     border-left: 1px #ccc solid;
     font-size: 20px; color: #000; font-weight: bold;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -227,6 +240,9 @@
   .reserve-schedule table td:first-child{
     padding: 6px;
     font-size: 11px;
+  }
+  .reserve-schedule table td:first-child > div{
+    font-size: 14px;
   }
   .reserve-confirm{
     width: 300px; height: fit-content;

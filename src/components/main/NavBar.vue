@@ -44,9 +44,9 @@
       }
     },
     watch: {
-      $route(to){
+      $route(nextPage){
         this.linkClass = { floorPage: "item", searchPage: "item", statusPage: "item", savePage: "item" };
-        this.linkClass[to.name] = "item is-active navBar-selected";
+        this.linkClass[nextPage.name] = "item is-active navBar-selected";
       }
     }
   }
