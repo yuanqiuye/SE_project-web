@@ -15,7 +15,7 @@ const routes = [
       { path: "floor", name: "floorPage", component: () => import("../components/main/FloorPage.vue") },
       { path: "search", name: "searchPage", component: () => import("../components/main/SearchPage.vue") },
       { path: "status", name: "statusPage", component: () => import("../components/main/StatusPage.vue") },
-      { path: "save", name: "savePage", component: () => import("../components/main/SavePage.vue") },
+      { path: "save", name: "savePage", component: () => import("../components/main/SavePage.vue") }
     ]
   },
   { path: "/:pathMatch(.*)", name: "notFound", redirect: "/login", hidden: true }

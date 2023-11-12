@@ -13,7 +13,7 @@
   </div>
   <div class="floor box">
     <div class="floor-main">
-      <div>&lt; 平面圖 &gt;</div>
+      <img src="../../assets/img/floor/ins1.png">
     </div>
     <div class="floor-switch">
       <span class="ts-icon is-angle-up-icon" @click="clickSwitchFloorButton('up')"></span>
@@ -196,6 +196,7 @@
   }
   .floor-main{
     width: 100%;
+    padding: 10px 0;
     display: flex; justify-content: center; align-items: center;
   }
   .floor-switch{
