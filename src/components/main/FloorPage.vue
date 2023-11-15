@@ -2,7 +2,7 @@
   <building-selector @building="(v)=>{building=v;}"/>
   <floor-selector :building="building" @classroomID="getData"/>
   <classroom-info :classroom="classroom"/>
-  <reserve-area :classroom="classroom"/>
+  <apply-area :classroom="classroom"/>
 </template>
 
 <script>
@@ -10,14 +10,14 @@
   import buildingSelector from "./floorPage/buildingSelector.vue";
   import floorSelector from "./floorPage/FloorSelector.vue";
   import classroomInfo from "./floorPage/ClassroomInfo.vue";
-  import reserveArea from "./floorPage/ReserveArea.vue";
+  import applyArea from "./floorPage/ApplyArea.vue";
   
   export default{
     components: {
       "building-selector": buildingSelector,
       "floor-selector": floorSelector,
       "classroom-info": classroomInfo,
-      "reserve-area": reserveArea
+      "apply-area": applyArea
     },
     data(){
       return {

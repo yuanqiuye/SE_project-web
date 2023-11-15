@@ -1,14 +1,12 @@
 <template>
-  <div class="reserveArea">
+  <div class="applyArea">
     <div class="schedule box">
       <div class="borderShadow ts-box">
         <table class="ts-table is-definition is-celled">
           <thead>
             <tr>
               <th>
-                <div>
-                  <span class="ts-icon is-rotate-right-icon"></span>
-                </div>
+                <span class="ts-icon is-rotate-right-icon" @click="null" v-if="false"></span>
               </th>
               <th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th>
             </tr>
@@ -25,22 +23,20 @@
         </table>
       </div>
     </div>
-    <div class="confirm box" v-show="!confirm.enable">
-      <span class="confirm-emptyText">
+    <div class="confirm box">
+      <span class="confirm-emptyText" v-show="!confirm.enable">
         <span class="ts-icon is-plus-icon is-huge"></span>
         目前沒有選取任何時段，請直接點選左側的課表。
       </span>
-    </div><!--undo!!!!!!!!!!!!!!!!!!!!!!!-->
-    <div class="confirm box" v-show="confirm.enable">
-      <span class="confirm-text">
+      <span class="confirm-text" v-show="confirm.enable">
         <span class="confirm-title">[ 已選擇 ]</span><br>
         <span>
           {{ classroom.info.building }}&nbsp;{{ classroom.info.name }}<br>
           {{ confirm.day }}&nbsp;{{ confirm.time }}&nbsp;(&nbsp;{{ confirm.period }}&nbsp;)
         </span>
       </span>
-      <div class="confirm-buttons">
-        <button class="borderShadow ts-button is-accent">送出申請</button>
+      <div class="confirm-buttons" v-show="confirm.enable">
+        <button class="borderShadow ts-button is-accent" @click="clickApplyButton()">送出申請</button>
         <button class="borderShadow ts-button is-accent is-secondary" @click="resetsDP()">取消並重置</button>
       </div>
     </div>
@@ -48,6 +44,8 @@
 </template>
 
 <script>
+  import { sendApply } from '@/api/floor';
+
   export default{
     props: [
       "classroom"
@@ -65,14 +63,33 @@
           { nth: 8, startTime: "15:10", endTime: "16:00" },
           { nth: 9, startTime: "16:05", endTime: "16:55" },
         ], // 第幾節,各節次的開始和結束時間
+        periodState: null,
         sDP: { day: null, startPeriod: null, endPeriod: null }, // selected day & period
-        confirm: { enable: false, building: "", classroomName: "", day: "", time: "", period: "" }
+        confirm: { enable: false, day: "", time: "", period: "" }
       }
+    },
+    mounted(){
+      this.initScheduleTable();
     },
     methods: {
       setCellBgColor(day, period, color){ // 更改課表某一格的顏色
         const e_table = this.$refs.scheduleTable;
         e_table.rows[period-1].cells[day].style.backgroundColor = color;
+      },
+      initScheduleTable(){
+        const colorTable = { 0: "#fff", 1: "#fbb", 2: "#bfb", 100: "#bbb" };
+        // 時段借用狀態: { 0: 可借用, 1: 已被借用, 2: 被自己借用, 100: 無法借用 }
+        
+        this.periodState = Array.from(Array(6), () => Array(this.periodTime.length+1).fill(100)); // 生成空狀態表
+        for (let p of this.classroom.periodData){
+          for (let i = p.startPeriod; i <= p.endPeriod; i++) this.periodState[p.day][i] = p.state; // 更新狀態表
+        }
+        
+        for (let day = 1; day <= 5; day++){ // 幫表格塗色
+          for (let period = 1; period <= this.periodTime.length; period++){
+            this.setCellBgColor(day, period, colorTable[this.periodState[day][period]]);
+          }
+        }
       },
       resetsDP(){ // 重設選取的節次
         if (this.sDP.day == null) return; // 如果是未選取狀態則不用重設
@@ -87,9 +104,9 @@
         
         const day = e_cell.cellIndex;
         const period = this.periodTime[e_cell.parentNode.rowIndex-1].nth;
-        if (!(day >= 1 && period >= 0)) return; // 如果點擊了不是格子的區域,則不予理會
+        if (!(day >= 1 && period >= 1)) return; // 如果點擊了不是格子的區域,則不予理會
         
-        // if () return; // 如果點擊了無法選取的格子,則不予理會
+        if (this.periodState[day][period] != 0) return; // 如果點擊了無法選取的格子,則不予理會
         
         if (this.sDP.day == null){ // 如果還沒選時段,選取目前點的格子
           this.sDP = { day: day, startPeriod: period, endPeriod: period };
@@ -107,27 +124,38 @@
         
         this.updateConfirmBox();
       },
-      updateConfirmBox(){
+      updateConfirmBox(){ // click格子,更新確認欄的內容
         this.confirm.enable = (this.sDP.day != null);
         if (!this.confirm.enable) return;
         
-        const building = { "ins": "資工系館", "ecg": "電綜大樓" };
         const nthDay = [ "", "星期一", "星期二", "星期三", "星期四", "星期五" ];
         
-        this.confirm.building = building[this.building];
         this.confirm.day = nthDay[this.sDP.day]; // 暫定
         this.confirm.time = `${this.periodTime[this.sDP.startPeriod-1].startTime}~${this.periodTime[this.sDP.endPeriod-1].endTime}`;
         const startPeriod = `${100*this.sDP.day + this.sDP.startPeriod}`;
         const endPeriod = `${100*this.sDP.day + this.sDP.endPeriod}`;
         if (this.sDP.startPeriod == this.sDP.endPeriod) this.confirm.period = startPeriod;
         else this.confirm.period = `${startPeriod}~${endPeriod}`;
+      },
+      clickApplyButton(){
+        sendApply(this.sDP);
+      }
+    },
+    computed: {
+      watchClassroomID(){
+        return this.classroom.id;
+      }
+    },
+    watch: {
+      watchClassroomID(){
+        this.initScheduleTable();
       }
     }
   }
 </script>
 
 <style scoped>
-  .reserveArea{
+  .applyArea{
     margin-top: 8px;
     display: flex;
   }

@@ -1,5 +1,5 @@
 export function getPasswordHint(account){
-  alert("getUserHint :\naccount = "+account);
+  alert(`[api/login/getPasswordHint]\naccount = ${account}`);
   const hint = "你知道的"
   if (account == "1") return hint;
   return null;
@@ -10,7 +10,7 @@ export function getPasswordHint(account){
 */
 
 export function userLogin(account, password){
-  alert("userLogin :\naccount = "+account+"\npassword = "+password);
+  alert(`[api/login/userLogin]\naccount = ${account}\npassword = ${password}`);
   if (account == "1" && password == "1") return 1;
   return -1;
 }
@@ -21,7 +21,7 @@ export function userLogin(account, password){
 */
 
 export function userRegister(account, password, hint){
-  alert("userRegister :\naccount = "+account+"\npassword = "+password+"\nhint = "+hint);
+  alert(`[api/login/userRegister]\naccount = ${account}\npassword = ${password}\nhint = ${hint}`);
   if (account == "" || password == "" || hint == "") return -2;
   if (account == "1" && password == "1") return 2;
   return 1;
@@ -34,5 +34,5 @@ export function userRegister(account, password, hint){
 */
 
 export function userLogout(){
-  alert("userLogout");
+  alert("[api/login/userLogout]");
 }
