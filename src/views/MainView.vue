@@ -1,8 +1,8 @@
 <template>
-  <nav-bar></nav-bar>
+  <nav-bar/>
   <div class="pageWrapper">
     <div class="page">
-      <router-view></router-view>
+      <router-view/>
     </div>
   </div>
 </template>
