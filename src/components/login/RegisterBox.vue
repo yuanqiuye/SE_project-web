@@ -33,9 +33,9 @@
       register(){
         let returnCode = userRegister(this.input.account, this.input.password, this.input.hint);
         if (returnCode == 1 || returnCode == 2) this.$router.push({name: "floorPage"});
-        else if (returnCode == -1) this.showWarning("register", "帳號已存在 , 密碼錯誤");
-        else if (returnCode == -2) this.showWarning("register", "註冊資料未輸入完整");
-        else this.showWarning("login", "未知錯誤");
+        else if (returnCode == -1) this.showWarning("帳號已存在 , 密碼錯誤");
+        else if (returnCode == -2) this.showWarning("註冊資料未輸入完整");
+        else this.showWarning("未知錯誤");
       }
     },
   }

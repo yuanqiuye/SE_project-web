@@ -1,0 +1,17 @@
+{
+  "default": "ins",
+  "B": {
+    "ins": {
+      "default": "1",
+      "F": {
+        "1": {
+          "default": "ins101",
+          "bgURL": "ins1.png",
+          "C": {
+            "101": { "id": "101", "width": 100, "height": 100, "left": 100, "top": 100 }
+          }
+        }
+      }
+    }
+  }
+}

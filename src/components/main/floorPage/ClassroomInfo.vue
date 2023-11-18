@@ -46,7 +46,7 @@
     methods: {
       clickSaveButton(){
         let nextState = !this.saveButton;
-        if (updateSave(nextState) == 1) this.saveButton = nextState; // 後端成功修改收藏,星星才會變顏色
+        if (updateSave(this.classroom.id, nextState) == 1) this.saveButton = nextState; // 後端成功修改收藏,星星才會變顏色
       },
     },
     computed:{

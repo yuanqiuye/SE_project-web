@@ -1,43 +1,97 @@
 <template>
   <div class="floor box">
     <div class="floor-main">
-      <floor-ins1 @ID="sendID"/>
+      <img :src="getBGurl(slt.building, slt.floor)">
+      <div v-for="block in getBlockData(slt.building, slt.floor)" :key="block.id" :style="blockStyle(block)">
+        {{ block.id }}
+      </div>
     </div>
     <div class="floor-switch">
       <span class="ts-icon is-caret-up-icon" @click="clickSwitchButton('up')"></span>
-      <span class="floor-switch-nth">{{ floor }}</span>
+      <span class="floor-switch-nth">{{  }}</span>
       <span class="ts-icon is-caret-down-icon" @click="clickSwitchButton('down')"></span>
     </div>
   </div>
 </template>
 
 <script>
-  import ins1 from "./floor/ins1.vue";
+  import config from "@/assets/floor/floor-config.json"; // 用來對元素排版的設定檔
 
   export default{
-    components: {
-      "floor-ins1": ins1 // 資工系館1F
-    },
     props: [
-      "building" // FloorPage.vue(父comp) 傳進來的樓層代號
+      "in-building" // FloorPage.vue(父comp) 傳進來的樓層代號
     ],
     data(){
       return {
-        floor: "1F" // 目前樓層,顯示用 (暫定)
+        slt: { // selector
+          building: null, // 目前大樓
+          floor: null, // 目前樓層
+          classroomID: null // 目前選擇的教室
+        }
       }
     },
+    created(){ // 初始化平面圖
+      this.resetBuilding();
+    },
     methods: {
-      sendID(id){ // 傳遞 classroomID 的 func
-        this.$emit("classroomID", id); // 接收 <CRid>.vue(子comp) 回傳的 classroomID 並傳給 FloorPage.vue(父comp)
+      resetBuilding(){ // 將 大樓+樓層+教室 設為預設值
+        this.slt.building = config.default; // 預設大樓
+        this.resetFloor();
       },
-      clickSwitchButton(switchType){ // 切換樓層
+      resetFloor(){ // 將 樓層+教室 設為預設值
+        this.slt.floor = config.B[this.slt.building].default; // 大樓的樓層預設值
+        this.resetClassroom();
+      },
+      resetClassroom(){ // 將 教室 設為預設值
+        this.slt.classroomID = config.B[this.slt.building].F[this.slt.floor].default; // 樓層的教室預設值
+      },
+      
+      setBuilding(building){ // 切換大樓
+        this.slt.building = building;
+        this.resetFloor(); // 切換大樓後,將樓層和教室設為預設值
+      },
+      setFloor(floor){ // 切換樓層
+        this.slt.floor = floor;
+        this.resetClassroom(); // 切換樓層後,將教室設為預設值
+      },
+      setClassroom(classroomID){ // 切換教室
+        this.slt.classroomID = classroomID
+      },
+      
+      getBGurl(/* 注意一下傳不傳參數會不會更新 */){ // 產生平面圖背景圖片的實際可用路徑
+        const imgURL = config.B[this.slt.building].F[this.slt.floor].bgURL; // 經由 config 取得背景圖片的相對路徑
+        return require(`@/assets/floor/${this.slt.building}/${imgURL}`); // 轉為可用的實際路徑後,return
+      },
+      getBlockData(){ // 教室的方形按鈕的繪製參數
+        return config.B[this.slt.building].F[this.slt.floor].C;
+      },
+      blockStyle(block){ // 方形按鈕的座標和大小
+        return {
+          position: "absolute",
+          left: `${block.left}px`,
+          top: `${block.top}px`,
+          width: `${block.width}px`,
+          height: `${block.height}px`,
+          "background-color": "#aaa" // block default bg color
+        };
+      },
+      
+      
+      // for (let [key, value] of Object.entries(obj))
+      
+      
+      sendID(id){ // 傳遞 classroomID 的 func
+        this.$emit("classroomID", id);
+        // 接收 <floorID>.vue(子comp) 回傳的 classroomID 並傳給 FloorPage.vue(父comp)
+      },
+      clickSwitchButton(switchType){ // 切換樓層,未實作
         if (switchType == "up") alert("up");
         else if (switchType == "down") alert("down");
       },
     },
     watch: {
-      building(/* newValue */){ // FloorPage.vue(父comp) 傳進來的樓層代號改變時
-        
+      inBuilding(/* newValue */){ // FloorPage.vue(父comp) 傳進來的樓層代號改變時
+        // alert();
       }
     },
   }
