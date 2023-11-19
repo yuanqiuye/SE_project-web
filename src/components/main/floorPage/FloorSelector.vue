@@ -1,9 +1,17 @@
 <template>
   <div class="floor box">
     <div class="floor-main">
-      <img :src="getBGurl(slt.building, slt.floor)">
-      <div v-for="block in getBlockData(slt.building, slt.floor)" :key="block.id" :style="blockStyle(block)">
-        {{ block.id }}
+      <div>
+        <img :src="getBGurl(slt.building, slt.floor)">
+        <div
+          class="block"
+          v-for="block in getBlockData(slt.building, slt.floor)"
+          :key="block.id"
+          :style="blockStyle(block)"
+          @click="clickBlock"
+        >
+          {{ block.id }}
+        </div>
       </div>
     </div>
     <div class="floor-switch">
@@ -66,17 +74,12 @@
         return config.B[this.slt.building].F[this.slt.floor].C;
       },
       blockStyle(block){ // 方形按鈕的座標和大小
-        return {
-          position: "absolute",
-          left: `${block.left}px`,
-          top: `${block.top}px`,
-          width: `${block.width}px`,
-          height: `${block.height}px`,
-          "background-color": "#aaa" // block default bg color
-        };
+        return { left: `${block.left}px`, top: `${block.top}px`, width: `${block.width}px`, height: `${block.height}px` };
       },
       
-      
+      clickBlock(){
+        
+      },
       // for (let [key, value] of Object.entries(obj))
       
       
@@ -98,6 +101,15 @@
 </script>
 
 <style scoped>
+  .block{
+    position: absolute;
+    background-color: #dff;
+    font-size: 18px; font-weight: bold;
+    display: flex; justify-content: center; align-items: center;
+  }
+  .block:hover{
+    background-color: #bee;
+  }
   .floor{
     margin-top: 8px;
     display: flex; justify-content: space-between;
