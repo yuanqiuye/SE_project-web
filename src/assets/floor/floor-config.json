@@ -4,17 +4,24 @@
     "ins": {
       "default": "1",
       "F": {
+        "B1": {
+          "default": "B01",
+          "bgURL": "insB1.png",
+          "C": {
+            
+          }
+        },
         "1": {
           "default": "101",
           "bgURL": "ins1.png",
           "C": {
-            "101": { "id": "101", "width": 184, "height": 160, "left": 93, "top": 206 },
-            "105": { "id": "105", "width": 203, "height": 160, "left": 281, "top": 206 },
-            "110A": { "id": "110A", "width": 67, "height": 98, "left": 163, "top": 55 },
-            "110B": { "id": "110B", "width": 68, "height": 98, "left": 90, "top": 55 },
-            "112": { "id": "112", "width": 93, "height": 98, "left": 235, "top": 55 },
-            "114A": { "id": "114A", "width": 74, "height": 98, "left": 332, "top": 55 },
-            "114B": { "id": "114B", "width": 74, "height": 98, "left": 410, "top": 55 }
+            "101": { "id": "101", "width": 186, "height": 162, "left": 92, "top": 205 },
+            "105": { "id": "105", "width": 205, "height": 162, "left": 280, "top": 205 },
+            "110A": { "id": "110A", "width": 69, "height": 100, "left": 162, "top": 54 },
+            "110B": { "id": "110B", "width": 70, "height": 100, "left": 89, "top": 54 },
+            "112": { "id": "112", "width": 95, "height": 100, "left": 234, "top": 54 },
+            "114A": { "id": "114A", "width": 76, "height": 100, "left": 331, "top": 54 },
+            "114B": { "id": "114B", "width": 76, "height": 100, "left": 409, "top": 54 }
           }
         }
       }

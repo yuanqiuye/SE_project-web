@@ -2,7 +2,7 @@
   <div class="floor box">
     <div class="floor-main">
       <div>
-        <img draggable="false" :src="getBGurl(slt.building, slt.floor)">
+        <img class="floor-main-bg" draggable="false" :src="getBGurl(slt.building, slt.floor)">
         <div
           class="block"
           v-for="block in getBlockData(slt.building, slt.floor)"
@@ -16,7 +16,7 @@
     </div>
     <div class="floor-switch">
       <span class="ts-icon is-caret-up-icon" @click="clickSwitchButton('up')"></span>
-      <span class="floor-switch-nth">{{  }}</span>
+      <span class="floor-switch-nth">{{ slt.floor+"F" }}</span>
       <span class="ts-icon is-caret-down-icon" @click="clickSwitchButton('down')"></span>
     </div>
   </div>
@@ -123,6 +123,10 @@
     width: 100%;
     padding: 10px 0;
     display: flex; justify-content: center; align-items: center;
+  }
+  .floor-main-bg{
+    z-index: 1;
+    pointer-events: none;
   }
   .floor-switch{
     width: 50px;
