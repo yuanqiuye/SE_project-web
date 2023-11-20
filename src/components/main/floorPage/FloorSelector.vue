@@ -2,13 +2,13 @@
   <div class="floor box">
     <div class="floor-main">
       <div>
-        <img :src="getBGurl(slt.building, slt.floor)">
+        <img draggable="false" :src="getBGurl(slt.building, slt.floor)">
         <div
           class="block"
           v-for="block in getBlockData(slt.building, slt.floor)"
           :key="block.id"
           :style="blockStyle(block)"
-          @click="clickBlock"
+          @click="clickBlock(block)"
         >
           {{ block.id }}
         </div>
@@ -40,6 +40,10 @@
     },
     created(){ // 初始化平面圖
       this.resetBuilding();
+      
+    },
+    mounted(){
+      this.$emit('classroomID', this.slt.building+this.slt.classroomID); // 將預設的 classroomID 傳給 FloorPage.vue(父comp)
     },
     methods: {
       resetBuilding(){ // 將 大樓+樓層+教室 設為預設值
@@ -74,27 +78,28 @@
         return config.B[this.slt.building].F[this.slt.floor].C;
       },
       blockStyle(block){ // 方形按鈕的座標和大小
-        return { left: `${block.left}px`, top: `${block.top}px`, width: `${block.width}px`, height: `${block.height}px` };
+        return {
+          left: `${block.left}px`,
+          top: `${block.top}px`,
+          width: `${block.width}px`,
+          height: `${block.height}px`,
+          "backgroundColor": (this.slt.classroomID == block.id)?"#6ee":""
+        };
+      },
+      clickBlock(block){ // 按下教室按鈕,切換教室
+        this.setClassroom(block.id);
+        this.$emit('classroomID', this.slt.building+block.id); // 將目前選擇的教室的 classroomID 傳給 FloorPage.vue(父comp)
       },
       
-      clickBlock(){
-        
-      },
-      // for (let [key, value] of Object.entries(obj))
-      
-      
-      sendID(id){ // 傳遞 classroomID 的 func
-        this.$emit("classroomID", id);
-        // 接收 <floorID>.vue(子comp) 回傳的 classroomID 並傳給 FloorPage.vue(父comp)
-      },
-      clickSwitchButton(switchType){ // 切換樓層,未實作
+      clickSwitchButton(switchType){ // 切換樓層
         if (switchType == "up") alert("up");
         else if (switchType == "down") alert("down");
       },
     },
     watch: {
-      inBuilding(/* newValue */){ // FloorPage.vue(父comp) 傳進來的樓層代號改變時
-        // alert();
+      inBuilding(/* newValue */){ // FloorPage.vue(父comp) 傳進來的樓層代號改變時,切換大樓
+        // alert(newValue)
+        // this.setBuilding(newValue);
       }
     },
   }
@@ -104,11 +109,11 @@
   .block{
     position: absolute;
     background-color: #dff;
-    font-size: 18px; font-weight: bold;
+    font-size: 18px; font-weight: bold; user-select: none;
     display: flex; justify-content: center; align-items: center;
   }
   .block:hover{
-    background-color: #bee;
+    background-color: #cee;
   }
   .floor{
     margin-top: 8px;

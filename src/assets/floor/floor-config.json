@@ -5,7 +5,7 @@
       "default": "1",
       "F": {
         "1": {
-          "default": "ins101",
+          "default": "101",
           "bgURL": "ins1.png",
           "C": {
             "101": { "id": "101", "width": 184, "height": 160, "left": 93, "top": 206 },

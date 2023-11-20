@@ -1,10 +1,10 @@
 export function getClassroomData(classroomID){ // 跟後端請求某個教室的資料
   const classroomDB = {
-    "ins105": {
-      id: "ins105", // 教室編號(唯一性)
+    "ins101": {
+      id: "ins101", // 教室編號(唯一性)
       info: {
         building: "資工系館",
-        name: "105 視聽教室",
+        name: "101 視聽教室",
         number: "70",
         equipment: "數位多功能講桌"
       }, // 教室資訊(靜態)
@@ -25,7 +25,7 @@ export function getClassroomData(classroomID){ // 跟後端請求某個教室的
     info: {
       building: `< 大樓名稱 >`,
       name: `< 教室名稱 >`,
-      number: `< 人數 >`,
+      number: `未知`,
       equipment: `< 設備 >`
     },
     isSave: false,
@@ -34,7 +34,7 @@ export function getClassroomData(classroomID){ // 跟後端請求某個教室的
   
   // alert(`[api/floor/getClassroomData]\nclassroomID = ${classroomID}`); // debug
   if (classroomID in classroomDB) return classroomDB[classroomID];
-  return classroom_default;
+  return classroom_default; // 如果找不到資料則回傳default
 }
 
 export function updateSave(classroomID, isSave){ // 修改user的收藏data
