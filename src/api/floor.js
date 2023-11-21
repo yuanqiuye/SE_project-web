@@ -22,12 +22,7 @@ export function getClassroomData(classroomID){ // 跟後端請求某個教室的
   
   const classroom_default = {
     id: classroomID,
-    info: {
-      building: `< 大樓名稱 >`,
-      name: `< 教室名稱 >`,
-      number: `未知`,
-      equipment: `< 設備 >`
-    },
+    info: { building: "未知的大樓", name: "未知", number: "-", equipment: "-" },
     isSave: false,
     periodData: []
   } // 預設教室資料,勿刪

@@ -8,7 +8,7 @@
           v-for="block in getBlockData(slt.building, slt.floor)"
           :key="block.id"
           :style="blockStyle(block)"
-          @click="clickBlock(block)"
+          @click="setClassroom(block.id)"
         >
           {{ block.id }}
         </div>
@@ -46,18 +46,6 @@
       this.sendClassroomData(); // 將預設的 classroomID 傳給 FloorPage.vue(父comp)
     },
     methods: {
-      resetBuilding(){ // 將 大樓+樓層+教室 設為預設值
-        this.slt.building = config.default; // 預設大樓
-        this.resetFloor();
-      },
-      resetFloor(){ // 將 樓層+教室 設為預設值
-        this.slt.floor = config.B[this.slt.building].default; // 大樓的樓層預設值
-        this.resetClassroom();
-      },
-      resetClassroom(){ // 將 教室 設為預設值
-        this.slt.classroomID = config.B[this.slt.building].F[this.slt.floor].default; // 樓層的教室預設值
-      },
-      
       setBuilding(building){ // 切換大樓
         this.slt.building = building;
         this.resetFloor(); // 切換大樓後,將樓層和教室設為預設值
@@ -67,7 +55,18 @@
         this.resetClassroom(); // 切換樓層後,將教室設為預設值
       },
       setClassroom(classroomID){ // 切換教室
-        this.slt.classroomID = classroomID
+        this.slt.classroomID = classroomID;
+        this.sendClassroomData(); // 切換教室會將 classroom資料 傳給 FloorPage.vue(父comp)
+      },
+      
+      resetBuilding(){ // 將 大樓+樓層+教室 設為預設值
+        this.setBuilding(config.default); // 預設大樓
+      },
+      resetFloor(){ // 將 樓層+教室 設為預設值
+        this.setFloor(config.B[this.slt.building].default); // 大樓的樓層預設值
+      },
+      resetClassroom(){ // 將 教室 設為預設值
+        this.setClassroom(config.B[this.slt.building].F[this.slt.floor].default); // 樓層的教室預設值
       },
       
       getBGurl(/* 注意一下傳不傳參數會不會更新 */){ // 產生平面圖背景圖片的實際可用路徑
@@ -87,10 +86,6 @@
         const id = this.slt.building + this.slt.classroomID;
         const classroom = getClassroomData(id); // 跟後端拿新教室的資料,會更新整個頁面的相關資料
         this.$emit("classroom", classroom); // 將目前選擇的教室的 classroom資料 傳給 FloorPage.vue(父comp)
-      },
-      clickBlock(block){ // 當平面圖某個教室被點擊
-        this.setClassroom(block.id); // 切換教室
-        this.sendClassroomData();
       },
       clickSwitchButton(switchType){ // 當上下樓按鈕被點擊
         const floorList = Object.keys(config.B[this.slt.building].F);
