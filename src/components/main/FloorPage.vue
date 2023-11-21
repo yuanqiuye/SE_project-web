@@ -22,7 +22,7 @@
     data(){
       return {
         building: null, // 現在是哪棟樓
-        classroom: getClassroomData("") // classroom資料
+        classroom: getClassroomData(null) // classroom資料
       }
     }
   }

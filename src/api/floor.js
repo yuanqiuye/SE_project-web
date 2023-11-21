@@ -16,12 +16,12 @@ export function getClassroomData(classroomID){ // 跟後端請求某個教室的
         { day: 4, startPeriod: 1, endPeriod: 9, state: 0 },
         { day: 2, startPeriod: 1, endPeriod: 4, state: 1 },
         { day: 3, startPeriod: 1, endPeriod: 4, state: 2 }
-      ], // 時段借用狀態: { 0: 可借用, 1: 已被借用, 2: 被自己借用 }
+      ] // 時段借用狀態: { 0: 可借用, 1: 已被借用, 2: 被自己借用 }
     }
   }; // 模擬後端資料庫
   
   const classroom_default = {
-    id: classroomID,
+    id: null,
     info: { building: "未知的大樓", name: "未知", number: "-", equipment: "-" },
     isSave: false,
     periodData: []

@@ -74,7 +74,9 @@
     methods: {
       setCellBgColor(day, period, color){ // 更改課表某一格的顏色
         const e_table = this.$refs.scheduleTable;
-        e_table.rows[period-1].cells[day].style.backgroundColor = color;
+        try{
+          e_table.rows[period-1].cells[day].style.backgroundColor = color;
+        }catch(e){true} // unknown bug
       },
       initScheduleTable(){
         const colorTable = { 0: "#fff", 1: "#fbb", 2: "#bfb", 100: "#bbb" };
