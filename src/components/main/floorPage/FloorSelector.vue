@@ -82,17 +82,17 @@
         if (this.slt.classroomID == block.id) style.backgroundColor = "#3ee";
         return style;
       },
-      clickBlock(block){ // 當平面圖某個教室被點擊
-        this.setClassroom(block.id); // 切換教室
-        this.sendClassroomData();
-      },
+      
       sendClassroomData(){ // 將 classroom資料 傳給 FloorPage.vue(父comp)
         const id = this.slt.building + this.slt.classroomID;
         const classroom = getClassroomData(id); // 跟後端拿新教室的資料,會更新整個頁面的相關資料
         this.$emit("classroom", classroom); // 將目前選擇的教室的 classroom資料 傳給 FloorPage.vue(父comp)
       },
-      
-      clickSwitchButton(switchType){ // 切換樓層
+      clickBlock(block){ // 當平面圖某個教室被點擊
+        this.setClassroom(block.id); // 切換教室
+        this.sendClassroomData();
+      },
+      clickSwitchButton(switchType){ // 當上下樓按鈕被點擊
         const floorList = Object.keys(config.B[this.slt.building].F);
         const nowFloorIndex = floorList.indexOf(this.slt.floor);
         
@@ -101,13 +101,12 @@
         else if (switchType == "down")  nextFloorIndex--;
         nextFloorIndex = (nextFloorIndex + floorList.length) % floorList.length;
         
-        this.setFloor(floorList[nextFloorIndex]);
+        this.setFloor(floorList[nextFloorIndex]); // 切換樓層
       },
     },
     watch: {
-      inBuilding(/* newValue */){ // FloorPage.vue(父comp) 傳進來的樓層代號改變時,切換大樓
-        // alert(newValue)
-        // this.setBuilding(newValue);
+      inBuilding(newValue){ // FloorPage.vue(父comp) 傳進來的樓層代號改變時,切換大樓
+        this.setBuilding(newValue);
       }
     },
   }
