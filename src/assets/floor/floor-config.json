@@ -8,7 +8,16 @@
           "default": "B01",
           "bgURL": "insB1.png",
           "C": {
-            
+            "B01": { "id": "B01", "width": 108, "height": 74, "left": 499, "top": 138 },
+            "B03": { "id": "B03", "width": 108, "height": 74, "left": 388, "top": 138 },
+            "B05": { "id": "B05", "width": 34, "height": 66, "left": 238, "top": 158 },
+            "B07": { "id": "B07", "width": 54, "height": 66, "left": 182, "top": 158 },
+            "B09": { "id": "B09", "width": 108, "height": 66, "left": 72, "top": 158 },
+            "B10": { "id": "B10", "width": 108, "height": 65, "left": 499, "top": 44 },
+            "B12": { "id": "B12", "width": 106, "height": 65, "left": 390, "top": 44 },
+            "B14": { "id": "B14", "width": 65, "height": 80, "left": 208, "top": 53 },
+            "B16": { "id": "B16", "width": 62, "height": 80, "left": 144, "top": 53 },
+            "B18": { "id": "B18", "width": 79, "height": 80, "left": 63, "top": 53 }
           }
         },
         "1": {
@@ -22,6 +31,43 @@
             "112": { "id": "112", "width": 95, "height": 100, "left": 234, "top": 54 },
             "114A": { "id": "114A", "width": 76, "height": 100, "left": 331, "top": 54 },
             "114B": { "id": "114B", "width": 76, "height": 100, "left": 409, "top": 54 }
+          }
+        },
+        "2": {
+          "default": "201",
+          "bgURL": "ins2.png",
+          "C": {
+            "201": { "id": "201", "width": 125, "height": 162, "left": 92, "top": 205 },
+            "203": { "id": "203", "width": 142, "height": 162, "left": 220, "top": 205 },
+            "205": { "id": "205", "width": 120, "height": 162, "left": 365, "top": 205 },
+            "210B": { "id": "210B", "width": 138, "height": 102, "left": 89, "top": 53 },
+            "212": { "id": "212", "width": 190, "height": 102, "left": 295, "top": 53 }
+          }
+        }
+      }
+    },
+    "ecg": {
+      "default": "B1",
+      "F": {
+        "B1": {
+          "default": "",
+          "bgURL": "ecgB1.png",
+          "C": {
+            
+          }
+        },
+        "6": {
+          "default": "",
+          "bgURL": "ecg6.png",
+          "C": {
+            
+          }
+        },
+        "7": {
+          "default": "",
+          "bgURL": "ecg7.png",
+          "C": {
+            
           }
         }
       }

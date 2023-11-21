@@ -23,7 +23,8 @@
 </template>
 
 <script>
-  import config from "@/assets/floor/floor-config.json"; // 用來對元素排版的設定檔
+  import { getClassroomData } from '@/api/floor';
+  import config from "@/assets/floor/floor-config.json"; // 平面圖排版的設定檔
 
   export default{
     props: [
@@ -40,10 +41,9 @@
     },
     created(){ // 初始化平面圖
       this.resetBuilding();
-      
     },
     mounted(){
-      this.$emit('classroomID', this.slt.building+this.slt.classroomID); // 將預設的 classroomID 傳給 FloorPage.vue(父comp)
+      this.sendClassroomData(); // 將預設的 classroomID 傳給 FloorPage.vue(父comp)
     },
     methods: {
       resetBuilding(){ // 將 大樓+樓層+教室 設為預設值
@@ -77,23 +77,31 @@
       getBlockData(){ // 教室的方形按鈕的繪製參數
         return config.B[this.slt.building].F[this.slt.floor].C;
       },
-      blockStyle(block){ // 方形按鈕的座標和大小
-        return {
-          left: `${block.left}px`,
-          top: `${block.top}px`,
-          width: `${block.width}px`,
-          height: `${block.height}px`,
-          "backgroundColor": (this.slt.classroomID == block.id)?"#6ee":""
-        };
+      blockStyle(block){ // 方形按鈕的座標/大小/顏色
+        const style = { left: `${block.left}px`, top: `${block.top}px`, width: `${block.width}px`, height: `${block.height}px` };
+        if (this.slt.classroomID == block.id) style.backgroundColor = "#3ee";
+        return style;
       },
-      clickBlock(block){ // 按下教室按鈕,切換教室
-        this.setClassroom(block.id);
-        this.$emit('classroomID', this.slt.building+block.id); // 將目前選擇的教室的 classroomID 傳給 FloorPage.vue(父comp)
+      clickBlock(block){ // 當平面圖某個教室被點擊
+        this.setClassroom(block.id); // 切換教室
+        this.sendClassroomData();
+      },
+      sendClassroomData(){ // 將 classroom資料 傳給 FloorPage.vue(父comp)
+        const id = this.slt.building + this.slt.classroomID;
+        const classroom = getClassroomData(id); // 跟後端拿新教室的資料,會更新整個頁面的相關資料
+        this.$emit("classroom", classroom); // 將目前選擇的教室的 classroom資料 傳給 FloorPage.vue(父comp)
       },
       
       clickSwitchButton(switchType){ // 切換樓層
-        if (switchType == "up") alert("up");
-        else if (switchType == "down") alert("down");
+        const floorList = Object.keys(config.B[this.slt.building].F);
+        const nowFloorIndex = floorList.indexOf(this.slt.floor);
+        
+        let nextFloorIndex = nowFloorIndex;
+        if (switchType == "up") nextFloorIndex++;
+        else if (switchType == "down")  nextFloorIndex--;
+        nextFloorIndex = (nextFloorIndex + floorList.length) % floorList.length;
+        
+        this.setFloor(floorList[nextFloorIndex]);
       },
     },
     watch: {
@@ -108,19 +116,20 @@
 <style scoped>
   .block{
     position: absolute;
-    background-color: #dff;
-    font-size: 18px; font-weight: bold; user-select: none;
+    background-color: #dee;
+    font-size: 18px; font-weight: bold;
     display: flex; justify-content: center; align-items: center;
   }
   .block:hover{
-    background-color: #cee;
+    background-color: #bee;
   }
   .floor{
     margin-top: 8px;
     display: flex; justify-content: space-between;
+    user-select: none;
   }
   .floor-main{
-    width: 100%;
+    width: 100%; height: 420px;
     padding: 10px 0;
     display: flex; justify-content: center; align-items: center;
   }
