@@ -5,10 +5,7 @@
         <table class="ts-table is-definition is-celled">
           <thead>
             <tr>
-              <th>
-                <span class="ts-icon is-rotate-right-icon" @click="null" v-if="false"></span>
-              </th>
-              <th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th>
+              <th></th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th>
             </tr>
           </thead>
           <tbody ref="scheduleTable" @click="clickScheduleTable">
@@ -150,6 +147,7 @@
     },
     watch: {
       watchClassroomID(){
+        this.resetsDP();
         this.initScheduleTable();
       }
     }
@@ -164,14 +162,6 @@
   .schedule{
     padding: 8px;
     white-space: nowrap;
-  }
-  .schedule table span.is-rotate-right-icon{
-    padding: 6px;
-    border-radius: 4px;
-    font-size: 20px;
-  }
-  .schedule table span.is-rotate-right-icon:hover{
-    background-color: #ddd;
   }
   .schedule table td, th{
     text-align: center; vertical-align: middle;

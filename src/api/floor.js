@@ -8,18 +8,7 @@ export function getClassroomData(classroomID){ // 跟後端請求某個教室的
   } // 預設教室資料,勿刪
   
   let classroom = classroom_default; // 如果找不到資料則回傳default
-  if (classroomID in classroomDB.C){
-    classroom = classroomDB.C[classroomID];
-    
-    classroom.periodData = [ // for test
-      { day: 1, startPeriod: 1, endPeriod: 9, state: 0 },
-      { day: 2, startPeriod: 1, endPeriod: 9, state: 0 },
-      { day: 3, startPeriod: 1, endPeriod: 9, state: 0 },
-      { day: 4, startPeriod: 1, endPeriod: 9, state: 0 },
-      { day: 2, startPeriod: 1, endPeriod: 4, state: 1 },
-      { day: 3, startPeriod: 1, endPeriod: 4, state: 2 }
-    ] // 時段借用狀態: { 0: 可借用, 1: 已被借用, 2: 被自己借用 }
-  }
+  if (classroomID in classroomDB.C) classroom = classroomDB.C[classroomID];
   classroom.id = classroomID;
   
   return classroom;

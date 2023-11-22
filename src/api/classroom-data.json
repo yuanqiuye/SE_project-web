@@ -38,7 +38,10 @@
         "equipment": "數位多功能講桌 ( 主機、投影機、擴大機、麥克風、喇叭、布幕 )"
       },
       "isSave": false,
-      "periodData": []
+      "periodData": [
+        { "day": 1, "startPeriod": 1, "endPeriod": 4, "state": 0 },
+        { "day": 2, "startPeriod": 1, "endPeriod": 4, "state": 0 }
+      ]
     },
     "ins105": {
       "info": {
@@ -48,7 +51,10 @@
         "equipment": "數位多功能講桌 ( 主機、投影機、擴大機、麥克風、喇叭、布幕 )"
       },
       "isSave": false,
-      "periodData": []
+      "periodData": [
+        { "day": 2, "startPeriod": 1, "endPeriod": 4, "state": 0 },
+        { "day": 3, "startPeriod": 1, "endPeriod": 4, "state": 0 }
+      ]
     },
     "ins203": {
       "info": {
