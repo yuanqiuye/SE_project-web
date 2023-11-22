@@ -1,18 +1,18 @@
 <template>
   <div class="navBar ts-app-navbar">
-    <router-link :to="{name:'floorPage'}" :class="linkClass.floorPage">
+    <router-link v-show="(role=='user')" :class="getClass('floorPage')" :to="{name:'floorPage'}">
       <div class="ts-icon is-layer-group-icon"></div>
       <div class="label">樓層平面圖</div>
     </router-link>
-    <router-link :to="{name:'searchPage'}" :class="linkClass.searchPage">
+    <router-link v-show="(role=='user')" :class="getClass('searchPage')" :to="{name:'searchPage'}">
       <div class="ts-icon is-magnifying-glass-icon"></div>
       <div class="label">搜尋教室</div>
     </router-link>
-    <router-link :to="{name:'statusPage'}" :class="linkClass.statusPage">
+    <router-link v-show="(role=='user')" :class="getClass('statusPage')" :to="{name:'statusPage'}">
       <div class="ts-icon is-pen-icon"></div>
       <div class="label">借用狀態</div>
     </router-link>
-    <router-link :to="{name:'savePage'}" :class="linkClass.savePage">
+    <router-link v-show="(role=='user')" :class="getClass('savePage')" :to="{name:'savePage'}">
       <div class="ts-icon is-star-icon"></div>
       <div class="label">我的收藏</div>
     </router-link>
@@ -29,24 +29,23 @@
   export default{
     data(){
       return {
-        linkClass: {
-          floorPage: "item is-active navBar-selected",
-          searchPage: "item",
-          statusPage: "item",
-          savePage: "item"
-        }
+        role: "user", // 使用者身分
+        nowPage: this.$route.name // 目前頁面
       }
     },
     methods: {
+      getClass(pageName){
+        if (pageName == this.nowPage) return "item is-active navBar-selected"; // 被選取
+        return "item"; // 未被選取
+      },
       logout(){
         userLogout();
-        this.$router.push({name: "loginPage"});
+        this.$router.push({name: "loginPage"}); // 登出後會回到登入頁面
       }
     },
     watch: {
       $route(nextPage){
-        this.linkClass = { floorPage: "item", searchPage: "item", statusPage: "item", savePage: "item" };
-        this.linkClass[nextPage.name] = "item is-active navBar-selected";
+        this.nowPage = nextPage.name;
       }
     }
   }
