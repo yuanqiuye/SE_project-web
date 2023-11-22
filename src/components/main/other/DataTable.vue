@@ -6,29 +6,26 @@
           <td class="main-table-fliter-id">
             <div class="ts-input is-start-icon is-solid">
               <span class="ts-icon is-magnifying-glass-icon"></span>
-              <input type="text" placeholder="教室代碼" maxlength="10">
+              <input type="text" placeholder="教室代碼" v-model="fliter.id">
             </div>
           </td>
           <td>
             <div class="ts-select is-solid">
-              <select>
-                <option>資工系館 ( INS )</option>
-                <option>電綜大樓 ( ECG )</option>
+              <select v-model="fliter.building" @change="whenBuildingChange">
+                <option value="ins">資工系館 ( INS )</option>
+                <option value="ecg">電綜大樓 ( ECG )</option>
               </select>
             </div>
           </td>
           <td class="main-table-fliter-classroom">
             <div class="ts-select is-solid">
-              <select>
-                <option>B1</option>
-                <option>1F</option>
-                <option>2F</option>
+              <select v-model="fliter.floor" @change="whenFloorChange">
+                <option v-for="floor in getFloorOption()" :key="floor" :value="floor">{{ floor+"F" }}</option>
               </select>
             </div>
             <div class="ts-select is-solid">
-              <select>
-                <option>101</option>
-                <option>105</option>
+              <select v-model="fliter.classroomID">
+                <option v-for="classroomID in getClassroomOption()" :key="classroomID">{{ classroomID }}</option>
               </select>
             </div>
           </td>
@@ -59,8 +56,8 @@
             </div>
           </td>
           <td>
-            <span class="ts-icon is-caret-left-icon main-table-resetButton iconButton">
-              <span class="ts-icon is-rotate-right-icon" @click="null"></span>
+            <span class="ts-icon is-caret-left-icon main-table-resetButton iconButton" @click="resetFliter">
+              <span class="ts-icon is-rotate-right-icon"></span>
             </span>
           </td>
         </tr>
@@ -73,40 +70,55 @@
             <span class="ts-icon is-gears-icon"></span>
           </td>
         </tr>
-        <tr>
-          <td>INS101</td>
-          <td>資工系館 ( INS )</td>
-          <td>101 視聽教室 ( 階梯教室 )</td>
-          <td>-</td>
-          <td>
-            <span class="ts-icon is-info-icon iconButton" @click="null"></span>
-          </td>
-        </tr>
-        <tr>
-          <td>INS101</td>
-          <td>資工系館 ( INS )</td>
-          <td>101 視聽教室 ( 階梯教室 )</td>
-          <td>-</td>
-          <td>
-            <span class="ts-icon is-info-icon iconButton" @click="null"></span>
-          </td>
-        </tr>
-        <tr>
-          <td>INS101</td>
-          <td>資工系館 ( INS )</td>
-          <td>101 視聽教室 ( 階梯教室 )</td>
-          <td>-</td>
-          <td>
-            <span class="ts-icon is-info-icon iconButton" @click="null"></span>
-          </td>
-        </tr>
       </tbody>
     </table>
   </div>
 </template>
 
 <script>
+  import config from "@/assets/floor/floor-config.json"; // 平面圖排版的設定檔
 
+  export default{
+    data(){
+      return {
+        fliter: null
+      }
+    },
+    created(){
+      this.resetFliter();
+    },
+    methods: {
+      whenBuildingChange(){
+        this.fliter.floor = null;
+        this.fliter.classroomID = null;
+      },
+      whenFloorChange(){
+        this.fliter.classroomID = null;
+      },
+      
+      getFloorOption(){
+        try{
+          return Object.keys(config.B[this.fliter.building].F);
+        }catch{null}
+        return [];
+      },
+      getClassroomOption(){
+        try{
+          return Object.keys(config.B[this.fliter.building].F[this.fliter.floor].C);
+        }catch{null}
+        return [];
+      },
+      
+      resetFliter(){
+        this.fliter = {
+          id: "",
+          building: null,
+          floor: null,
+          classroomID: null,
+        }
+      }
+    }
+  }
 </script>
 
 <style scoped>
