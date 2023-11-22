@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import NavBar from "./../components/main/NavBar.vue";
+  import NavBar from "@/components/main/other/NavBar.vue";
 
   export default{
     components: {
@@ -27,7 +27,7 @@
     margin: 10px; padding: 8px;
     background-color: #fffa; backdrop-filter: blur(20px);
     border-radius: 6px; box-shadow: 0 0 8px #0006;
-    overflow: auto; overflow-x: hidden;
+    overflow-x: hidden; overflow-y: auto;
   }
   .page::-webkit-scrollbar{
     width: 16px;
