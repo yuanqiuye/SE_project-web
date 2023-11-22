@@ -74,7 +74,10 @@
         "equipment": "23台mac主機、投影機、擴大機、麥克風、喇叭、布幕"
       },
       "isSave": false,
-      "periodData": []
+      "periodData": [
+        { "day": 3, "startPeriod": 1, "endPeriod": 4, "state": 0 },
+        { "day": 4, "startPeriod": 1, "endPeriod": 4, "state": 0 }
+      ]
     },
     "ins212": {
       "info": {

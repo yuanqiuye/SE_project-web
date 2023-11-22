@@ -27,7 +27,6 @@
     margin: 10px; padding: 8px;
     background-color: #fffa; backdrop-filter: blur(20px);
     border-radius: 6px; box-shadow: 0 0 8px #0006;
-    font-size: 16px;
     overflow: auto; overflow-x: hidden;
   }
   .page::-webkit-scrollbar{

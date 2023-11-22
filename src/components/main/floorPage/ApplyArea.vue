@@ -1,24 +1,22 @@
 <template>
   <div class="applyArea">
-    <div class="schedule box">
-      <div class="borderShadow ts-box">
-        <table class="ts-table is-definition is-celled">
-          <thead>
-            <tr>
-              <th></th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th>
-            </tr>
-          </thead>
-          <tbody ref="scheduleTable" @click="clickScheduleTable">
-            <tr v-for="(period, rowIndex) in periodTime" :key="rowIndex">
-              <td>
-                <div>第&nbsp;&nbsp;{{ period.nth }}&nbsp;&nbsp;節</div>
-                {{ period.startTime }}&nbsp;~&nbsp;{{ period.endTime }}
-              </td>
-              <td v-for="columnIndex in 5" :key="columnIndex"></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="schedule ts-box borderShadow">
+      <table class="ts-table is-definition is-celled">
+        <thead>
+          <tr>
+            <th></th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th>
+          </tr>
+        </thead>
+        <tbody ref="scheduleTable" @click="clickScheduleTable">
+          <tr v-for="(period, rowIndex) in periodTime" :key="rowIndex">
+            <td>
+              <div>第&nbsp;&nbsp;{{ period.nth }}&nbsp;&nbsp;節</div>
+              {{ period.startTime }}&nbsp;~&nbsp;{{ period.endTime }}
+            </td>
+            <td v-for="columnIndex in 5" :key="columnIndex"></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="confirm box">
       <span class="confirm-emptyText" v-show="!confirm.enable">
@@ -28,7 +26,8 @@
       <span class="confirm-text" v-show="confirm.enable">
         <span class="confirm-title">[ 已選擇 ]</span><br>
         <span>
-          {{ classroom.info.building }}&nbsp;{{ classroom.info.name }}<br>
+          {{ classroom.info.building }}<br>
+          {{ classroom.info.name }}<br>
           {{ confirm.day }}&nbsp;{{ confirm.time }}&nbsp;(&nbsp;{{ confirm.period }}&nbsp;)
         </span>
       </span>
@@ -160,7 +159,6 @@
     display: flex;
   }
   .schedule{
-    padding: 8px;
     white-space: nowrap;
   }
   .schedule table td, th{

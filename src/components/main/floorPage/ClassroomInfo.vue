@@ -1,30 +1,28 @@
 <template>
-  <div class="classroomInfo box">
-    <div class="classroomInfo-data borderShadow ts-box">
-      <table class="ts-table is-definition">
-        <tbody>
-          <tr>
-            <td>教室名稱</td>
-            <td class="classroomInfo-data-name">
-              {{ classroom.info.name }}
-              <span
-                class="ts-icon is-star-icon"
-                :class="saveButton?'saveButton-saved':'saveButton'"
-                @click="clickSaveButton()"
-              ></span>
-            </td>
-          </tr>
-          <tr>
-            <td>人數</td>
-            <td>{{ classroom.info.number }}</td>
-          </tr>
-          <tr>
-            <td>器材</td>
-            <td>{{ classroom.info.equipment }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+  <div class="classroomInfo borderShadow ts-box">
+    <table class="ts-table is-definition">
+      <tbody>
+        <tr>
+          <td>教室名稱</td>
+          <td class="classroomInfo-name">
+            {{ classroom.info.name }}
+            <span
+              class="ts-icon is-star-icon"
+              :class="saveButton?'saveButton-saved':'saveButton'"
+              @click="clickSaveButton()"
+            ></span>
+          </td>
+        </tr>
+        <tr>
+          <td>人數</td>
+          <td>{{ classroom.info.number }}</td>
+        </tr>
+        <tr>
+          <td>器材</td>
+          <td>{{ classroom.info.equipment }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -64,16 +62,15 @@
 
 <style scoped>
   .classroomInfo{
-    margin-top: 8px; padding: 8px;
-  }
-  .classroomInfo-data{
+    margin-top: 8px;
+    border: none;
     font-size: 16px;
   }
-  .classroomInfo-data > table > tbody > tr > td:first-child{
+  .classroomInfo > table > tbody > tr > td:first-child{
     width: 100px;
     font-weight: bold;
   }
-  .classroomInfo-data-name{
+  .classroomInfo-name{
     padding-bottom: 0;
     display: flex;
   }
