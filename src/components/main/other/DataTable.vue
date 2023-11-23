@@ -20,12 +20,24 @@
           <td class="main-table-fliter-classroom">
             <div class="ts-select is-solid">
               <select v-model="fliter.floor" @change="whenFloorChange">
-                <option v-for="floor in getFloorOption()" :key="floor" :value="floor">{{ floor+"F" }}</option>
+                <option
+                  v-for="floor in getFloorOption()"
+                  :key="floor"
+                  :value="floor"
+                >
+                  {{ floor+"F" }}
+                </option>
               </select>
             </div>
             <div class="ts-select is-solid">
               <select v-model="fliter.classroomID">
-                <option v-for="classroomID in getClassroomOption()" :key="classroomID" :value="classroomID">{{ classroomID }}</option>
+                <option
+                  v-for="classroomID in getClassroomOption()"
+                  :key="classroomID"
+                  :value="classroomID"
+                >
+                  {{ classroomID }}
+                </option>
               </select>
             </div>
           </td>
@@ -40,14 +52,27 @@
               </select>
             </div>
             <div class="ts-select is-solid">
-              <select v-model="fliter.startPeriod">
-                <option v-for="period in getStartPeriod()" :key="period.nth" :value="period.nth">{{ `第 ${period.nth} 節` }}</option>
+              <select v-model="fliter.startPeriod" @change="whenStartPeriodChange">
+                <option
+                  v-for="period in getPeriod()"
+                  :key="period.nth"
+                  :value="period.nth"
+                >
+                  {{ `第 ${period.nth} 節` }}
+                </option>
               </select>
             </div>
             <span>到</span>
             <div class="ts-select is-solid">
               <select v-model="fliter.endPeriod">
-                <option v-for="period in getEndPeriod()" :key="period.nth" :value="period.nth">{{ `第 ${period.nth} 節` }}</option>
+                <option
+                  v-for="period in getPeriod()"
+                  :key="period.nth"
+                  :value="period.nth"
+                  v-show="fliter.startPeriod != null && period.nth >= fliter.startPeriod /* 結束時段不可小於開始時段 */"
+                >
+                  {{ `第 ${period.nth} 節` }}
+                </option>
               </select>
             </div>
           </td>
@@ -94,34 +119,34 @@
       this.resetFliter();
     },
     methods: {
-      getFloorOption(){
+      getFloorOption(){ // 獲取樓層選項
         try{
           return Object.keys(floor_config.B[this.fliter.building].F);
         }catch{null}
         return [];
       },
-      getClassroomOption(){
+      getClassroomOption(){ // 獲取教室id選項
         try{
           return Object.keys(floor_config.B[this.fliter.building].F[this.fliter.floor].C);
         }catch{null}
         return [];
       },
-      getStartPeriod(){
+      getPeriod(){ // 獲取有哪幾節課
         return schedule_config.periodTime;
       },
-      getEndPeriod(){
-        return []; // todo
-      },
       
-      whenBuildingChange(){
+      whenBuildingChange(){ // 如果大樓改變,重置樓層和教室id
         this.fliter.floor = null;
         this.fliter.classroomID = null;
       },
-      whenFloorChange(){
+      whenFloorChange(){ // 如果樓層改變.重置教室id
         this.fliter.classroomID = null;
       },
-      
-      resetFliter(){
+      whenStartPeriodChange(){ // 如果開始時段改變,將結束時段設為開始時段
+        this.fliter.endPeriod = this.fliter.startPeriod;
+      },
+           
+      resetFliter(){ // 重置篩選列
         this.fliter = {
           id: "",
           building: null,
