@@ -40,6 +40,7 @@
 </template>
 
 <script>
+  import config from "@/assets/schedule-config.json"; // 課表時段的設定檔
   import { sendApply } from '@/api/floor';
 
   export default{
@@ -48,17 +49,7 @@
     ],
     data(){
       return {
-        periodTime: [
-          { nth: 1, startTime: "08:20", endTime: "09:10" },
-          { nth: 2, startTime: "09:20", endTime: "10:10" },
-          { nth: 3, startTime: "10:20", endTime: "11:10" },
-          { nth: 4, startTime: "11:15", endTime: "12:05" },
-          { nth: 5, startTime: "12:10", endTime: "13:00" },
-          { nth: 6, startTime: "13:10", endTime: "14:00" },
-          { nth: 7, startTime: "14:10", endTime: "15:00" },
-          { nth: 8, startTime: "15:10", endTime: "16:00" },
-          { nth: 9, startTime: "16:05", endTime: "16:55" },
-        ], // 第幾節,各節次的開始和結束時間
+        periodTime: config.periodTime, // 第幾節,各節次的開始和結束時間
         periodState: null,
         sDP: { day: null, startPeriod: null, endPeriod: null }, // selected day & period
         confirm: { enable: false, day: "", time: "", period: "" }

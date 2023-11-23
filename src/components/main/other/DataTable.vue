@@ -25,33 +25,29 @@
             </div>
             <div class="ts-select is-solid">
               <select v-model="fliter.classroomID">
-                <option v-for="classroomID in getClassroomOption()" :key="classroomID">{{ classroomID }}</option>
+                <option v-for="classroomID in getClassroomOption()" :key="classroomID" :value="classroomID">{{ classroomID }}</option>
               </select>
             </div>
           </td>
           <td class="main-table-fliter-period">
             <div class="ts-select is-solid">
-              <select>
-                <option>星期一</option>
-                <option>星期二</option>
-                <option>星期三</option>
-                <option>星期四</option>
-                <option>星期五</option>
+              <select v-model="fliter.day">
+                <option value="1">星期一</option>
+                <option value="2">星期二</option>
+                <option value="3">星期三</option>
+                <option value="4">星期四</option>
+                <option value="5">星期五</option>
               </select>
             </div>
             <div class="ts-select is-solid">
-              <select>
-                <option>第一節</option>
-                <option>第二節</option>
-                <option>第三節</option>
+              <select v-model="fliter.startPeriod">
+                <option v-for="period in getStartPeriod()" :key="period.nth" :value="period.nth">{{ `第 ${period.nth} 節` }}</option>
               </select>
             </div>
             <span>到</span>
             <div class="ts-select is-solid">
-              <select>
-                <option>第一節</option>
-                <option>第二節</option>
-                <option>第三節</option>
+              <select v-model="fliter.endPeriod">
+                <option v-for="period in getEndPeriod()" :key="period.nth" :value="period.nth">{{ `第 ${period.nth} 節` }}</option>
               </select>
             </div>
           </td>
@@ -70,24 +66,53 @@
             <span class="ts-icon is-gears-icon"></span>
           </td>
         </tr>
+        <tr>
+          <td>INS101</td>
+          <td>資工系館 ( INS )</td>
+          <td>101 視聽教室 ( 階梯教室 )</td>
+          <td>-</td>
+          <td>
+            <span class="ts-icon is-info-icon iconButton" @click="null"></span>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
 </template>
 
 <script>
-  import config from "@/assets/floor/floor-config.json"; // 平面圖排版的設定檔
+  import floor_config from "@/assets/floor/floor-config.json"; // 平面圖排版的設定檔
+  import schedule_config from "@/assets/schedule-config.json"; // 課表時段的設定檔
 
   export default{
     data(){
       return {
-        fliter: null
+        fliter: null // resetFliter() will init
       }
     },
     created(){
       this.resetFliter();
     },
     methods: {
+      getFloorOption(){
+        try{
+          return Object.keys(floor_config.B[this.fliter.building].F);
+        }catch{null}
+        return [];
+      },
+      getClassroomOption(){
+        try{
+          return Object.keys(floor_config.B[this.fliter.building].F[this.fliter.floor].C);
+        }catch{null}
+        return [];
+      },
+      getStartPeriod(){
+        return schedule_config.periodTime;
+      },
+      getEndPeriod(){
+        return []; // todo
+      },
+      
       whenBuildingChange(){
         this.fliter.floor = null;
         this.fliter.classroomID = null;
@@ -96,25 +121,15 @@
         this.fliter.classroomID = null;
       },
       
-      getFloorOption(){
-        try{
-          return Object.keys(config.B[this.fliter.building].F);
-        }catch{null}
-        return [];
-      },
-      getClassroomOption(){
-        try{
-          return Object.keys(config.B[this.fliter.building].F[this.fliter.floor].C);
-        }catch{null}
-        return [];
-      },
-      
       resetFliter(){
         this.fliter = {
           id: "",
           building: null,
           floor: null,
           classroomID: null,
+          day: null,
+          startPeriod: null,
+          endPeriod: null
         }
       }
     }
