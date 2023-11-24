@@ -77,6 +77,14 @@
             </div>
           </td>
           <td>
+            <div class="ts-select is-solid">
+              <select v-model="fliter.status">
+                <option value="">申請中</option>
+                <option value="">申請被拒絕</option>
+              </select>
+            </div>
+          </td>
+          <td>
             <span class="ts-icon is-caret-left-icon main-table-resetButton iconButton" @click="resetFliter">
               <span class="ts-icon is-rotate-right-icon"></span>
             </span>
@@ -86,7 +94,8 @@
           <td>#</td>
           <td>大樓</td>
           <td>教室名稱</td>
-          <td>可申請時段</td>
+          <td>可申請時段/時段</td>
+          <td>狀態</td>
           <td>
             <span class="ts-icon is-gears-icon"></span>
           </td>
@@ -95,6 +104,7 @@
           <td>INS101</td>
           <td>資工系館 ( INS )</td>
           <td>101 視聽教室 ( 階梯教室 )</td>
+          <td>-</td>
           <td>-</td>
           <td>
             <span class="ts-icon is-info-icon iconButton" @click="null"></span>
@@ -110,6 +120,9 @@
   import schedule_config from "@/assets/schedule-config.json"; // 課表時段的設定檔
 
   export default{
+    props: [
+      "tableType" // 表格類型 -> { "search": 搜尋教室page, "status": 借用狀態page, "save": 我的收藏page }
+    ],
     data(){
       return {
         fliter: null // resetFliter() will init
@@ -154,7 +167,8 @@
           classroomID: null,
           day: null,
           startPeriod: null,
-          endPeriod: null
+          endPeriod: null,
+          status: null
         }
       }
     }

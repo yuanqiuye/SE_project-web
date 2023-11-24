@@ -1,5 +1,5 @@
 <template>
-  <data-table></data-table>
+  <data-table :tableType="'search'"></data-table>
 </template>
 
 <script>
