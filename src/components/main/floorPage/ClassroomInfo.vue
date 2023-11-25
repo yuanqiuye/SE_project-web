@@ -6,11 +6,7 @@
           <td>教室名稱</td>
           <td class="classroomInfo-name">
             {{ classroom.info.name }}
-            <span
-              class="ts-icon is-star-icon"
-              :class="saveButton?'saveButton-saved':'saveButton'"
-              @click="clickSaveButton()"
-            ></span>
+            <save-button :classroomID="classroom.id" :in-isSave="classroom.isSave"/>
           </td>
         </tr>
         <tr>
@@ -27,36 +23,16 @@
 </template>
 
 <script>
-  import { updateSave } from '@/api/floor';
+  import saveButton from "@/components/main/other/SaveButton.vue"; // 收藏按鈕comp
 
   export default{
+    components: {
+      "save-button": saveButton
+    },
     props: [
       "classroom" // 教室資料
     ],
-    data(){
-      return {
-        saveButton: false // cilent端的"教室是否被收藏"
-      }
-    },
-    created(){
-      this.saveButton = this.classroom.isSave; // 頁面載入時,更新cilent端的"教室是否被收藏"
-    },
-    methods: {
-      clickSaveButton(){
-        let nextState = !this.saveButton;
-        if (updateSave(this.classroom.id, nextState) == 1) this.saveButton = nextState; // 後端成功修改收藏,星星才會變顏色
-      },
-    },
-    computed:{
-      classroom_isSave(){
-        return this.classroom.isSave;
-      }
-    },
-    watch: {
-      classroom_isSave(newValue){
-        this.saveButton = newValue; // 父comp的classroom更新時,更新cilent端的"教室是否被收藏"
-      }
-    }
+    data(){}
   }
 </script>
 
@@ -73,17 +49,5 @@
   .classroomInfo-name{
     padding-bottom: 0;
     display: flex;
-  }
-  .saveButton{
-    margin: -5.5px 0 0 6px;
-    border: none;
-    color: #fff; font-size: 20px;
-    -webkit-text-stroke: 1px #666;
-  }
-  .saveButton-saved{
-    margin: -5.5px 0 0 6px;
-    border: none;
-    color: #f80; font-size: 20px;
-    -webkit-text-stroke: 1px;
   }
 </style>
