@@ -1,5 +1,5 @@
 <template>
-  <data-table :tableType="'status'"></data-table>
+  <data-table :tableType="'status'" :insert-data="null"/>
 </template>
 
 <script>

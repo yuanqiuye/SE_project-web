@@ -41,7 +41,7 @@
               </select>
             </div>
           </td>
-          <td class="main-table-fliter-period">
+          <td class="main-table-fliter-period" v-if="tableType == 'search' || tableType == 'status'">
             <div class="ts-select is-solid">
               <select v-model="fliter.day">
                 <option value="1">星期一</option>
@@ -76,11 +76,18 @@
               </select>
             </div>
           </td>
-          <td>
+          <td v-if="tableType == 'status'">
             <div class="ts-select is-solid">
               <select v-model="fliter.status">
-                <option value="">申請中</option>
-                <option value="">申請被拒絕</option>
+                <option :value="status.applying">申請中</option>
+                <option :value="status.denied">申請被拒絕</option>
+                <option :value="status.approved_noKey">申請通過 ( 未借鑰匙 )</option>
+                <option :value="status.approved_haveKey">申請通過 ( 已借鑰匙 )</option>
+                <option :value="status.using">借用中</option>
+                <option :value="status.afterUse_haveKey">借用完畢 ( 未還鑰匙 )</option>
+                <option :value="status.afterUse_noKey">借用完畢 ( 已還鑰匙 )</option>
+                <option :value="status.canceled_haveKey">已取消 ( 未還鑰匙 )</option>
+                <option :value="status.canceled_nokey">已取消</option>
               </select>
             </div>
           </td>
@@ -94,20 +101,22 @@
           <td>#</td>
           <td>大樓</td>
           <td>教室名稱</td>
-          <td>可申請時段/時段</td>
-          <td>狀態</td>
-          <td>
-            <span class="ts-icon is-gears-icon"></span>
-          </td>
+          <td v-if="tableType == 'search'">可申請時段</td><td v-if="tableType == 'status'">時段</td>
+          <td v-if="tableType == 'status'">狀態</td>
+          <td><span class="ts-icon is-gears-icon"></span></td>
         </tr>
         <tr>
           <td>INS101</td>
           <td>資工系館 ( INS )</td>
-          <td>101 視聽教室 ( 階梯教室 )</td>
-          <td>-</td>
-          <td>-</td>
+          <td class="saveButton-tdFix">
+            101 視聽教室 ( 階梯教室 )<save-button :classroomID="null" :in-isSave="null"/>
+          </td>
+          <td v-if="tableType == 'search' || tableType == 'status'">-</td>
+          <td v-if="tableType == 'status'">未知</td>
           <td>
-            <span class="ts-icon is-info-icon iconButton" @click="null"></span>
+            <span class="ts-icon is-info-icon iconButton infoIconFix" @click="null"></span>
+            <span v-if="false" class="ts-icon is-trash-can-icon iconButton-danger trashcanIconFix" @click="null"></span>
+            <!-- only status page have other iconButton -->
           </td>
         </tr>
       </tbody>
@@ -118,14 +127,30 @@
 <script>
   import floor_config from "@/assets/floor/floor-config.json"; // 平面圖排版的設定檔
   import schedule_config from "@/assets/schedule-config.json"; // 課表時段的設定檔
+  import saveButton from "@/components/main/other/SaveButton.vue"; // 收藏按鈕comp
 
   export default{
+    components: {
+      "save-button": saveButton
+    },
     props: [
-      "tableType" // 表格類型 -> { "search": 搜尋教室page, "status": 借用狀態page, "save": 我的收藏page }
+      "tableType", // 表格類型 -> { "search": 搜尋教室page, "status": 借用狀態page, "save": 我的收藏page }
+      "insertData" // 要插入表格的數筆資料
     ],
     data(){
       return {
-        fliter: null // resetFliter() will init
+        fliter: null, // resetFliter() will init
+        status: { // 時段狀態
+          applying: 0, // 申請中
+          denied: 1, // 申請被拒絕
+          approved_noKey: 2, // 申請通過(未借鑰匙)
+          approved_haveKey: 3, // 申請通過(已借鑰匙)
+          using: 4, // 借用中
+          afterUse_haveKey: 5, // 借用完畢(未還鑰匙)
+          afterUse_noKey: 6, // 借用完畢(已還鑰匙)
+          canceled_haveKey: 7, // 已取消(未還鑰匙)
+          canceled_nokey: 8, // 已取消
+        }
       }
     },
     created(){
@@ -158,7 +183,7 @@
       whenStartPeriodChange(){ // 如果開始時段改變,將結束時段設為開始時段
         this.fliter.endPeriod = this.fliter.startPeriod;
       },
-           
+      
       resetFliter(){ // 重置篩選列
         this.fliter = {
           id: "",
@@ -179,9 +204,24 @@
   .iconButton{
     padding: 8px;
     border-radius: 4px;
+    color: #000;
   }
   .iconButton:hover{
-    background-color: #ddd;
+    background-color: #cff;
+  }
+  .iconButton-danger{
+    padding: 8px;
+    border-radius: 4px;
+    color: #f00;
+  }
+  .iconButton-danger:hover{
+    background-color: #fdd;
+  }
+  .infoIconFix{
+    padding: 8px 12.18px;
+  }
+  .trashcanIconFix{
+    padding: 8px 8.68px;
   }
   .main-table td{
     text-align: center; white-space: nowrap;
@@ -192,7 +232,7 @@
   }
   .main-table > tbody > tr:nth-child(2) > td{
     background-color: #e4e4e4;
-    font-weight: bold;
+    font-weight: bold; user-select: none;
   }
   .main-table-resetButton > span.ts-icon{
     margin-left: 4px;

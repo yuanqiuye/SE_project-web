@@ -1,5 +1,5 @@
 <template>
-  <data-table :tableType="'search'"></data-table>
+  <data-table :table-type="'search'" :insert-data="null"/>
 </template>
 
 <script>
@@ -8,6 +8,11 @@
   export default{
     components: {
       "data-table": dataTable
+    },
+    data(){
+      return {
+        
+      }
     }
   }
 </script>

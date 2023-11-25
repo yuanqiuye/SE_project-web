@@ -127,7 +127,7 @@
         else this.confirm.period = `${startPeriod}~${endPeriod}`;
       },
       clickApplyButton(){
-        sendApply(this.sDP);
+        sendApply(this.classroom, this.sDP);
       }
     },
     computed: {

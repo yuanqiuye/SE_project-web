@@ -38,7 +38,7 @@
         let returnCode = userLogin(this.input.account, this.input.password);
         if (returnCode == 1) this.$router.push({name: "floorPage"});
         else if (returnCode == -1) this.showWarning("帳號或密碼錯誤");
-        else if (returnCode == -2) this.showWarning("帳號遭到封鎖 <br> 解封時間 : (time) ");
+        else if (returnCode == -2) this.showWarning("帳號遭到封鎖");
         else this.showWarning("未知錯誤");
       }
     }

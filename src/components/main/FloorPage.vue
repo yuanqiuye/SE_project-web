@@ -7,17 +7,17 @@
 
 <script>
   import { getClassroomData } from '@/api/floor';
-  import buildingSelector from "./floorPage/buildingSelector.vue";
-  import floorSelector from "./floorPage/FloorSelector.vue";
-  import classroomInfo from "./floorPage/ClassroomInfo.vue";
-  import applyArea from "./floorPage/ApplyArea.vue";
+  import buildingSelector from "./floorPage/buildingSelector.vue"; // 樓層切換的元件
+  import floorSelector from "./floorPage/FloorSelector.vue"; // 平面圖的元件
+  import classroomInfo from "./floorPage/ClassroomInfo.vue"; // 教室資訊欄的元件
+  import applyArea from "./floorPage/ApplyArea.vue"; // 課表欄&申請確認框的元件
   
   export default{
     components: {
-      "building-selector": buildingSelector, // 樓層切換的元件
-      "floor-selector": floorSelector, // 平面圖的元件
-      "classroom-info": classroomInfo, // 教室資訊欄的元件
-      "apply-area": applyArea // 課表欄&申請確認框的元件
+      "building-selector": buildingSelector,
+      "floor-selector": floorSelector,
+      "classroom-info": classroomInfo,
+      "apply-area": applyArea
     },
     data(){
       return {

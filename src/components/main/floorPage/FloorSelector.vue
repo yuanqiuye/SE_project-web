@@ -83,7 +83,7 @@
       },
       
       sendClassroomData(){ // 將 classroom資料 傳給 FloorPage.vue(父comp)
-        const id = this.slt.building + this.slt.classroomID;
+        const id = this.slt.building + this.slt.classroomID; // 教室的唯一id
         const classroom = getClassroomData(id); // 跟後端拿新教室的資料,會更新整個頁面的相關資料
         this.$emit("classroom", classroom); // 將目前選擇的教室的 classroom資料 傳給 FloorPage.vue(父comp)
       },

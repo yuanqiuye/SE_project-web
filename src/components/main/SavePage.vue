@@ -1,5 +1,5 @@
 <template>
-  <data-table :tableType="'save'"></data-table>
+  <data-table :tableType="'save'" :insert-data="null"/>
 </template>
 
 <script>
