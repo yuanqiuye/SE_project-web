@@ -4,9 +4,8 @@
       <tbody>
         <tr>
           <td>教室名稱</td>
-          <td class="classroomInfo-name">
-            {{ classroom.info.name }}
-            <save-button :classroomID="classroom.id" :in-isSave="classroom.isSave"/>
+          <td class="saveButton-tdFix">
+            {{ classroom.info.name }}<save-button :classroomID="classroom.id" :in-isSave="classroom.isSave"/>
           </td>
         </tr>
         <tr>
@@ -45,9 +44,5 @@
   .classroomInfo > table > tbody > tr > td:first-child{
     width: 100px;
     font-weight: bold;
-  }
-  .classroomInfo-name{
-    padding-bottom: 0;
-    display: flex;
   }
 </style>

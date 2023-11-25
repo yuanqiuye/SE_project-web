@@ -52,3 +52,9 @@
     -webkit-text-stroke: 1px;
   }
 </style>
+<style>
+  .saveButton-tdFix{ /* bad solution */
+    padding-bottom: 0 !important;
+    display: flex;
+  }
+</style>
