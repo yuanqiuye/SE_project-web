@@ -1,0 +1,6 @@
+{
+  "periodData": [
+    { "id": "ins101", "day": 1, "startPeriod": 1, "endPeriod": 4, "status": 0 }
+  ],
+  "saveData": [ "ins101" ]
+}

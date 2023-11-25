@@ -61,7 +61,7 @@
   .navBar > a{
     width: 80px; min-width: 80px; height: 60px;
     margin: 0 4px !important;
-    white-space: nowrap;
+    white-space: nowrap; user-select: none;
   }
   .navBar > a:hover{
     background-color: #fff4;
