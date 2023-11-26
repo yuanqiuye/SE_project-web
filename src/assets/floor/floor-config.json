@@ -5,7 +5,7 @@
       "default": "1",
       "F": {
         "B1": {
-          "default": "B01",
+          "default": "B07",
           "bgURL": "insB1.png",
           "C": {
             "B01": { "id": "B01", "width": 108, "height": 74, "left": 499, "top": 138 },
@@ -34,7 +34,7 @@
           }
         },
         "2": {
-          "default": "201",
+          "default": "203",
           "bgURL": "ins2.png",
           "C": {
             "201": { "id": "201", "width": 125, "height": 162, "left": 92, "top": 205 },

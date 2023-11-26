@@ -10,7 +10,7 @@
           :style="blockStyle(block)"
           @click="setClassroom(block.id)"
         >
-          {{ block.id }}
+          {{ isShowID(block.id) ? block.id : "" }}
         </div>
       </div>
     </div>
@@ -25,6 +25,7 @@
 <script>
   import { getClassroomData } from '@/api/floor';
   import config from "@/assets/floor/floor-config.json"; // 平面圖排版的設定檔
+  import classroomInfo from "@/assets/classroom-info.json"; // 教室資訊
 
   export default{
     props: [
@@ -73,13 +74,22 @@
         const imgURL = config.B[this.slt.building].F[this.slt.floor].bgURL; // 經由 config 取得背景圖片的相對路徑
         return require(`@/assets/floor/${this.slt.building}/${imgURL}`); // 轉為可用的實際路徑後,return
       },
-      getBlockData(){ // 教室的方形按鈕的繪製參數
+      getBlockData(){ // 教室的矩形按鈕的繪製參數
         return config.B[this.slt.building].F[this.slt.floor].C;
       },
-      blockStyle(block){ // 方形按鈕的座標/大小/顏色
-        const style = { left: `${block.left}px`, top: `${block.top}px`, width: `${block.width}px`, height: `${block.height}px` };
-        if (this.slt.classroomID == block.id) style.backgroundColor = "#3ee";
+      blockStyle(block){ // 矩形按鈕的座標/大小/顏色
+        let style = { left: `${block.left}px`, top: `${block.top}px`, width: `${block.width}px`, height: `${block.height}px` };
+        if (!(this.slt.building+block.id in classroomInfo)){ // 如果找不到教室資料
+          style.backgroundColor = "#bbb"; // 設為灰色
+          style.pointerEvents = "none"; // click event 無效
+          return style;
+        }
+        if (this.slt.classroomID == block.id) style.backgroundColor = "#3ee"; // 被選取的 block ,設為深藍色
         return style;
+      },
+      isShowID(id){ // 是否顯示矩形按鈕內的教室id
+        console.log(this.slt.floor+id);
+        return this.slt.building+id in classroomInfo;
       },
       
       sendClassroomData(){ // 將 classroom資料 傳給 FloorPage.vue(父comp)
