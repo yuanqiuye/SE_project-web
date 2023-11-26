@@ -1,7 +1,8 @@
 // !!! 警告 !!!
 // 嘗試修改不是"可修改區"的code,會導致不可預期的錯誤!
 
-import classroomDB from "@/api/classroom-data.json"; // 後端實裝後可刪
+import classroomInfo from "@/assets/classroom-info.json"; // 教室資訊
+import userData from "@/api/user-data.json"; // 後端完成後可刪
 
 export function getClassroomData(classroomID){ // 跟後端請求某個教室的資料
   const classroom_default = {
@@ -14,10 +15,10 @@ export function getClassroomData(classroomID){ // 跟後端請求某個教室的
   let classroom = classroom_default; // 如果找不到資料則回傳default
   
   // 可修改區 start
-  if (classroomID in classroomDB.C) classroom = classroomDB.C[classroomID];
-  // 可修改區 end
-  
   classroom.id = classroomID;
+  if (classroomID in classroomInfo) classroom.info = classroomInfo[classroomID];
+  classroom.isSave = userData.saveData.includes(classroomID);
+  // 可修改區 end
   
   return classroom;
 }
