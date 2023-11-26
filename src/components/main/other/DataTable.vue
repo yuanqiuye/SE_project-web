@@ -107,7 +107,7 @@
           <td v-if="tableType == 'search' || tableType == 'status'">{{ getPeriodText(rowData.period) }}</td>
           <td v-if="tableType == 'status'">{{ getStatusText(rowData.status) }}</td>
           <td>
-            <span class="ts-icon is-info-icon iconButton infoIconFix" @click="null"></span>
+            <span class="ts-icon is-info-icon iconButton infoIconFix" @click="$router.push(`/floor?id=${rowData.classroom.id}`)"></span>
             <span v-if="false" class="ts-icon is-trash-can-icon iconButton-danger trashcanIconFix" @click="null"></span>
             <!-- only status page have other iconButton -->
           </td>

@@ -33,7 +33,7 @@
     data(){
       return {
         slt: { // selector
-          building: null, // 目前大樓
+          building: null, // 目前館樓
           floor: null, // 目前樓層
           classroomID: null // 目前選擇的教室
         }
@@ -41,11 +41,29 @@
     },
     created(){ // 初始化平面圖
       this.resetBuilding();
+      this.urlSwitch(this.$route.query.id);
     },
     mounted(){
       this.sendClassroomID(); // 將預設的 classroomID 傳給 FloorPage.vue(父comp)
     },
     methods: {
+      urlSwitch(id){ // 網址的id參數會決定初始選擇的教室,若沒給則用default
+        if (id == undefined) return; // 網址沒給參數
+        if (!(id in classroomInfo)) return; // id不存在或沒有資料
+        
+        for (const building of Object.keys(config.B)){
+          for (const floor of Object.keys(config.B[building].F)){
+            for (const classroomID of Object.keys(config.B[building].F[floor].C)){
+              if (id == building+classroomID){
+                this.setBuilding(building);
+                this.setFloor(floor);
+                this.setClassroom(classroomID);
+              }
+            }
+          }
+        }
+      },
+      
       setBuilding(building){ // 切換大樓
         this.slt.building = building;
         this.resetFloor(); // 切換大樓後,將樓層和教室設為預設值
@@ -87,7 +105,6 @@
         return style;
       },
       isShowID(id){ // 是否顯示矩形按鈕內的教室id
-        console.log(this.slt.floor+id);
         return this.slt.building+id in classroomInfo;
       },
       

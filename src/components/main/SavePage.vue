@@ -1,21 +1,20 @@
 <template>
-  <data-table :table-type="'save'" :insert-data="insertData"/>
+  <data-table :table-type="'save'" :insert-data="getInsertData()"/>
 </template>
 
 <script>
   import dataTable from "./other/DataTable.vue";
+  import { getAllSave } from "@/api/save";
   
   export default{
     components: {
       "data-table": dataTable
     },
-    data(){
-      return {
-        insertData: [
-          { classroomID: "ins101", period: { day: 1, startPeriod: 1, endPeriod: 4 }, status: 0 },
-          { classroomID: "ins105", period: { day: 2, startPeriod: 3, endPeriod: 3 }, status: 1 },
-          { classroomID: "ins203", period: { day: 1, startPeriod: 6, endPeriod: 8 }, status: 2 }
-        ]
+    methods: {
+      getInsertData(){
+        let insertData = [];
+        for (let id of getAllSave()) insertData.push({ classroomID: id });
+        return insertData;
       }
     }
   }
