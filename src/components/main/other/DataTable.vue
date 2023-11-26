@@ -79,15 +79,7 @@
           <td v-if="tableType == 'status'">
             <div class="ts-select is-solid">
               <select v-model="fliter.status">
-                <option :value="status.applying">申請中</option>
-                <option :value="status.denied">申請被拒絕</option>
-                <option :value="status.approved_noKey">申請通過 ( 未借鑰匙 )</option>
-                <option :value="status.approved_haveKey">申請通過 ( 已借鑰匙 )</option>
-                <option :value="status.using">借用中</option>
-                <option :value="status.afterUse_haveKey">借用完畢 ( 未還鑰匙 )</option>
-                <option :value="status.afterUse_noKey">借用完畢 ( 已還鑰匙 )</option>
-                <option :value="status.canceled_haveKey">已取消 ( 未還鑰匙 )</option>
-                <option :value="status.canceled_nokey">已取消</option>
+                <option v-for="(text, index) in statusText" :key="index" :value="index">{{ text }}</option>
               </select>
             </div>
           </td>
@@ -105,14 +97,15 @@
           <td v-if="tableType == 'status'">狀態</td>
           <td><span class="ts-icon is-gears-icon"></span></td>
         </tr>
-        <tr>
-          <td>INS101</td>
-          <td>資工系館 ( INS )</td>
-          <td class="saveButton-tdFix">
-            101 視聽教室 ( 階梯教室 )<save-button :classroomID="null" :in-isSave="null"/>
+        <tr v-for="rowData in getTableData()" :key="rowData.classroom.id" v-show="isShow(rowData)">
+          <td>{{ rowData.classroom.id.toUpperCase() }}</td>
+          <td>{{ rowData.classroom.info.building }} ( {{ rowData.classroom.id.toUpperCase().substring(0, 3) }} )</td>
+          <td class="saveButton-tdFix" style="justify-content:center;">
+            {{ rowData.classroom.info.name }}
+            <save-button :classroomID="rowData.classroom.id" :in-isSave="rowData.classroom.isSave"/>
           </td>
-          <td v-if="tableType == 'search' || tableType == 'status'">-</td>
-          <td v-if="tableType == 'status'">未知</td>
+          <td v-if="tableType == 'search' || tableType == 'status'">{{ getPeriodText(rowData.period) }}</td>
+          <td v-if="tableType == 'status'">{{ getStatusText(rowData.status) }}</td>
           <td>
             <span class="ts-icon is-info-icon iconButton infoIconFix" @click="null"></span>
             <span v-if="false" class="ts-icon is-trash-can-icon iconButton-danger trashcanIconFix" @click="null"></span>
@@ -128,6 +121,7 @@
   import floor_config from "@/assets/floor/floor-config.json"; // 平面圖排版的設定檔
   import schedule_config from "@/assets/schedule-config.json"; // 課表時段的設定檔
   import saveButton from "@/components/main/other/SaveButton.vue"; // 收藏按鈕comp
+  import { getClassroomData } from '@/api/floor';
 
   export default{
     components: {
@@ -140,17 +134,16 @@
     data(){
       return {
         fliter: null, // resetFliter() will init
-        status: { // 時段狀態
-          applying: 0, // 申請中
-          denied: 1, // 申請被拒絕
-          approved_noKey: 2, // 申請通過(未借鑰匙)
-          approved_haveKey: 3, // 申請通過(已借鑰匙)
-          using: 4, // 借用中
-          afterUse_haveKey: 5, // 借用完畢(未還鑰匙)
-          afterUse_noKey: 6, // 借用完畢(已還鑰匙)
-          canceled_haveKey: 7, // 已取消(未還鑰匙)
-          canceled_nokey: 8, // 已取消
-        }
+        statusText: [
+          "申請中",
+          "申請被拒絕",
+          "申請通過 ( 未借鑰匙 )",
+          "申請通過 ( 已借鑰匙 )",
+          "借用中",
+          "借用完畢 ( 未還鑰匙 )",
+          "借用完畢 ( 已還鑰匙 )",
+          "已取消"
+        ]
       }
     },
     created(){
@@ -174,27 +167,77 @@
       },
       
       whenBuildingChange(){ // 如果大樓改變,重置樓層和教室id
-        this.fliter.floor = null;
-        this.fliter.classroomID = null;
+        this.fliter.floor = "";
+        this.fliter.classroomID = "";
       },
       whenFloorChange(){ // 如果樓層改變.重置教室id
-        this.fliter.classroomID = null;
+        this.fliter.classroomID = "";
       },
       whenStartPeriodChange(){ // 如果開始時段改變,將結束時段設為開始時段
         this.fliter.endPeriod = this.fliter.startPeriod;
       },
-      
       resetFliter(){ // 重置篩選列
         this.fliter = {
           id: "",
-          building: null,
-          floor: null,
-          classroomID: null,
+          building: "",
+          floor: "",
+          classroomID: "",
           day: null,
           startPeriod: null,
           endPeriod: null,
           status: null
         }
+      },
+      
+      getTableData(){ // 將父comp輸入表格的資料整理,再插入到表格
+        if (this.insertData == undefined) return [];
+        
+        let tableData = [];
+        for (let item of this.insertData){
+          tableData.push({
+            classroom: getClassroomData(item.classroomID), // <string>classroomID 轉 <struct>classroom資料
+            period: item.period,
+            status: item.status
+          });
+        }
+        return tableData;
+      },
+      getPeriodText(period){ // <struct>period 轉 <string>時段資訊
+        const nthDay = [ "", "星期一", "星期二", "星期三", "星期四", "星期五" ];
+        let periodText = "";
+        if (period != undefined){
+          periodText = `${nthDay[period.day]} , 第 ${period.startPeriod} 節`;
+          if (period.startPeriod != period.endPeriod) periodText += ` ~ 第 ${period.endPeriod} 節`
+        }
+        return periodText;
+      },
+      getStatusText(status){ // <int>status 轉 <string>statusText
+        let statusText = "未知"; // 預設狀態
+        if (status != undefined) statusText = this.statusText[status];
+        return statusText;
+      },
+      isShow(rowData){ // 篩選器判斷哪一列要顯示
+        let show = true;
+        
+        const rowData_id = rowData.classroom.id.toLowerCase() // 某一行資料的id
+        const fliter_id1 = this.fliter.id.toLowerCase(); // from id搜尋框
+        let fliter_id2 = this.fliter.building; // 當選擇 building: fliter_id2 = "ins" (大樓)
+        if (this.fliter.classroomID == "") fliter_id2 += this.fliter.floor; // 當選擇 building+floor: fliter_id2 = "insB1" (大樓+樓層)
+        else fliter_id2 += this.fliter.classroomID; // 當選擇 building+floor+classroomID: fliter_id2 = "insB03" (大樓+教室id)
+        fliter_id2 = fliter_id2.toLowerCase();
+        if (!rowData_id.includes(fliter_id1)) show = false;
+        if (!rowData_id.includes(fliter_id2)) show = false;
+        // 篩選id ( 大樓+樓層+教室id 也是一個id篩選器 )
+        
+        if (this.fliter.day != null && rowData.period.day != this.fliter.day) show = false; // 星期幾篩選
+        if (this.fliter.startPeriod != null && this.fliter.endPeriod != null){ // 時段篩選
+          if (!(this.fliter.startPeriod >= rowData.period.startPeriod && this.fliter.endPeriod <= rowData.period.endPeriod)) show = false;
+          // 篩選器的時段必須在rowData的時段內
+        }
+        
+        if (this.fliter.status != null && rowData.status != this.fliter.status) show = false; // 狀態篩選
+        
+        return show;
       }
     }
   }
