@@ -3,12 +3,12 @@
 </template>
 
 <script>
-  import { updateSave } from '@/api/floor';
+  import allClassroomInfo from "@/assets/classroom-info.json"; // 全部的教室資訊
+  import { getIsSave, addSave, removeSave } from '@/api/save';
 
   export default{
     props: [
-      "classroomID",
-      "inIsSave"
+      "classroomID"
     ],
     data(){
       return {
@@ -16,23 +16,20 @@
       }
     },
     created(){
-      this.setState(this.inIsSave); // 頁面載入時,更新cilent端的"教室是否被收藏"
+      this.isSave = getIsSave(this.classroomID); // 頁面載入時,更新cilent端的"教室是否被收藏"
     },
     methods: {
-      setState(nextState){
-        this.isSave = nextState;
-      },
-      clickSaveButton(){
-        this.setState(!this.isSave);
-        updateSave(this.classroomID, this.isSave); // 更新user的"教室是否被收藏"
+      clickSaveButton(){ // 更新user的"教室是否被收藏"
+        if (!(this.classroomID in allClassroomInfo)) return; // 如果教室資料不存在,無法更新
+        
+        this.isSave = !this.isSave;
+        if (this.isSave) addSave(this.classroomID);
+        else removeSave(this.classroomID);
       }
     },
     watch: {
-      classroomID(){
-        this.setState(this.inIsSave); // 由外部更新狀態,非人為操作,不會更新後端資料
-      },
-      inIsSave(){
-        this.setState(this.inIsSave); // 由外部更新狀態,非人為操作,不會更新後端資料
+      classroomID(){ // 教室id改變時,更新cilent端的"教室是否被收藏"
+        this.isSave = getIsSave(this.classroomID);
       }
     }
   }

@@ -2,5 +2,5 @@
   "periodData": [
     { "id": "ins101", "day": 1, "startPeriod": 1, "endPeriod": 4, "status": 0 }
   ],
-  "saveData": [ "ins101" ]
+  "saveData": [ "ins101", "insB12", "ins212" ]
 }

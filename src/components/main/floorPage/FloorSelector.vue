@@ -23,9 +23,8 @@
 </template>
 
 <script>
-  import { getClassroomData } from '@/api/floor';
   import config from "@/assets/floor/floor-config.json"; // 平面圖排版的設定檔
-  import classroomInfo from "@/assets/classroom-info.json"; // 教室資訊
+  import classroomInfo from "@/assets/classroom-info.json"; // 全部的教室資訊
 
   export default{
     props: [
@@ -44,7 +43,7 @@
       this.resetBuilding();
     },
     mounted(){
-      this.sendClassroomData(); // 將預設的 classroomID 傳給 FloorPage.vue(父comp)
+      this.sendClassroomID(); // 將預設的 classroomID 傳給 FloorPage.vue(父comp)
     },
     methods: {
       setBuilding(building){ // 切換大樓
@@ -57,7 +56,7 @@
       },
       setClassroom(classroomID){ // 切換教室
         this.slt.classroomID = classroomID;
-        this.sendClassroomData(); // 切換教室會將 classroom資料 傳給 FloorPage.vue(父comp)
+        this.sendClassroomID(); // 切換教室會將 classroom資料 傳給 FloorPage.vue(父comp)
       },
       
       resetBuilding(){ // 將 大樓+樓層+教室 設為預設值
@@ -92,10 +91,8 @@
         return this.slt.building+id in classroomInfo;
       },
       
-      sendClassroomData(){ // 將 classroom資料 傳給 FloorPage.vue(父comp)
-        const id = this.slt.building + this.slt.classroomID; // 教室的唯一id
-        const classroom = getClassroomData(id); // 跟後端拿新教室的資料,會更新整個頁面的相關資料
-        this.$emit("classroom", classroom); // 將目前選擇的教室的 classroom資料 傳給 FloorPage.vue(父comp)
+      sendClassroomID(){ // 將 classroomID 傳給 FloorPage.vue(父comp)
+        this.$emit("classroomID", this.slt.building + this.slt.classroomID) // 教室的唯一id
       },
       clickSwitchButton(switchType){ // 當上下樓按鈕被點擊
         const floorList = Object.keys(config.B[this.slt.building].F);

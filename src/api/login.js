@@ -1,6 +1,3 @@
-// !!! 警告 !!!
-// 嘗試修改不是"可修改區"的code,會導致不可預期的錯誤!
-
 export function getPasswordHint(account){ // 獲得某個帳號的密碼提示
   let hint = null; // 預設回傳的密碼提示
   

@@ -5,16 +5,17 @@
         <tr>
           <td>教室名稱</td>
           <td class="saveButton-tdFix">
-            {{ classroom.info.name }}<save-button :classroomID="classroom.id" :in-isSave="classroom.isSave"/>
+            {{ classroomInfo.name }}
+            <save-button :classroomID="classroomInfo.id"/>
           </td>
         </tr>
         <tr>
           <td>人數</td>
-          <td>{{ classroom.info.number }}</td>
+          <td>{{ classroomInfo.number }}</td>
         </tr>
         <tr>
           <td>器材</td>
-          <td>{{ classroom.info.equipment }}</td>
+          <td>{{ classroomInfo.equipment }}</td>
         </tr>
       </tbody>
     </table>
@@ -22,6 +23,7 @@
 </template>
 
 <script>
+  import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
   import saveButton from "@/components/main/other/SaveButton.vue"; // 收藏按鈕comp
 
   export default{
@@ -29,9 +31,18 @@
       "save-button": saveButton
     },
     props: [
-      "classroom" // 教室資料
+      "classroomID" // 教室id
     ],
-    data(){}
+    data(){
+      return {
+        classroomInfo: getClassroomInfo(null)
+      }
+    },
+    watch: {
+      classroomID(newValue){
+        this.classroomInfo = getClassroomInfo(newValue);
+      }
+    }
   }
 </script>
 

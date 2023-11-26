@@ -26,8 +26,8 @@
       <span class="confirm-text" v-show="confirm.enable">
         <span class="confirm-title">[ 已選擇 ]</span><br>
         <span>
-          {{ classroom.info.building }}<br>
-          {{ classroom.info.name }}<br>
+          {{ classroomInfo.building }}<br>
+          {{ classroomInfo.name }}<br>
           {{ confirm.day }}&nbsp;{{ confirm.time }}&nbsp;(&nbsp;{{ confirm.period }}&nbsp;)
         </span>
       </span>
@@ -40,15 +40,17 @@
 </template>
 
 <script>
+  import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
   import config from "@/assets/schedule-config.json"; // 課表時段的設定檔
-  import { sendApply } from '@/api/floor';
+  import { getClassroomPeriodData, sendApply } from '@/api/app';
 
   export default{
     props: [
-      "classroom"
+      "classroomID"
     ],
     data(){
       return {
+        classroomInfo: getClassroomInfo(null),
         periodTime: config.periodTime, // 第幾節,各節次的開始和結束時間
         periodState: null,
         sDP: { day: null, startPeriod: null, endPeriod: null }, // selected day & period
@@ -70,7 +72,7 @@
         // 時段借用狀態: { 0: 可借用, 1: 已被借用, 2: 被自己借用, 100: 無法借用 }
         
         this.periodState = Array.from(Array(6), () => Array(this.periodTime.length+1).fill(100)); // 生成空狀態表
-        for (let p of this.classroom.periodData){
+        for (let p of getClassroomPeriodData(this.classroomInfo.id)){
           for (let i = p.startPeriod; i <= p.endPeriod; i++) this.periodState[p.day][i] = p.state; // 更新狀態表
         }
         
@@ -127,16 +129,12 @@
         else this.confirm.period = `${startPeriod}~${endPeriod}`;
       },
       clickApplyButton(){
-        sendApply(this.classroom, this.sDP);
-      }
-    },
-    computed: {
-      watchClassroomID(){
-        return this.classroom.id;
+        sendApply(this.classroomInfo.id, this.sDP);
       }
     },
     watch: {
-      watchClassroomID(){
+      classroomID(newValue){
+        this.classroomInfo = getClassroomInfo(newValue);
         this.resetsDP();
         this.initScheduleTable();
       }

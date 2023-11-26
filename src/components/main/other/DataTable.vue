@@ -99,10 +99,10 @@
         </tr>
         <tr v-for="rowData in getTableData()" :key="rowData.classroom.id" v-show="isShow(rowData)">
           <td>{{ rowData.classroom.id.toUpperCase() }}</td>
-          <td>{{ rowData.classroom.info.building }} ( {{ rowData.classroom.id.toUpperCase().substring(0, 3) }} )</td>
+          <td>{{ rowData.classroom.building }} ( {{ rowData.classroom.id.toUpperCase().substring(0, 3) }} )</td>
           <td class="saveButton-tdFix" style="justify-content:center;">
-            {{ rowData.classroom.info.name }}
-            <save-button :classroomID="rowData.classroom.id" :in-isSave="rowData.classroom.isSave"/>
+            {{ rowData.classroom.name }}
+            <save-button :classroomID="rowData.classroom.id"/>
           </td>
           <td v-if="tableType == 'search' || tableType == 'status'">{{ getPeriodText(rowData.period) }}</td>
           <td v-if="tableType == 'status'">{{ getStatusText(rowData.status) }}</td>
@@ -120,8 +120,8 @@
 <script>
   import floor_config from "@/assets/floor/floor-config.json"; // 平面圖排版的設定檔
   import schedule_config from "@/assets/schedule-config.json"; // 課表時段的設定檔
+  import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
   import saveButton from "@/components/main/other/SaveButton.vue"; // 收藏按鈕comp
-  import { getClassroomData } from '@/api/floor';
 
   export default{
     components: {
@@ -195,7 +195,7 @@
         let tableData = [];
         for (let item of this.insertData){
           tableData.push({
-            classroom: getClassroomData(item.classroomID), // <string>classroomID 轉 <struct>classroom資料
+            classroom: getClassroomInfo(item.classroomID), // <string>classroomID 轉 <struct>classroom資料
             period: item.period,
             status: item.status
           });
