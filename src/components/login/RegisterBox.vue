@@ -6,7 +6,7 @@
     </div>
     <div class="title">帳號註冊</div>
     <div class="loginView-inputbox">
-      <input placeholder="學號" v-model="input.account">
+      <input placeholder="海大email" v-model="input.account">
       <input placeholder="密碼" v-model="input.password">
       <input placeholder="忘記密碼提示" maxlength="15" v-model="input.hint">
       <div class="loginView-warning" v-show="warning.show" v-html="warning.text"></div>
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { userRegister } from '@/api/login';
+  import { userRegister } from '@/api/auth';
 
   export default{
     data(){

@@ -2,7 +2,7 @@
   <div class="loginView">
     <div class="title">教室預約系統</div>
     <div class="loginView-inputbox">
-      <input placeholder="學號" v-model="input.account">
+      <input placeholder="海大email" v-model="input.account">
       <input placeholder="密碼" v-model="input.password">
       <div class="option">
         <div @click="showPasswordHint()">忘記密碼</div>
@@ -15,7 +15,7 @@
 </template>
 
 <script>
-  import { getPasswordHint, userLogin } from "@/api/login"
+  import { getPasswordHint, userLogin } from "@/api/auth"
 
   export default{
     data(){
