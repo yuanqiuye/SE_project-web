@@ -107,7 +107,7 @@
           <td v-if="tableType == 'search' || tableType == 'status'">{{ getPeriodText(rowData.period) }}</td>
           <td v-if="tableType == 'status'">{{ getStatusText(rowData.status) }}</td>
           <td>
-            <span class="ts-icon is-info-icon iconButton infoIconFix" @click="$router.push(`/floor?id=${rowData.classroom.id}`)"></span>
+            <span class="ts-icon is-info-icon iconButton infoIconFix" @click="clickInfoButton(rowData.classroom.id)"></span>
             <span v-if="false" class="ts-icon is-trash-can-icon iconButton-danger trashcanIconFix" @click="null"></span>
             <!-- only status page have other iconButton -->
           </td>
@@ -188,6 +188,29 @@
           status: null
         }
       },
+      isShow(rowData){ // 篩選器判斷哪一列要顯示
+        let show = true;
+        
+        const rowData_id = rowData.classroom.id.toLowerCase() // 某一行資料的id
+        const fliter_id1 = this.fliter.id.toLowerCase(); // from id搜尋框
+        let fliter_id2 = this.fliter.building; // 當選擇 building: fliter_id2 = "ins" (大樓)
+        if (this.fliter.classroomID == "") fliter_id2 += this.fliter.floor; // 當選擇 building+floor: fliter_id2 = "insB1" (大樓+樓層)
+        else fliter_id2 += this.fliter.classroomID; // 當選擇 building+floor+classroomID: fliter_id2 = "insB03" (大樓+教室id)
+        fliter_id2 = fliter_id2.toLowerCase();
+        if (!rowData_id.includes(fliter_id1)) show = false;
+        if (!rowData_id.includes(fliter_id2)) show = false;
+        // 篩選id ( 大樓+樓層+教室id 也是一個id篩選器 )
+        
+        if (this.fliter.day != null && rowData.period.day != this.fliter.day) show = false; // 星期幾篩選
+        if (this.fliter.startPeriod != null && this.fliter.endPeriod != null){ // 時段篩選
+          if (!(this.fliter.startPeriod >= rowData.period.startPeriod && this.fliter.endPeriod <= rowData.period.endPeriod)) show = false;
+          // 篩選器的時段必須在rowData的時段內
+        }
+        
+        if (this.fliter.status != null && rowData.status != this.fliter.status) show = false; // 狀態篩選
+        
+        return show;
+      },
       
       getTableData(){ // 將父comp輸入表格的資料整理,再插入到表格
         if (this.insertData == undefined) return [];
@@ -216,28 +239,9 @@
         if (status != undefined) statusText = this.statusText[status];
         return statusText;
       },
-      isShow(rowData){ // 篩選器判斷哪一列要顯示
-        let show = true;
-        
-        const rowData_id = rowData.classroom.id.toLowerCase() // 某一行資料的id
-        const fliter_id1 = this.fliter.id.toLowerCase(); // from id搜尋框
-        let fliter_id2 = this.fliter.building; // 當選擇 building: fliter_id2 = "ins" (大樓)
-        if (this.fliter.classroomID == "") fliter_id2 += this.fliter.floor; // 當選擇 building+floor: fliter_id2 = "insB1" (大樓+樓層)
-        else fliter_id2 += this.fliter.classroomID; // 當選擇 building+floor+classroomID: fliter_id2 = "insB03" (大樓+教室id)
-        fliter_id2 = fliter_id2.toLowerCase();
-        if (!rowData_id.includes(fliter_id1)) show = false;
-        if (!rowData_id.includes(fliter_id2)) show = false;
-        // 篩選id ( 大樓+樓層+教室id 也是一個id篩選器 )
-        
-        if (this.fliter.day != null && rowData.period.day != this.fliter.day) show = false; // 星期幾篩選
-        if (this.fliter.startPeriod != null && this.fliter.endPeriod != null){ // 時段篩選
-          if (!(this.fliter.startPeriod >= rowData.period.startPeriod && this.fliter.endPeriod <= rowData.period.endPeriod)) show = false;
-          // 篩選器的時段必須在rowData的時段內
-        }
-        
-        if (this.fliter.status != null && rowData.status != this.fliter.status) show = false; // 狀態篩選
-        
-        return show;
+      
+      clickInfoButton(classroomID){ // 每列資訊最右側的"i"按鈕(更多資訊)被按下
+        this.$router.push({ name: 'floorPage', query: { id: classroomID } }); // 跳轉到平面圖頁面,並切換到特定教室
       }
     }
   }
