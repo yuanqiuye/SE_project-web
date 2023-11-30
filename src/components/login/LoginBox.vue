@@ -1,8 +1,8 @@
 <template>
   <div class="loginView">
     <div class="title">教室預約系統</div>
-    <div class="loginView-inputbox">
-      <input placeholder="海大email" v-model="input.account">
+    <div class="loginView-inputbox inputbox-height">
+      <input placeholder="學號" v-model="input.account">
       <input placeholder="密碼" v-model="input.password">
       <div class="option">
         <div @click="showPasswordHint()">忘記密碼</div>
@@ -36,9 +36,9 @@
       },
       login(){
         let returnCode = userLogin(this.input.account, this.input.password);
-        if (returnCode == 1) this.$router.push({name: "floorPage"});
-        else if (returnCode == -1) this.showWarning("帳號或密碼錯誤");
-        else if (returnCode == -2) this.showWarning("帳號遭到封鎖");
+        if (returnCode == 200) this.$router.push({ name: "floorPage" });
+        else if (returnCode == 400) this.showWarning("帳號或密碼錯誤");
+        else if (returnCode == 403) this.showWarning("帳號遭到封鎖");
         else this.showWarning("未知錯誤");
       }
     }
@@ -48,6 +48,9 @@
 <style scoped>
   .title{
     font-size: 30px; font-weight: bold; text-align: center;
+  }
+  .inputbox-height{
+    height: 300px;
   }
   .option{
     margin-top: 2px; padding: 0 6px;

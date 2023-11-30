@@ -13,7 +13,6 @@
     display: flex; flex-direction: column; justify-content: center; align-items: center;
   }
   .loginView-inputbox{
-    height: 300px;
     display: flex; flex-direction: column; justify-content: center;
   }
   .loginView-inputbox > input{
