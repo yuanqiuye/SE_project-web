@@ -34,9 +34,17 @@
         if (this.input.account == "" || this.input.password == "" || this.input.hint == "") this.showWarning("註冊資料未輸入完整");
         else{
           let returnCode = userRegister(this.input.account, this.input.password, this.input.hint);
-          if (returnCode == 200) this.$router.push({ name: "registerPage_verify", query: { account: this.input.account } });
-          else if (returnCode == 400) this.$router.push({ name: "registerPage_result" });
-          else this.showWarning("未知錯誤");
+          switch (returnCode){
+            case 200: // 註冊成功,跳轉至驗證碼頁面
+              this.$router.push({ name: "registerPage_verify", query: { account: this.input.account } });
+              break;
+            case 400: // 帳號已存在,跳轉至註冊結果頁面
+              this.$router.push({ name: "registerPage_result" });
+              break;
+            default:
+              this.showWarning("未知錯誤");
+              break;
+          }
         }
       }
     },
