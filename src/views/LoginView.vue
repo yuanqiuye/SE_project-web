@@ -23,9 +23,6 @@
   .loginView-inputbox > input:not(:first-child){
     margin-top: 8px;
   }
-  .loginView-warning{
-    color: #f00; font-weight: bold; text-align: center;
-  }
   .loginView-button{
     border: none;
     box-shadow: 0 0 6px #000b;

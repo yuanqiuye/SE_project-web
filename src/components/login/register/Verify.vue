@@ -9,19 +9,25 @@
     </div>
     <div class="loginView-inputbox inputbox-height">
       <input placeholder="驗證碼" v-model="input.verificationCode">
+      <warning-box :text="warningText"/>
     </div>
-    <button @click="clickVerify" class="loginView-button ts-button is-large">驗證</button>
+    <button class="loginView-button ts-button is-large" @click="clickVerify">驗證</button>
   </div>
 </template>
 
 <script>
   import { verifyCode } from '@/api/auth';
+  import warningBox from "@/components/login/other/WarningBox.vue";
 
   export default{
+    components: {
+      "warning-box": warningBox
+    },
     data(){
       return {
         account: "",
-        input: { verificationCode: "" }
+        input: { verificationCode: "" },
+        warningText: ""
       }
     },
     created(){
@@ -29,7 +35,18 @@
     },
     methods: {
       clickVerify(){
-        verifyCode(this.account, this.input.verificationCode);
+        let returnCode = verifyCode(this.account, this.input.verificationCode);
+        switch (returnCode){
+          case 200: // 驗證碼正確,跳轉至註冊結果頁面(顯示驗證成功)
+            this.$router.push({ name: "registerPage_result", query: { result: "success" } });
+            break;
+          case 400: // 驗證碼錯誤
+            this.warningText = "驗證碼錯誤";
+            break;
+          default:
+          this.warningText = "未知錯誤";
+            break;
+        }
       }
     },
   }

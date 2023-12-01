@@ -8,38 +8,49 @@
         <div @click="showPasswordHint()">忘記密碼</div>
         <div @click="$router.push({name:'registerPage'})">註冊</div>
       </div>
-      <div class="loginView-warning" v-show="warning.show" v-html="warning.text"></div>
+      <warning-box :text="warningText"/>
     </div>
     <button class="loginView-button ts-button is-large" @click="login()">登入</button>
   </div>
 </template>
 
 <script>
-  import { getPasswordHint, userLogin } from "@/api/auth"
+  import { getPasswordHint, userLogin } from "@/api/auth";
+  import warningBox from "@/components/login/other/WarningBox.vue";
 
   export default{
+    components: {
+      "warning-box": warningBox
+    },
     data(){
       return{
         show: true,
         input: { account: "", password: "" },
-        warning: { show: false, text: "" }
+        warningText: ""
       }
     },
     methods: {
-      showWarning(warningString){
-        this.warning = { show: true, text: warningString };
-      },
       showPasswordHint(){
         let hint = getPasswordHint(this.input.account);
-        if (hint != null) this.showWarning("[ 密碼提示 ]<br>"+hint);
-        else this.showWarning("帳號不存在 !");
+        if (hint != null) this.warningText = `[ 密碼提示 ]<br>${hint}`;
+        else this.warningText = "帳號不存在 !";
       },
       login(){
         let returnCode = userLogin(this.input.account, this.input.password);
-        if (returnCode == 200) this.$router.push({ name: "floorPage" });
-        else if (returnCode == 400) this.showWarning("帳號或密碼錯誤");
-        else if (returnCode == 403) this.showWarning("帳號遭到封鎖");
-        else this.showWarning("未知錯誤");
+        switch (returnCode){
+          case 200: // 帳號及密碼正確,跳轉至平面圖頁面
+            this.$router.push({ name: "floorPage" });
+            break;
+          case 400: // 帳號或密碼錯誤
+            this.warningText = "帳號或密碼錯誤";
+            break;
+          case 403: // 帳號被ban
+            this.warningText = "帳號遭到封鎖";
+            break;
+          default:
+            this.warningText = "未知錯誤";
+            break;
+        }
       }
     }
   }

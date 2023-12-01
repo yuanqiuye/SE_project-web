@@ -38,6 +38,7 @@ export function userRegister(account, password, hint){ // 送出註冊帳號請�
   // 可修改區 start
   // todo 叫後端傳送驗證碼到user的海大信箱
   alert(`[api/login/userRegister]\naccount = ${account}\npassword = ${password}\nhint = ${hint}`); // debug
+  if (account == "1") return 400;
   return 200;
   // 可修改區 end
 }
@@ -55,8 +56,19 @@ export function userRegister(account, password, hint){ // 送出註冊帳號請�
 export function verifyCode(account, code){ // 檢查驗證碼是否正確
   // 可修改區 start
   alert(`[api/login/verifyCode]\naccount = ${account}\ncode = ${code}`); // debug
+  // todo 如果驗證成功,直接變成登入狀態 (註冊成功,直接自動登入)
+  return 200;
   // 可修改區 end
 }
+/*
+  input:
+    account: <string>帳號
+    code: <string>驗證碼
+  
+  return:
+    if 驗證碼正確 -> return 200
+    if 驗證碼錯誤 -> return 400
+*/
 
 export function userLogout(){ // 登出
   // 可修改區 start
