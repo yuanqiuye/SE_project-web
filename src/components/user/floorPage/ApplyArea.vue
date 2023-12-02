@@ -82,7 +82,7 @@
         
         const allUserPeriodData = getAllUserPeriodData();
         for (const p of allUserPeriodData){
-          if (p.classroomID == this.classroomInfo.id && p.status >= 2 && p.status <= 5){ // 教室相同,狀態介於2~5之間代表正在借用
+          if (p.classroomID == this.classroomInfo.id && (p.status == 2 || p.status == 3)){ // 教室相同,狀態介於2~5之間代表被借走
             for (let i = p.period.startPeriod; i <= p.period.endPeriod; i++) this.periodState[p.period.day][i] = 1; // 更新狀態表 (1: 已被借用)
           }
         }
@@ -90,7 +90,7 @@
         
         const userPeriodData = getUserPeriodData();
         for (const p of userPeriodData){
-          if (p.classroomID == this.classroomInfo.id && p.status >= 2 && p.status <= 5){ // 教室相同,狀態介於2~5之間代表正在借用
+          if (p.classroomID == this.classroomInfo.id && (p.status == 2 || p.status == 3)){ // 教室相同,狀態介於2~5之間代表正在借用
             for (let i = p.period.startPeriod; i <= p.period.endPeriod; i++) this.periodState[p.period.day][i] = 2; // 更新狀態表 (2: 被自己借用)
           }
         }

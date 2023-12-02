@@ -156,6 +156,7 @@
   import schedule_config from "@/assets/schedule-config.json"; // 課表時段的設定檔
   import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
   import saveButton from "@/components/user/other/SaveButton.vue"; // 收藏按鈕comp
+  import { getRole } from "@/api/auth";
   import { cancelApply, deletePeriodData, acceptRequest, rejectRequest } from "@/api/app";
 
   export default{
@@ -304,7 +305,8 @@
         }
       },
       clickInfoButton(classroomID){ // 每列資訊最右側的"i"按鈕(更多資訊)被按下
-        this.$router.push({ name: 'floorPage', query: { id: classroomID } }); // 跳轉到平面圖頁面,並切換到特定教室
+        if (getRole() == "user") this.$router.push({ name: 'floorPage', query: { id: classroomID } }); // 跳轉到平面圖頁面,並切換到特定教室
+        else if (getRole() == "admin") this.$router.push({ name: 'floorPage_admin', query: { id: classroomID } });
       },
       clickCancelButton(pid){ // Only for status page (user) , 每列資訊最右側的"x"按鈕(取消申請)被按下
         this.runConfirmDialog("取消申請", "取消申請", cancelApply, pid);
