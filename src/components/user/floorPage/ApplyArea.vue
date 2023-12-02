@@ -42,7 +42,7 @@
 <script>
   import config from "@/assets/schedule-config.json"; // 課表時段的設定檔
   import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
-  import { getUserPeriodData, getClassroomPeriodData, sendApply } from '@/api/app';
+  import { getEnablePeriodData, getAllUserPeriodData, getUserPeriodData, sendApply } from '@/api/app';
 
   export default{
     props: [
@@ -74,20 +74,23 @@
         this.periodState = Array.from(Array(1+5), () => Array(this.periodTime.length+1).fill(100));
         // 生成空狀態表(表格全部填無法借用)
         
-        const classroomPeriodData = getClassroomPeriodData(this.classroomInfo.id);
-        for (const p of classroomPeriodData.idle){
+        const enablePeriod = getEnablePeriodData(this.classroomInfo.id);
+        for (const p of enablePeriod){
           for (let i = p.startPeriod; i <= p.endPeriod; i++) this.periodState[p.day][i] = 0; // 更新狀態表 (0: 可借用)
         }
         // 更新狀態表(可借用)
         
-        for (const p of classroomPeriodData.used){
-          for (let i = p.startPeriod; i <= p.endPeriod; i++) this.periodState[p.day][i] = 1; // 更新狀態表 (1: 已被借用)
+        const allUserPeriodData = getAllUserPeriodData();
+        for (const p of allUserPeriodData){
+          if (p.classroomID == this.classroomInfo.id && p.status >= 2 && p.status <= 5){ // 教室相同,狀態介於2~5之間代表正在借用
+            for (let i = p.period.startPeriod; i <= p.period.endPeriod; i++) this.periodState[p.period.day][i] = 1; // 更新狀態表 (1: 已被借用)
+          }
         }
         // 更新狀態表(已被借用)
         
         const userPeriodData = getUserPeriodData();
         for (const p of userPeriodData){
-          if (p.classroomID == this.classroomInfo.id){ // 教室相同
+          if (p.classroomID == this.classroomInfo.id && p.status >= 2 && p.status <= 5){ // 教室相同,狀態介於2~5之間代表正在借用
             for (let i = p.period.startPeriod; i <= p.period.endPeriod; i++) this.periodState[p.period.day][i] = 2; // 更新狀態表 (2: 被自己借用)
           }
         }

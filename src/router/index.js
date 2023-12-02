@@ -42,7 +42,7 @@ const routes = [
     },
     children: [
       { path: "floor", name: "floorPage_admin", component: () => import("@/components/admin/AdminFloorPage.vue") },
-      { path: "request", name: "requestPage_admin", component: () => import("@/components/user/SearchPage.vue") },
+      { path: "request", name: "requestPage_admin", component: () => import("@/components/admin/AdminRequestPage.vue") },
       { path: "save", name: "savePage_admin", component: () => import("@/components/user/SavePage.vue") },
     ]
   },

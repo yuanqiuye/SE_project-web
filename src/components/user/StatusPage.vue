@@ -1,5 +1,5 @@
 <template>
-  <data-table :enable-col="{ period: '時段', status: '狀態' }" :insert-data="insertData"/>
+  <data-table :table-type="'statusPage'" :enable-col="{ period: '時段', status: '狀態' }" :insert-data="insertData"/>
 </template>
 
 <script>
@@ -12,7 +12,7 @@
     },
     data(){
       return {
-        insertData: null
+        insertData: []
       }
     },
     created(){

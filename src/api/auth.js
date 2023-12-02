@@ -2,7 +2,7 @@ export function getPasswordHint(account){ // 獲得某個帳號的密碼提示
   let hint = null; // 預設回傳的密碼提示
   
   // 可修改區 start
-  alert(`[api/login/getPasswordHint]\naccount = ${account}`); // debug
+  alert(`[api/auth/getPasswordHint]\naccount = ${account}`); // debug
   if (account == "1") hint = "你知道的"; // 如果帳號存在,將 hint 設為該帳號的密碼提示
   // 可修改區 end
   
@@ -18,7 +18,7 @@ export function getPasswordHint(account){ // 獲得某個帳號的密碼提示
 
 export function userLogin(account, password){ // 送出登入請求
   // 可修改區 start
-  alert(`[api/login/userLogin]\naccount = ${account}\npassword = ${password}`); // debug
+  alert(`[api/auth/userLogin]\naccount = ${account}\npassword = ${password}`); // debug
   if (account == "1" && password == "1") return 200;
   // 可修改區 end
   return 400;
@@ -37,7 +37,7 @@ export function userLogin(account, password){ // 送出登入請求
 export function userRegister(account, password, hint){ // 送出註冊帳號請求
   // 可修改區 start
   // todo 叫後端傳送驗證碼到user的海大信箱
-  alert(`[api/login/userRegister]\naccount = ${account}\npassword = ${password}\nhint = ${hint}`); // debug
+  alert(`[api/auth/userRegister]\naccount = ${account}\npassword = ${password}\nhint = ${hint}`); // debug
   if (account == "1") return 400;
   return 200;
   // 可修改區 end
@@ -55,7 +55,7 @@ export function userRegister(account, password, hint){ // 送出註冊帳號請�
 
 export function verifyCode(account, code){ // 檢查驗證碼是否正確
   // 可修改區 start
-  alert(`[api/login/verifyCode]\naccount = ${account}\ncode = ${code}`); // debug
+  alert(`[api/auth/verifyCode]\naccount = ${account}\ncode = ${code}`); // debug
   // todo 如果驗證成功,直接變成登入狀態 (註冊成功,直接自動登入)
   return 200;
   // 可修改區 end
@@ -72,10 +72,10 @@ export function verifyCode(account, code){ // 檢查驗證碼是否正確
 
 export function userLogout(){ // 登出
   // 可修改區 start
-  alert("[api/login/userLogout]"); // debug
+  alert("[api/auth/userLogout]"); // debug
   // 可修改區 end
 }
 
 export function getRole(){ // 不是api,獲取身分組
-  return "user"; // 測試中
+  return "admin"; // 測試中,勿動
 }

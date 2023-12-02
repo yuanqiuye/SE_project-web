@@ -1,5 +1,5 @@
+import enablePeriod from "@/api/enable-period.json"; // 後端連接後可刪
 import user from "@/api/user-data.json"; // 後端完成後可刪
-import classroomPeriodData from "@/api/period-data.json"; // 後端連接後可刪
 
 export function getUserPeriodData(){ // 獲取user的借用資料
   // 可修改區 start
@@ -13,11 +13,21 @@ export function getUserPeriodData(){ // 獲取user的借用資料
     請參照 user-data
 */
 
-export function getClassroomPeriodData(classroomID){ // 跟後端拿某個教室全部的借用資料
+export function getAllUserPeriodData(){ // 獲取所有user的借用資料
   // 可修改區 start
-  if (classroomID in classroomPeriodData) return classroomPeriodData[classroomID];
+  return user.periodData;
   // 可修改區 end
-  return { idle: [], used: [] };
+}
+/*
+  return:
+    請參照 user-data
+*/
+
+export function getEnablePeriodData(classroomID){ // 跟後端拿某個教室全部的借用資料
+  // 可修改區 start
+  if (classroomID in enablePeriod) return enablePeriod[classroomID];
+  // 可修改區 end
+  return [];
 }
 /*
   input:
@@ -27,8 +37,8 @@ export function getClassroomPeriodData(classroomID){ // 跟後端拿某個教室
     請參照 period-data.json
 */
 
-export function getAllClassroomPeriodData(){ // 跟後端拿全部教室的借用資料
-  return classroomPeriodData;
+export function getAllEnablePeriodData(){ // 跟後端拿全部教室的借用資料
+  return enablePeriod;
 }
 /*
   return:
@@ -37,7 +47,7 @@ export function getAllClassroomPeriodData(){ // 跟後端拿全部教室的借�
 
 export function sendApply(classroomID, selectedPeriod){ // 送出借用教室的申請
   // 可修改區 start
-  alert(`[api/floor/sendApply]\nclassroomID = ${classroomID}\nselectedPeriod = ${selectedPeriod}`); // debug
+  alert(`[api/app/sendApply]\nclassroomID = ${classroomID}\nselectedPeriod = ${selectedPeriod}`); // debug
   return 200;
   // 可修改區 end
 }
@@ -52,34 +62,62 @@ export function sendApply(classroomID, selectedPeriod){ // 送出借用教室的
     if 申請失敗 -> return 400
 */
 
-export function cancelApply(classroomID){ // 取消教室申請
+export function cancelApply(pid){ // 取消教室申請 (user)
   // 可修改區 start
-  alert(`[api/floor/cancelApply]\nclassroomID = ${classroomID}`); // debug
+  alert(`[api/app/cancelApply]\npid = ${pid}`); // debug
   return 200;
   // 可修改區 end
 }
 /*
   input:
-    classroomID: <string>教室ID
-  userAccount: <string>
+    pid: <string>時段ID (唯一性)
   
   return:
     if 取消成功 -> return 200
     if 取消失敗 -> return 400
 */
 
-export function deletePeriodData(classroomID){ // 刪除特定狀態的借用紀錄 ( ex: 申請被拒絕 / 借用完畢(已還鑰匙) / 已取消申請 )
+export function deletePeriodData(pid){ // 刪除特定狀態的借用紀錄 (user) ( ex: 申請被拒絕 / 借用完畢(已還鑰匙) / 已取消申請 )
   // 可修改區 start
-  alert(`[api/floor/deletePeriodData]\nclassroomID = ${classroomID}`); // debug
+  alert(`[api/app/deletePeriodData]\npid = ${pid}`); // debug
   return 200;
   // 可修改區 end
 }
 /*
   input:
-    classroomID: <string>教室ID
-  userAccount: <string>
+    pid: <string>時段ID (唯一性)
   
   return:
-    if 刪除成功 -> return 200
-    if 刪除失敗 -> return 400
+    if 取消成功 -> return 200
+    if 取消失敗 -> return 400
+*/
+
+export function acceptRequest(pid){ // 接受一個時段申請 (admin)
+  // 可修改區 start
+  alert(`[api/app/acceptRequest]\npid = ${pid}`); // debug
+  return 200;
+  // 可修改區 end
+}
+/*
+  input:
+    pid: <string>時段ID (唯一性)
+  
+  return:
+    if 取消成功 -> return 200
+    if 取消失敗 -> return 400
+*/
+
+export function rejectRequest(pid){ // 拒絕一個時段申請 (admin)
+  // 可修改區 start
+  alert(`[api/app/rejectRequest]\npid = ${pid}`); // debug
+  return 200;
+  // 可修改區 end
+}
+/*
+  input:
+    pid: <string>時段ID (唯一性)
+  
+  return:
+    if 取消成功 -> return 200
+    if 取消失敗 -> return 400
 */

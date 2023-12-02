@@ -3,6 +3,12 @@
     <table class="main-table ts-table is-celled">
       <tbody>
         <tr>
+          <td class="main-table-fliter-account" v-if="'account' in enableCol">
+            <div class="ts-input is-start-icon is-solid">
+              <span class="ts-icon is-magnifying-glass-icon"></span>
+              <input type="text" placeholder="學號" v-model="fliter.account">
+            </div>
+          </td>
           <td class="main-table-fliter-id">
             <div class="ts-input is-start-icon is-solid">
               <span class="ts-icon is-magnifying-glass-icon"></span>
@@ -90,6 +96,7 @@
           </td>
         </tr>
         <tr>
+          <td v-if="'account' in enableCol">{{ enableCol.account }}</td>
           <td>#</td>
           <td>大樓</td>
           <td>教室名稱</td>
@@ -98,6 +105,7 @@
           <td><span class="ts-icon is-gears-icon"></span></td>
         </tr>
         <tr v-for="rowData in getTableData()" :key="rowData.classroom.id" v-show="isShow(rowData)">
+          <td v-if="'account' in enableCol">{{ rowData.account }}</td>
           <td>{{ rowData.classroom.id.toUpperCase() }}</td>
           <td>{{ rowData.classroom.building }} ( {{ rowData.classroom.id.toUpperCase().substring(0, 3) }} )</td>
           <td class="saveButton-tdFix" style="justify-content:center;">
@@ -113,17 +121,29 @@
               @click="clickInfoButton(rowData.classroom.id)"
             ></span>
             <span
-              class="ts-icon is-xmark-icon iconButton-danger xmarkIconFix"
+              class="ts-icon is-x-icon iconButton-danger xIconFix"
               title="取消申請"
-              v-if="rowData.status == 0 || rowData.status == 2"
-              @click="clickCancelButton(rowData.classroom.id)"
-            ></span>
+              v-if="tableType == 'statusPage' && (rowData.status == 0 || rowData.status == 2)"
+              @click="clickCancelButton(rowData.pid)"
+            ></span><!-- Only for status page (user). -->
             <span
               class="ts-icon is-trash-can-icon iconButton-danger trashcanIconFix"
               title="刪除"
-              v-if="rowData.status == 1 || rowData.status == 6 || rowData.status == 7"
-              @click="clickDeleteButton(rowData.classroom.id)"
-            ></span>
+              v-if="tableType == 'statusPage' && (rowData.status == 1 || rowData.status == 6 || rowData.status == 7)"
+              @click="clickDeleteButton(rowData.pid)"
+            ></span><!-- Only for status page (user). -->
+            <span
+              class="ts-icon is-check-icon iconButton xIconFix"
+              title="同意申請"
+              v-if="tableType == 'requestPage_admin'"
+              @click="clickAcceptButton(rowData.pid)"
+            ></span><!-- Only for request page (admin). -->
+            <span
+              class="ts-icon is-x-icon iconButton-danger xIconFix"
+              title="拒絕申請"
+              v-if="tableType == 'requestPage_admin'"
+              @click="clickRejectButton(rowData.pid)"
+            ></span><!-- Only for request page (admin). -->
           </td>
         </tr>
       </tbody>
@@ -136,13 +156,14 @@
   import schedule_config from "@/assets/schedule-config.json"; // 課表時段的設定檔
   import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
   import saveButton from "@/components/user/other/SaveButton.vue"; // 收藏按鈕comp
-  import { cancelApply, deletePeriodData } from "@/api/app";
+  import { cancelApply, deletePeriodData, acceptRequest, rejectRequest } from "@/api/app";
 
   export default{
     components: {
       "save-button": saveButton
     },
     props: [
+      "tableType", // 表格類型
       "enableCol", // 要啟用哪幾列
       "insertData" // 要插入表格的數筆資料
     ],
@@ -193,6 +214,7 @@
       },
       resetFliter(){ // 重置篩選列
         this.fliter = {
+          account: "",
           id: "",
           building: "",
           floor: "",
@@ -205,6 +227,8 @@
       },
       isShow(rowData){ // 篩選器判斷哪一列要顯示
         let show = true;
+        
+        if (!rowData.account.includes(this.fliter.account)) show = false; // 學號篩選
         
         const rowData_id = rowData.classroom.id.toLowerCase() // 某一行資料的id
         const fliter_id1 = this.fliter.id.toLowerCase(); // from id搜尋框
@@ -233,6 +257,8 @@
         let tableData = [];
         for (let item of this.insertData){
           const rowData = {
+            pid: item.pid,
+            account: (item.account != undefined) ? item.account : "",
             classroom: getClassroomInfo(item.classroomID), // <string>classroomID 轉 <struct>classroom資料
             period: item.period,
             status: item.status
@@ -260,42 +286,37 @@
         return statusText;
       },
       
+      runConfirmDialog(questionText, resultText, f_api, pid){ // 自定義彈出式確認框,因為我不想寫四遍switch
+        const result = window.confirm(`是否要${questionText} ?`); // 彈出式確認框
+        if (!result) return; // 按下取消就不執行 api
+        
+        const returnCode = f_api(pid); // 執行指定的 api function
+        switch (returnCode){
+          case 200: // api操作執行成功
+            alert(`${resultText}成功 !`);
+            break;
+          case 400: // api操作執行失敗
+            alert(`${resultText}失敗 !`);
+            break;
+          default: // 未知錯誤
+            alert("未知錯誤");
+            break;
+        }
+      },
       clickInfoButton(classroomID){ // 每列資訊最右側的"i"按鈕(更多資訊)被按下
         this.$router.push({ name: 'floorPage', query: { id: classroomID } }); // 跳轉到平面圖頁面,並切換到特定教室
       },
-      clickCancelButton(classroomID){ // 每列資訊最右側的"x"按鈕(取消申請)被按下
-        const result = window.confirm("是否要取消申請 ?"); // 彈出式確認框
-        if (result){ // 如果按下確定
-          const returnCode = cancelApply(classroomID); // 取消申請
-          switch (returnCode){
-            case 200: // 取消申請成功
-              alert("取消申請成功 !");
-              break;
-            case 400: // 取消申請失敗
-              alert("取消申請失敗 !");
-              break;
-            default:
-              alert("未知錯誤");
-              break;
-          }
-        }
+      clickCancelButton(pid){ // Only for status page (user) , 每列資訊最右側的"x"按鈕(取消申請)被按下
+        this.runConfirmDialog("取消申請", "取消申請", cancelApply, pid);
       },
-      clickDeleteButton(classroomID){ // 每列資訊最右側的"垃圾桶"按鈕(刪除)被按下
-      const result = window.confirm("是否要刪除借用紀錄 ?"); // 彈出式確認框
-        if (result){ // 如果按下確定
-          const returnCode = deletePeriodData(classroomID); // 取消申請
-          switch (returnCode){
-            case 200: // 取消申請成功
-              alert("刪除成功 !");
-              break;
-            case 400: // 取消申請失敗
-              alert("刪除失敗 !");
-              break;
-            default:
-              alert("未知錯誤");
-              break;
-          }
-        }
+      clickDeleteButton(pid){ // Only for status page (user) , 每列資訊最右側的"垃圾桶"按鈕(刪除)被按下
+        this.runConfirmDialog("刪除借用紀錄", "刪除", deletePeriodData, pid);
+      },
+      clickAcceptButton(pid){ // Only for request page (admin) , 每列資訊最右側的"v"按鈕(同意申請)被按下
+        this.runConfirmDialog("同意申請", "操作", acceptRequest, pid);
+      },
+      clickRejectButton(pid){ // Only for request page (admin) , 每列資訊最右側的"x"按鈕(拒絕申請)被按下
+        this.runConfirmDialog("拒絕申請", "操作", rejectRequest, pid);
       }
     }
   }
@@ -321,7 +342,7 @@
   .infoIconFix{
     padding: 8px 12.18px;
   }
-  .xmarkIconFix{
+  .xIconFix{
     padding: 8px 9.55px;
   }
   .trashcanIconFix{
@@ -340,6 +361,9 @@
   }
   .main-table-resetButton > span.ts-icon{
     margin-left: 4px;
+  }
+  .main-table-fliter-account > div{
+    width: 130px;
   }
   .main-table-fliter-id > div{
     width: 120px;
