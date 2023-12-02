@@ -34,7 +34,7 @@ export function getEnablePeriodData(classroomID){ // 跟後端拿某個教室全
     classroomID: <string>教室ID
   
   return:
-    請參照 period-data.json
+    請參照 enable-period.json
 */
 
 export function getAllEnablePeriodData(){ // 跟後端拿全部教室的借用資料
@@ -42,7 +42,7 @@ export function getAllEnablePeriodData(){ // 跟後端拿全部教室的借用�
 }
 /*
   return:
-    請參照 period-data.json
+    請參照 enable-period.json
 */
 
 export function sendApply(classroomID, selectedPeriod){ // 送出借用教室的申請
