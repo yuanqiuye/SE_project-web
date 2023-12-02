@@ -1,28 +1,28 @@
+import user from "@/api/user-data.json"; // 後端完成後可刪
+import periodData from "@/api/period-data.json"; // 後端連接後可刪
+
+export function getUserPeriodData(){
+  // 可修改區 start
+  return user.periodData;
+  // 可修改區 end
+}
+/*
+  return:
+    請參照 user-data
+*/
+
 export function getClassroomPeriodData(classroomID){ // 跟後端拿某個教室全部的借用資料
-  const example_classroomPeriodData = {
-    "ins101": [
-      { account: null, day: 1, startPeriod: 1, endPeriod: 4, state: 0 },
-      { account: null, day: 2, startPeriod: 1, endPeriod: 4, state: 0 },
-    ],
-    "ins105": [
-      { account: null, day: 2, startPeriod: 1, endPeriod: 4, state: 0 },
-      { account: null, day: 3, startPeriod: 1, endPeriod: 4, state: 0 },
-    ],
-    "ins203": [
-      { account: null, day: 3, startPeriod: 1, endPeriod: 4, state: 0 },
-      { account: null, day: 4, startPeriod: 1, endPeriod: 4, state: 0 },
-    ],
-  };
-  
-  if (classroomID in example_classroomPeriodData) return example_classroomPeriodData[classroomID];
-  return [];
+  // 可修改區 start
+  if (classroomID in periodData) return periodData[classroomID];
+  // 可修改區 end
+  return { idle: [], used: [] };
 }
 /*
   input:
     classroomID: <string>教室ID
   
   return:
-    <array> 同 example_classroomPeriodData
+    請參照 period-data.json
 */
 
 export function sendApply(classroomID, selectedPeriod){ // 送出借用教室的申請
