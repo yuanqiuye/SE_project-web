@@ -24,7 +24,7 @@
 
 <script>
   import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
-  import saveButton from "@/components/main/other/SaveButton.vue"; // 收藏按鈕comp
+  import saveButton from "@/components/user/other/SaveButton.vue"; // 收藏按鈕comp
 
   export default{
     components: {

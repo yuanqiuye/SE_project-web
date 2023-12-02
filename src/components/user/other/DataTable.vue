@@ -135,7 +135,7 @@
   import floor_config from "@/assets/floor/floor-config.json"; // 平面圖排版的設定檔
   import schedule_config from "@/assets/schedule-config.json"; // 課表時段的設定檔
   import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
-  import saveButton from "@/components/main/other/SaveButton.vue"; // 收藏按鈕comp
+  import saveButton from "@/components/user/other/SaveButton.vue"; // 收藏按鈕comp
   import { cancelApply, deletePeriodData } from "@/api/app";
 
   export default{

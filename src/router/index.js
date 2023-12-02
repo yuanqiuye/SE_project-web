@@ -19,10 +19,10 @@ const routes = [
   {
     path: "/", component: () => import("@/views/MainView.vue"),
     children: [
-      { path: "floor", name: "floorPage", component: () => import("@/components/main/FloorPage.vue") },
-      { path: "search", name: "searchPage", component: () => import("@/components/main/SearchPage.vue") },
-      { path: "status", name: "statusPage", component: () => import("@/components/main/StatusPage.vue") },
-      { path: "save", name: "savePage", component: () => import("@/components/main/SavePage.vue") }
+      { path: "floor", name: "floorPage", component: () => import("@/components/user/FloorPage.vue") },
+      { path: "search", name: "searchPage", component: () => import("@/components/user/SearchPage.vue") },
+      { path: "status", name: "statusPage", component: () => import("@/components/user/StatusPage.vue") },
+      { path: "save", name: "savePage", component: () => import("@/components/user/SavePage.vue") }
     ]
   },
   { path: "/:pathMatch(.*)", name: "notFound", redirect: "/login", hidden: true }
