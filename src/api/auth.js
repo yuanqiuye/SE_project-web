@@ -75,3 +75,7 @@ export function userLogout(){ // 登出
   alert("[api/login/userLogout]"); // debug
   // 可修改區 end
 }
+
+export function getRole(){ // 不是api,獲取身分組
+  return "user"; // 測試中
+}

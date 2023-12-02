@@ -13,7 +13,7 @@
   export default{
     components: {
       "nav-bar": NavBar
-    },
+    }
   }
 </script>
 

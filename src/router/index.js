@@ -1,4 +1,5 @@
-import { createRouter, createWebHistory } from "vue-router"
+import { createRouter, createWebHistory } from "vue-router";
+import { getRole } from "@/api/auth";
 
 const routes = [
   {
@@ -18,11 +19,31 @@ const routes = [
   },
   {
     path: "/", component: () => import("@/views/MainView.vue"),
+    beforeEnter: (to, from, next) => {
+      const role = getRole();
+      if (role == "user") next();
+      else if (role == "admin") next({ name: "floorPage_admin" });
+      else next({ name: "loginPage" });
+    },
     children: [
       { path: "floor", name: "floorPage", component: () => import("@/components/user/FloorPage.vue") },
       { path: "search", name: "searchPage", component: () => import("@/components/user/SearchPage.vue") },
       { path: "status", name: "statusPage", component: () => import("@/components/user/StatusPage.vue") },
-      { path: "save", name: "savePage", component: () => import("@/components/user/SavePage.vue") }
+      { path: "save", name: "savePage", component: () => import("@/components/user/SavePage.vue") },
+    ]
+  },
+  {
+    path: "/admin", component: () => import("@/views/MainView.vue"),
+    beforeEnter: (to, from, next) => {
+      const role = getRole();
+      if (role == "user") next({ name: "floorPage" });
+      else if (role == "admin") next();
+      else next({ name: "loginPage" });
+    },
+    children: [
+      { path: "floor", name: "floorPage_admin", component: () => import("@/components/admin/AdminFloorPage.vue") },
+      { path: "request", name: "requestPage_admin", component: () => import("@/components/user/SearchPage.vue") },
+      { path: "save", name: "savePage_admin", component: () => import("@/components/user/SavePage.vue") },
     ]
   },
   { path: "/:pathMatch(.*)", name: "notFound", redirect: "/login", hidden: true }
