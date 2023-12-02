@@ -6,7 +6,19 @@
       { "day": 3, "startPeriod": 3, "endPeriod": 7 }
     ],
     "used": [
-      { "day": 1, "startPeriod": 1, "endPeriod": 4 }
+      { "day": 1, "startPeriod": 1, "endPeriod": 3 },
+      { "day": 2, "startPeriod": 3, "endPeriod": 4 }
+    ]
+  },
+  "ins105": {
+    "idle": [
+      { "day": 1, "startPeriod": 1, "endPeriod": 9 },
+      { "day": 2, "startPeriod": 4, "endPeriod": 9 },
+      { "day": 3, "startPeriod": 3, "endPeriod": 7 }
+    ],
+    "used": [
+      { "day": 1, "startPeriod": 5, "endPeriod": 8 },
+      { "day": 2, "startPeriod": 6, "endPeriod": 9 }
     ]
   }
 }

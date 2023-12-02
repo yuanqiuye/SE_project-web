@@ -7,3 +7,7 @@ export function getClassroomInfo(classroomID){ // 獲得教室資料
   classroom.id = classroomID;
   return classroom;
 }
+/*
+  為什麼要多寫一個function是因為要處理沒有資料的教室
+  如果是需要拿到"有資料"的全部教室代號,會直接在vue檔內 import "classroom-info.json"
+*/

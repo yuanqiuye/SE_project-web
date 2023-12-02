@@ -40,8 +40,8 @@
 </template>
 
 <script>
-  import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
   import config from "@/assets/schedule-config.json"; // 課表時段的設定檔
+  import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
   import { getUserPeriodData, getClassroomPeriodData, sendApply } from '@/api/app';
 
   export default{
@@ -71,7 +71,7 @@
         const colorTable = { 0: "#fff", 1: "#fbb", 2: "#bfb", 100: "#bbb" };
         // 時段借用狀態: { 0: 可借用, 1: 已被借用, 2: 被自己借用, 100: 無法借用 }
         
-        this.periodState = Array.from(Array(6), () => Array(this.periodTime.length+1).fill(100));
+        this.periodState = Array.from(Array(1+5), () => Array(this.periodTime.length+1).fill(100));
         // 生成空狀態表(表格全部填無法借用)
         
         const classroomPeriodData = getClassroomPeriodData(this.classroomInfo.id);

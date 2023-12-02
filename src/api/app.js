@@ -1,5 +1,5 @@
 import user from "@/api/user-data.json"; // 後端完成後可刪
-import periodData from "@/api/period-data.json"; // 後端連接後可刪
+import classroomPeriodData from "@/api/period-data.json"; // 後端連接後可刪
 
 export function getUserPeriodData(){
   // 可修改區 start
@@ -13,7 +13,7 @@ export function getUserPeriodData(){
 
 export function getClassroomPeriodData(classroomID){ // 跟後端拿某個教室全部的借用資料
   // 可修改區 start
-  if (classroomID in periodData) return periodData[classroomID];
+  if (classroomID in classroomPeriodData) return classroomPeriodData[classroomID];
   // 可修改區 end
   return { idle: [], used: [] };
 }
@@ -24,6 +24,10 @@ export function getClassroomPeriodData(classroomID){ // 跟後端拿某個教室
   return:
     請參照 period-data.json
 */
+
+export function getAllClassroomPeriodData(){ // 跟後端拿全部教室的借用資料
+  return classroomPeriodData;
+}
 
 export function sendApply(classroomID, selectedPeriod){ // 送出借用教室的申請
   // 可修改區 start
