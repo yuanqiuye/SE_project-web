@@ -87,8 +87,8 @@
         
         const userPeriodData = getUserPeriodData();
         for (const p of userPeriodData){
-          if (p.id == this.classroomInfo.id){ // 教室相同
-            for (let i = p.startPeriod; i <= p.endPeriod; i++) this.periodState[p.day][i] = 2; // 更新狀態表 (2: 被自己借用)
+          if (p.classroomID == this.classroomInfo.id){ // 教室相同
+            for (let i = p.period.startPeriod; i <= p.period.endPeriod; i++) this.periodState[p.period.day][i] = 2; // 更新狀態表 (2: 被自己借用)
           }
         }
         // 更新狀態表(被自己借用)

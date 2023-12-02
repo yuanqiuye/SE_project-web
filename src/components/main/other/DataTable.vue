@@ -84,7 +84,7 @@
             </div>
           </td>
           <td>
-            <span class="ts-icon is-caret-left-icon main-table-resetButton iconButton" @click="resetFliter">
+            <span class="ts-icon is-caret-left-icon main-table-resetButton iconButton" title="重置篩選器" @click="resetFliter">
               <span class="ts-icon is-rotate-right-icon"></span>
             </span>
           </td>
@@ -107,9 +107,23 @@
           <td v-if="tableType == 'search' || tableType == 'status'">{{ getPeriodText(rowData.period) }}</td>
           <td v-if="tableType == 'status'">{{ getStatusText(rowData.status) }}</td>
           <td>
-            <span class="ts-icon is-info-icon iconButton infoIconFix" @click="clickInfoButton(rowData.classroom.id)"></span>
-            <span v-if="false" class="ts-icon is-trash-can-icon iconButton-danger trashcanIconFix" @click="null"></span>
-            <!-- only status page have other iconButton -->
+            <span
+              class="ts-icon is-info-icon iconButton infoIconFix"
+              title="更多資訊"
+              @click="clickInfoButton(rowData.classroom.id)"
+            ></span>
+            <span
+              class="ts-icon is-xmark-icon iconButton-danger xmarkIconFix"
+              title="取消申請"
+              v-if="rowData.status == 0 || rowData.status == 2"
+              @click="clickCancelButton(rowData.classroom.id)"
+            ></span>
+            <span
+              class="ts-icon is-trash-can-icon iconButton-danger trashcanIconFix"
+              title="刪除"
+              v-if="rowData.status == 1 || rowData.status == 6 || rowData.status == 7"
+              @click="clickDeleteButton(rowData.classroom.id)"
+            ></span>
           </td>
         </tr>
       </tbody>
@@ -122,6 +136,7 @@
   import schedule_config from "@/assets/schedule-config.json"; // 課表時段的設定檔
   import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
   import saveButton from "@/components/main/other/SaveButton.vue"; // 收藏按鈕comp
+  import { cancelApply, deletePeriodData } from "@/api/app";
 
   export default{
     components: {
@@ -142,7 +157,7 @@
           "借用中",
           "借用完畢 ( 未還鑰匙 )",
           "借用完畢 ( 已還鑰匙 )",
-          "已取消"
+          "已取消申請"
         ]
       }
     },
@@ -242,6 +257,40 @@
       
       clickInfoButton(classroomID){ // 每列資訊最右側的"i"按鈕(更多資訊)被按下
         this.$router.push({ name: 'floorPage', query: { id: classroomID } }); // 跳轉到平面圖頁面,並切換到特定教室
+      },
+      clickCancelButton(classroomID){ // 每列資訊最右側的"x"按鈕(取消申請)被按下
+        const result = window.confirm("是否要取消申請 ?"); // 彈出式確認框
+        if (result){ // 如果按下確定
+          const returnCode = cancelApply(classroomID); // 取消申請
+          switch (returnCode){
+            case 200: // 取消申請成功
+              alert("取消申請成功 !");
+              break;
+            case 400: // 取消申請失敗
+              alert("取消申請失敗 !");
+              break;
+            default:
+              alert("未知錯誤");
+              break;
+          }
+        }
+      },
+      clickDeleteButton(classroomID){ // 每列資訊最右側的"垃圾桶"按鈕(刪除)被按下
+      const result = window.confirm("是否要刪除借用紀錄 ?"); // 彈出式確認框
+        if (result){ // 如果按下確定
+          const returnCode = deletePeriodData(classroomID); // 取消申請
+          switch (returnCode){
+            case 200: // 取消申請成功
+              alert("刪除成功 !");
+              break;
+            case 400: // 取消申請失敗
+              alert("刪除失敗 !");
+              break;
+            default:
+              alert("未知錯誤");
+              break;
+          }
+        }
       }
     }
   }
@@ -266,6 +315,9 @@
   }
   .infoIconFix{
     padding: 8px 12.18px;
+  }
+  .xmarkIconFix{
+    padding: 8px 9.55px;
   }
   .trashcanIconFix{
     padding: 8px 8.68px;
