@@ -145,8 +145,20 @@
         if (this.sDP.startPeriod == this.sDP.endPeriod) this.confirm.period = startPeriod;
         else this.confirm.period = `${startPeriod}~${endPeriod}`;
       },
-      clickApplyButton(){
-        sendApply(this.classroomInfo.id, this.sDP);
+      clickApplyButton(){ // 按下申請按鈕
+        const returnCode = sendApply(this.classroomInfo.id, this.sDP);
+        switch (returnCode){
+          case 200:
+            alert("申請成功 !");
+            break;
+          case 400:
+            alert("申請失敗 !");
+            break;
+          default:
+            alert("未知錯誤");
+            break;
+        }
+        this.resetsDP(); // 重設選取的時段
       }
     },
     watch: {

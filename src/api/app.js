@@ -30,6 +30,10 @@ export function getClassroomPeriodData(classroomID){ // 跟後端拿某個教室
 export function getAllClassroomPeriodData(){ // 跟後端拿全部教室的借用資料
   return classroomPeriodData;
 }
+/*
+  return:
+    請參照 period-data.json
+*/
 
 export function sendApply(classroomID, selectedPeriod){ // 送出借用教室的申請
   // 可修改區 start
