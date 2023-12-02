@@ -1,5 +1,5 @@
 <template>
-  <data-table :table-type="'search'" :insert-data="insertData"/>
+  <data-table :enable-col="{ period: '可借用時段' }" :insert-data="insertData"/>
 </template>
 
 <script>
