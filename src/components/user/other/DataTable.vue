@@ -41,7 +41,7 @@
               </select>
             </div>
           </td>
-          <td class="main-table-fliter-period" v-if="tableType == 'search' || tableType == 'status'">
+          <td class="main-table-fliter-period" v-if="'period' in enableCol">
             <div class="ts-select is-solid">
               <select v-model="fliter.day">
                 <option value="1">星期一</option>
@@ -76,7 +76,7 @@
               </select>
             </div>
           </td>
-          <td v-if="tableType == 'status'">
+          <td v-if="'status' in enableCol">
             <div class="ts-select is-solid">
               <select v-model="fliter.status">
                 <option v-for="(text, index) in statusText" :key="index" :value="index">{{ text }}</option>
@@ -93,8 +93,8 @@
           <td>#</td>
           <td>大樓</td>
           <td>教室名稱</td>
-          <td v-if="tableType == 'search'">可申請時段</td><td v-if="tableType == 'status'">時段</td>
-          <td v-if="tableType == 'status'">狀態</td>
+          <td v-if="'period' in enableCol">{{ enableCol.period }}</td>
+          <td v-if="'status' in enableCol">{{ enableCol.status }}</td>
           <td><span class="ts-icon is-gears-icon"></span></td>
         </tr>
         <tr v-for="rowData in getTableData()" :key="rowData.classroom.id" v-show="isShow(rowData)">
@@ -104,8 +104,8 @@
             {{ rowData.classroom.name }}
             <save-button :classroomID="rowData.classroom.id"/>
           </td>
-          <td v-if="tableType == 'search' || tableType == 'status'">{{ getPeriodText(rowData.period) }}</td>
-          <td v-if="tableType == 'status'">{{ getStatusText(rowData.status) }}</td>
+          <td v-if="'period' in enableCol">{{ getPeriodText(rowData.period) }}</td>
+          <td v-if="'status' in enableCol">{{ getStatusText(rowData.status) }}</td>
           <td>
             <span
               class="ts-icon is-info-icon iconButton infoIconFix"
@@ -143,7 +143,7 @@
       "save-button": saveButton
     },
     props: [
-      "tableType", // 表格類型 -> { "search": 搜尋教室page, "status": 借用狀態page, "save": 我的收藏page }
+      "enableCol", // 要啟用哪幾列
       "insertData" // 要插入表格的數筆資料
     ],
     data(){
