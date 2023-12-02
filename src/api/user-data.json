@@ -1,9 +1,9 @@
 {
   "periodData": [
     { "classroomID": "ins101", "period": { "day": 2, "startPeriod": 3, "endPeriod": 4 }, "status": 0 },
-    { "classroomID": "ins101", "period": { "day": 2, "startPeriod": 3, "endPeriod": 4 }, "status": 1 },
+    { "classroomID": "ins105", "period": { "day": 2, "startPeriod": 3, "endPeriod": 4 }, "status": 1 },
     { "classroomID": "ins101", "period": { "day": 2, "startPeriod": 3, "endPeriod": 4 }, "status": 2 },
-    { "classroomID": "ins101", "period": { "day": 2, "startPeriod": 3, "endPeriod": 4 }, "status": 3 },
+    { "classroomID": "ins205", "period": { "day": 2, "startPeriod": 3, "endPeriod": 4 }, "status": 3 },
     { "classroomID": "ins101", "period": { "day": 2, "startPeriod": 3, "endPeriod": 4 }, "status": 4 },
     { "classroomID": "ins101", "period": { "day": 2, "startPeriod": 3, "endPeriod": 4 }, "status": 5 },
     { "classroomID": "ins101", "period": { "day": 2, "startPeriod": 3, "endPeriod": 4 }, "status": 6 },

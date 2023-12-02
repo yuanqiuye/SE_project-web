@@ -232,11 +232,16 @@
         
         let tableData = [];
         for (let item of this.insertData){
-          tableData.push({
+          const rowData = {
             classroom: getClassroomInfo(item.classroomID), // <string>classroomID 轉 <struct>classroom資料
             period: item.period,
             status: item.status
-          });
+          };
+          
+          const classroomName = rowData.classroom.name;
+          rowData.classroom.name = classroomName.slice(0, classroomName.indexOf("(")).trim(); // 縮短教室名稱,因為status表格太寬了
+          
+          tableData.push(rowData);
         }
         return tableData;
       },
