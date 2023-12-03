@@ -152,7 +152,7 @@
         const returnCode = sendApply(this.classroomInfo.id, this.sDP);
         switch (returnCode){
           case 200:
-            alert("申請成功 !");
+            alert("申請成功 !\n請至借用紀錄頁面查看最新狀態，管理員將盡速審核你的請求。\n鑰匙歸還期限為借用日後一日系辦關門前。");
             break;
           case 400:
             alert("申請失敗 !");
