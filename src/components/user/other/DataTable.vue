@@ -97,7 +97,7 @@
         </tr>
         <tr>
           <td v-if="'account' in enableCol">{{ enableCol.account }}</td>
-          <td>#</td>
+          <td><span class="ts-icon is-hashtag-icon"></span></td>
           <td>大樓</td>
           <td>教室名稱</td>
           <td v-if="'period' in enableCol">{{ enableCol.period }}</td>
@@ -118,43 +118,43 @@
             <span
               class="ts-icon is-info-icon iconButton infoIconFix"
               title="詳細教室資訊"
-              @click="clickInfoButton(rowData.classroom.id)"
+              @click="infoButton(rowData.classroom.id)"
             ></span>
             <span
               class="ts-icon is-x-icon iconButton-danger xIconFix"
               title="取消申請"
               v-if="tableType == 'statusPage' && (rowData.status == 0 || rowData.status == 2)"
-              @click="clickCancelButton(rowData.pid)"
+              @click="cancelButton(rowData.pid)"
             ></span><!-- Only for status page (user). -->
             <span
               class="ts-icon is-trash-can-icon iconButton-danger trashcanIconFix"
               title="刪除"
               v-if="tableType == 'statusPage' && (rowData.status == 1 || rowData.status == 6 || rowData.status == 7)"
-              @click="clickDeleteButton(rowData.pid)"
+              @click="deleteButton(rowData.pid)"
             ></span><!-- Only for status page (user). -->
             <span
               class="ts-icon is-key-icon iconButton"
               title="借出鑰匙"
               v-if="tableType == 'overviewPage_admin' && rowData.status == 2"
-              @click="clickLendKeyButton(rowData.pid)"
+              @click="lendKeyButton(rowData.pid)"
             ></span><!-- Only for overview page (admin). -->
             <span
               class="ts-icon is-key-icon iconButton"
               title="歸還鑰匙"
               v-if="tableType == 'overviewPage_admin' && rowData.status == 5"
-              @click="clickReceiveKeyButton(rowData.pid)"
+              @click="receiveKeyButton(rowData.pid)"
             ></span><!-- Only for overview page (admin). -->
             <span
               class="ts-icon is-check-icon iconButton xIconFix"
               title="同意申請"
               v-if="tableType == 'requestPage_admin'"
-              @click="clickAcceptButton(rowData.pid)"
+              @click="acceptButton(rowData.pid)"
             ></span><!-- Only for request page (admin). -->
             <span
               class="ts-icon is-x-icon iconButton-danger xIconFix"
               title="拒絕申請"
               v-if="tableType == 'requestPage_admin'"
-              @click="clickRejectButton(rowData.pid)"
+              @click="rejectButton(rowData.pid)"
             ></span><!-- Only for request page (admin). -->
           </td>
         </tr>
@@ -176,11 +176,11 @@
     components: {
       "save-button": saveButton
     },
-    props: [
-      "tableType", // 表格類型
-      "enableCol", // 要啟用哪幾列
-      "insertData" // 要插入表格的數筆資料
-    ],
+    props: {
+      tableType: { default: null }, // 表格類型
+      enableCol: { default: {} }, // 要啟用哪幾列
+      insertData: { default: [] } // 要插入表格的數筆資料
+    },
     data(){
       return {
         fliter: null, // resetFliter() will init
@@ -305,7 +305,7 @@
         return statusText;
       },
       
-      runConfirmDialog(questionText, resultText, f_api, pid){ // 自定義彈出式確認框,因為我不想寫四遍switch
+      runConfirmDialog(questionText, resultText, f_api, pid){ // 自定義彈出式確認框,因為我不想寫n遍switch
         const result = window.confirm(`${questionText} ?`); // 彈出式確認框
         if (!result) return; // 按下取消就不執行 api
         
@@ -322,26 +322,26 @@
             break;
         }
       },
-      clickInfoButton(classroomID){ // 每列資訊最右側的"i"按鈕(更多資訊)被按下
+      infoButton(classroomID){ // 每列資訊最右側的"i"按鈕(更多資訊)被按下
         if (getRole() == "user") this.$router.push({ name: 'floorPage', query: { id: classroomID } }); // 跳轉到平面圖頁面,並切換到特定教室
         else if (getRole() == "admin") this.$router.push({ name: 'floorPage_admin', query: { id: classroomID } });
       },
-      clickCancelButton(pid){ // Only for status page (user) , 每列資訊最右側的"x"按鈕(取消申請)被按下
+      cancelButton(pid){ // Only for status page (user) , 每列資訊最右側的"x"按鈕(取消申請)被按下
         this.runConfirmDialog("是否要取消申請", "取消申請", cancelApply, pid);
       },
-      clickDeleteButton(pid){ // Only for status page (user) , 每列資訊最右側的"垃圾桶"按鈕(刪除)被按下
+      deleteButton(pid){ // Only for status page (user) , 每列資訊最右側的"垃圾桶"按鈕(刪除)被按下
         this.runConfirmDialog("是否要刪除借用紀錄", "刪除", deletePeriodData, pid);
       },
-      clickLendKeyButton(pid){ // Only for overview page (admin), 每列資訊最右側的"鑰匙"按鈕(借出鑰匙)被按下
+      lendKeyButton(pid){ // Only for overview page (admin), 每列資訊最右側的"鑰匙"按鈕(借出鑰匙)被按下
         this.runConfirmDialog("是否要借出鑰匙", "借用狀態更新", LendKey, pid);
       },
-      clickReceiveKeyButton(pid){ // Only for overview page (admin), 每列資訊最右側的"鑰匙"按鈕(拿到歸還的鑰匙)被按下
+      receiveKeyButton(pid){ // Only for overview page (admin), 每列資訊最右側的"鑰匙"按鈕(拿到歸還的鑰匙)被按下
         this.runConfirmDialog("是否拿到了歸還的鑰匙", "借用狀態更新", ReceiveKey, pid);
       },
-      clickAcceptButton(pid){ // Only for request page (admin) , 每列資訊最右側的"v"按鈕(同意申請)被按下
+      acceptButton(pid){ // Only for request page (admin) , 每列資訊最右側的"v"按鈕(同意申請)被按下
         this.runConfirmDialog("是否要同意申請", "操作", acceptRequest, pid);
       },
-      clickRejectButton(pid){ // Only for request page (admin) , 每列資訊最右側的"x"按鈕(拒絕申請)被按下
+      rejectButton(pid){ // Only for request page (admin) , 每列資訊最右側的"x"按鈕(拒絕申請)被按下
         this.runConfirmDialog("是否要拒絕申請", "操作", rejectRequest, pid);
       }
     }

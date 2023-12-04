@@ -73,8 +73,8 @@ export function cancelApply(pid){ // 取消教室申請 (user)
     pid: <string>時段ID (唯一性)
   
   return:
-    if 取消成功 -> return 200
-    if 取消失敗 -> return 400
+    if 成功 -> return 200
+    if 失敗 -> return 400
 */
 
 export function deletePeriodData(pid){ // 刪除特定狀態的借用紀錄 (user) ( ex: 申請被拒絕 / 借用完畢(已還鑰匙) / 已取消申請 )
@@ -88,8 +88,8 @@ export function deletePeriodData(pid){ // 刪除特定狀態的借用紀錄 (use
     pid: <string>時段ID (唯一性)
   
   return:
-    if 取消成功 -> return 200
-    if 取消失敗 -> return 400
+    if 成功 -> return 200
+    if 失敗 -> return 400
 */
 
 export function LendKey(pid){ // 借出鑰匙 (admin)
@@ -103,8 +103,8 @@ export function LendKey(pid){ // 借出鑰匙 (admin)
     pid: <string>時段ID (唯一性)
   
   return:
-    if 取消成功 -> return 200
-    if 取消失敗 -> return 400
+    if 成功 -> return 200
+    if 失敗 -> return 400
 */
 
 export function ReceiveKey(pid){ // 收到歸還的鑰匙 (admin)
@@ -118,8 +118,8 @@ export function ReceiveKey(pid){ // 收到歸還的鑰匙 (admin)
     pid: <string>時段ID (唯一性)
   
   return:
-    if 取消成功 -> return 200
-    if 取消失敗 -> return 400
+    if 成功 -> return 200
+    if 失敗 -> return 400
 */
 
 export function acceptRequest(pid){ // 接受一個時段申請 (admin)
@@ -133,8 +133,8 @@ export function acceptRequest(pid){ // 接受一個時段申請 (admin)
     pid: <string>時段ID (唯一性)
   
   return:
-    if 取消成功 -> return 200
-    if 取消失敗 -> return 400
+    if 成功 -> return 200
+    if 失敗 -> return 400
 */
 
 export function rejectRequest(pid){ // 拒絕一個時段申請 (admin)
@@ -148,8 +148,8 @@ export function rejectRequest(pid){ // 拒絕一個時段申請 (admin)
     pid: <string>時段ID (唯一性)
   
   return:
-    if 取消成功 -> return 200
-    if 取消失敗 -> return 400
+    if 成功 -> return 200
+    if 失敗 -> return 400
 */
 
 export function getUserPoint(account){ // 獲取user的記點狀況 (admin)
@@ -158,9 +158,40 @@ export function getUserPoint(account){ // 獲取user的記點狀況 (admin)
   return user.point;
   // 可修改區 end
 }
+/*
+  input:
+    account: <string>學號(帳號)
+  
+  return:
+    <int>違規點數
+*/
 
-export function setUserPoint(account){ // 修改user的記點狀況 (admin)
+export function setUserPoint(account, point){ // 修改user的記點狀況 (admin)
   // 可修改區 start
-  alert(`[api/app/setUserPoint]\naccount = ${account}`); // debug
+  alert(`[api/app/setUserPoint]\naccount = ${account}\npoint = ${point}`); // debug
+  return 200;
+  // 可修改區 end
+}
+/*
+  input:
+    account: <string>學號(帳號)
+    point: <int>違規點數
+  
+  return:
+    if 成功 -> return 200
+    if 失敗 -> return 400
+*/
+
+export function getUserBanState(account){
+  // 可修改區 start
+  account
+  return 0;
+  // 可修改區 end
+}
+
+export function setUserBanState(account, state){
+  // 可修改區 start
+  alert(`[api/app/setUserBanState]\naccount = ${account}\nstate = ${state}`); // debug
+  return 200;
   // 可修改區 end
 }

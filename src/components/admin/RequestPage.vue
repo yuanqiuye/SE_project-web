@@ -1,5 +1,9 @@
 <template>
-  <data-table :table-type="'requestPage_admin'" :enable-col="{ account: '申請人', period: '時段' }" :insert-data="insertData"/>
+  <data-table
+    :table-type="'requestPage_admin'"
+    :enable-col="{ account: '申請人', period: '時段' }"
+    :insert-data="insertData"
+  />
 </template>
 
 <script>

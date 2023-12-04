@@ -44,6 +44,7 @@ const routes = [
       { path: "floor", name: "floorPage_admin", component: () => import("@/components/admin/FloorPage.vue") },
       { path: "overview", name: "overviewPage_admin", component: () => import("@/components/admin/OverviewPage.vue") },
       { path: "request", name: "requestPage_admin", component: () => import("@/components/admin/RequestPage.vue") },
+      { path: "user-info", name: "userInfoPage_admin", component: () => import("@/components/admin/UserInfoPage.vue") },
       { path: "save", name: "savePage_admin", component: () => import("@/components/user/SavePage.vue") },
     ]
   },

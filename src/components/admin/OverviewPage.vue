@@ -1,5 +1,9 @@
 <template>
-  <data-table :table-type="'overviewPage_admin'" :enable-col="{ account: '借用人', period: '時段', status: '狀態' }" :insert-data="insertData"/>
+  <data-table
+    :table-type="'overviewPage_admin'"
+    :enable-col="{ account: '借用人', period: '時段', status: '狀態' }"
+    :insert-data="insertData"
+  />
 </template>
 
 <script>

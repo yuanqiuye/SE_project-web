@@ -5,7 +5,7 @@ export function getClassroomInfo(classroomID){ // 獲得教室資料
   let classroom = classroom_default;
   if (classroomID in classroomInfo) classroom = classroomInfo[classroomID];
   classroom.id = classroomID;
-  return { ...classroom };
+  return { ...classroom }; // copy
 }
 /*
   為什麼要多寫一個function是因為要處理沒有資料的教室

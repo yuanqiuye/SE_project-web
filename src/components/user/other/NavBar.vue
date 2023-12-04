@@ -1,5 +1,5 @@
 <template>
-  <div class="navBar ts-app-navbar" v-show="role == 'user'">
+  <div class="navBar ts-app-navbar" v-if="role == 'user'">
     <router-link :class="getClass('floorPage')" :to="{ name: 'floorPage' }">
       <div class="ts-icon is-layer-group-icon"></div>
       <div class="label">樓層平面圖</div>
@@ -21,7 +21,7 @@
       <div class="label">登出</div>
     </a>
   </div>
-  <div class="navBar ts-app-navbar" v-show="role == 'admin'">
+  <div class="navBar ts-app-navbar" v-if="role == 'admin'">
     <router-link :class="getClass('floorPage_admin')" :to="{ name: 'floorPage_admin' }">
       <div class="ts-icon is-layer-group-icon"></div>
       <div class="label">樓層平面圖</div>
@@ -33,6 +33,10 @@
     <router-link :class="getClass('requestPage_admin')" :to="{ name: 'requestPage_admin' }">
       <div class="ts-icon is-envelope-icon"></div>
       <div class="label">借用請求</div>
+    </router-link>
+    <router-link :class="getClass('userInfoPage_admin')" :to="{ name: 'userInfoPage_admin' }">
+      <div class="ts-icon is-user-gear-icon"></div>
+      <div class="label">管理使用者</div>
     </router-link>
     <router-link :class="getClass('savePage_admin')" :to="{ name: 'savePage_admin' }">
       <div class="ts-icon is-star-icon"></div>

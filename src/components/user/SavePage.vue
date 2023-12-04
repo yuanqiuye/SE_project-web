@@ -1,5 +1,5 @@
 <template>
-  <data-table :enable-col="{}" :insert-data="getInsertData()"/>
+  <data-table :insert-data="getInsertData()"/>
 </template>
 
 <script>
