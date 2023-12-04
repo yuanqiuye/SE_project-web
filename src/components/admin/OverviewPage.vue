@@ -1,5 +1,5 @@
 <template>
-  <data-table :table-type="'requestPage_admin'" :enable-col="{ account: '學號', period: '時段' }" :insert-data="insertData"/>
+  <data-table :table-type="'overviewPage_admin'" :enable-col="{ account: '借用人', period: '時段', status: '狀態' }" :insert-data="insertData"/>
 </template>
 
 <script>
@@ -19,7 +19,7 @@
       const allUserPeriodData = getAllUserPeriodData();
       for (let p of allUserPeriodData){
         p.account = p.pid.slice(0, p.pid.indexOf("-"));
-        if (p.status == 0) this.insertData.push(p);
+        if (p.status >= 2 && p.status <= 5) this.insertData.push(p);
       }
     }
   }

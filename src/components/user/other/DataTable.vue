@@ -18,8 +18,8 @@
           <td>
             <div class="ts-select is-solid">
               <select v-model="fliter.building" @change="whenBuildingChange">
-                <option value="ins">資工系館 ( INS )</option>
-                <option value="ecg">電綜大樓 ( ECG )</option>
+                <option value="ins">資工系館</option>
+                <option value="ecg">電綜大樓</option>
               </select>
             </div>
           </td>
@@ -105,9 +105,9 @@
           <td><span class="ts-icon is-gears-icon"></span></td>
         </tr>
         <tr v-for="rowData in getTableData()" :key="rowData.classroom.id" v-show="isShow(rowData)">
-          <td v-if="'account' in enableCol">{{ rowData.account }}</td>
+          <td v-if="'account' in enableCol">{{ rowData.account }} ( {{ getPoint(rowData.account) }}違規點 )</td>
           <td>{{ rowData.classroom.id.toUpperCase() }}</td>
-          <td>{{ rowData.classroom.building }} ( {{ rowData.classroom.id.toUpperCase().substring(0, 3) }} )</td>
+          <td>{{ rowData.classroom.building }}</td>
           <td class="saveButton-tdFix" style="justify-content:center;">
             {{ rowData.classroom.name }}
             <save-button :classroomID="rowData.classroom.id"/>
@@ -117,7 +117,7 @@
           <td>
             <span
               class="ts-icon is-info-icon iconButton infoIconFix"
-              title="更多資訊"
+              title="詳細教室資訊"
               @click="clickInfoButton(rowData.classroom.id)"
             ></span>
             <span
@@ -132,6 +132,18 @@
               v-if="tableType == 'statusPage' && (rowData.status == 1 || rowData.status == 6 || rowData.status == 7)"
               @click="clickDeleteButton(rowData.pid)"
             ></span><!-- Only for status page (user). -->
+            <span
+              class="ts-icon is-key-icon iconButton"
+              title="借出鑰匙"
+              v-if="tableType == 'overviewPage_admin' && rowData.status == 2"
+              @click="clickLendKeyButton(rowData.pid)"
+            ></span><!-- Only for overview page (admin). -->
+            <span
+              class="ts-icon is-key-icon iconButton"
+              title="歸還鑰匙"
+              v-if="tableType == 'overviewPage_admin' && rowData.status == 5"
+              @click="clickReceiveKeyButton(rowData.pid)"
+            ></span><!-- Only for overview page (admin). -->
             <span
               class="ts-icon is-check-icon iconButton xIconFix"
               title="同意申請"
@@ -157,7 +169,8 @@
   import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
   import saveButton from "@/components/user/other/SaveButton.vue"; // 收藏按鈕comp
   import { getRole } from "@/api/auth";
-  import { cancelApply, deletePeriodData, acceptRequest, rejectRequest } from "@/api/app";
+  import { cancelApply, deletePeriodData, LendKey, ReceiveKey, acceptRequest, rejectRequest } from "@/api/app";
+  import { getUserPoint } from "@/api/app";
 
   export default{
     components: {
@@ -180,7 +193,8 @@
           "借用完畢 ( 未還鑰匙 )",
           "借用完畢 ( 已還鑰匙 )",
           "已取消申請"
-        ]
+        ],
+        userPoint: {}
       }
     },
     created(){
@@ -259,7 +273,7 @@
         for (let item of this.insertData){
           const rowData = {
             pid: item.pid,
-            account: (item.account != undefined) ? item.account : "",
+            account: (item.account == undefined) ? "" : item.account,
             classroom: getClassroomInfo(item.classroomID), // <string>classroomID 轉 <struct>classroom資料
             period: item.period,
             status: item.status
@@ -271,6 +285,10 @@
           tableData.push(rowData);
         }
         return tableData;
+      },
+      getPoint(account){ // 獲取user的記點
+        if (!(account in this.userPoint)) this.userPoint[account] = getUserPoint(account); // 優化,不用每一筆資料都用一次api
+        return this.userPoint[account];
       },
       getPeriodText(period){ // <struct>period 轉 <string>時段資訊
         const nthDay = [ "", "星期一", "星期二", "星期三", "星期四", "星期五" ];
@@ -288,7 +306,7 @@
       },
       
       runConfirmDialog(questionText, resultText, f_api, pid){ // 自定義彈出式確認框,因為我不想寫四遍switch
-        const result = window.confirm(`是否要${questionText} ?`); // 彈出式確認框
+        const result = window.confirm(`${questionText} ?`); // 彈出式確認框
         if (!result) return; // 按下取消就不執行 api
         
         const returnCode = f_api(pid); // 執行指定的 api function
@@ -309,16 +327,22 @@
         else if (getRole() == "admin") this.$router.push({ name: 'floorPage_admin', query: { id: classroomID } });
       },
       clickCancelButton(pid){ // Only for status page (user) , 每列資訊最右側的"x"按鈕(取消申請)被按下
-        this.runConfirmDialog("取消申請", "取消申請", cancelApply, pid);
+        this.runConfirmDialog("是否要取消申請", "取消申請", cancelApply, pid);
       },
       clickDeleteButton(pid){ // Only for status page (user) , 每列資訊最右側的"垃圾桶"按鈕(刪除)被按下
-        this.runConfirmDialog("刪除借用紀錄", "刪除", deletePeriodData, pid);
+        this.runConfirmDialog("是否要刪除借用紀錄", "刪除", deletePeriodData, pid);
+      },
+      clickLendKeyButton(pid){ // Only for overview page (admin), 每列資訊最右側的"鑰匙"按鈕(借出鑰匙)被按下
+        this.runConfirmDialog("是否要借出鑰匙", "借用狀態更新", LendKey, pid);
+      },
+      clickReceiveKeyButton(pid){ // Only for overview page (admin), 每列資訊最右側的"鑰匙"按鈕(拿到歸還的鑰匙)被按下
+        this.runConfirmDialog("是否拿到了歸還的鑰匙", "借用狀態更新", ReceiveKey, pid);
       },
       clickAcceptButton(pid){ // Only for request page (admin) , 每列資訊最右側的"v"按鈕(同意申請)被按下
-        this.runConfirmDialog("同意申請", "操作", acceptRequest, pid);
+        this.runConfirmDialog("是否要同意申請", "操作", acceptRequest, pid);
       },
       clickRejectButton(pid){ // Only for request page (admin) , 每列資訊最右側的"x"按鈕(拒絕申請)被按下
-        this.runConfirmDialog("拒絕申請", "操作", rejectRequest, pid);
+        this.runConfirmDialog("是否要拒絕申請", "操作", rejectRequest, pid);
       }
     }
   }

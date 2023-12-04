@@ -45,7 +45,7 @@ export function getAllEnablePeriodData(){ // 跟後端拿全部教室的借用�
     請參照 enable-period.json
 */
 
-export function sendApply(classroomID, selectedPeriod){ // 送出借用教室的申請
+export function sendApply(classroomID, selectedPeriod){ // 送出借用教室的申請 (user)
   // 可修改區 start
   alert(`[api/app/sendApply]\nclassroomID = ${classroomID}\nselectedPeriod = ${selectedPeriod}`); // debug
   return 200;
@@ -92,6 +92,36 @@ export function deletePeriodData(pid){ // 刪除特定狀態的借用紀錄 (use
     if 取消失敗 -> return 400
 */
 
+export function LendKey(pid){ // 借出鑰匙 (admin)
+  // 可修改區 start
+  alert(`[api/app/LendKey]\npid = ${pid}`); // debug
+  return 200;
+  // 可修改區 end
+}
+/*
+  input:
+    pid: <string>時段ID (唯一性)
+  
+  return:
+    if 取消成功 -> return 200
+    if 取消失敗 -> return 400
+*/
+
+export function ReceiveKey(pid){ // 收到歸還的鑰匙 (admin)
+  // 可修改區 start
+  alert(`[api/app/ReceiveKey]\npid = ${pid}`); // debug
+  return 200;
+  // 可修改區 end
+}
+/*
+  input:
+    pid: <string>時段ID (唯一性)
+  
+  return:
+    if 取消成功 -> return 200
+    if 取消失敗 -> return 400
+*/
+
 export function acceptRequest(pid){ // 接受一個時段申請 (admin)
   // 可修改區 start
   alert(`[api/app/acceptRequest]\npid = ${pid}`); // debug
@@ -122,3 +152,15 @@ export function rejectRequest(pid){ // 拒絕一個時段申請 (admin)
     if 取消失敗 -> return 400
 */
 
+export function getUserPoint(account){ // 獲取user的記點狀況 (admin)
+  // 可修改區 start
+  account
+  return user.point;
+  // 可修改區 end
+}
+
+export function setUserPoint(account){ // 修改user的記點狀況 (admin)
+  // 可修改區 start
+  alert(`[api/app/setUserPoint]\naccount = ${account}`); // debug
+  // 可修改區 end
+}

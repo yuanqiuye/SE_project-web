@@ -9,7 +9,7 @@
       <div class="label">搜尋教室</div>
     </router-link>
     <router-link :class="getClass('statusPage')" :to="{ name: 'statusPage' }">
-      <div class="ts-icon is-list-icon"></div>
+      <div class="ts-icon is-list-ul-icon"></div>
       <div class="label">借用紀錄</div>
     </router-link>
     <router-link :class="getClass('savePage')" :to="{ name: 'savePage' }">
@@ -25,6 +25,10 @@
     <router-link :class="getClass('floorPage_admin')" :to="{ name: 'floorPage_admin' }">
       <div class="ts-icon is-layer-group-icon"></div>
       <div class="label">樓層平面圖</div>
+    </router-link>
+    <router-link :class="getClass('overviewPage_admin')" :to="{ name: 'overviewPage_admin' }">
+      <div class="ts-icon is-list-ul-icon"></div>
+      <div class="label">借用總覽</div>
     </router-link>
     <router-link :class="getClass('requestPage_admin')" :to="{ name: 'requestPage_admin' }">
       <div class="ts-icon is-envelope-icon"></div>

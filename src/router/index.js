@@ -41,8 +41,9 @@ const routes = [
       else next({ name: "loginPage" });
     },
     children: [
-      { path: "floor", name: "floorPage_admin", component: () => import("@/components/admin/AdminFloorPage.vue") },
-      { path: "request", name: "requestPage_admin", component: () => import("@/components/admin/AdminRequestPage.vue") },
+      { path: "floor", name: "floorPage_admin", component: () => import("@/components/admin/FloorPage.vue") },
+      { path: "overview", name: "overviewPage_admin", component: () => import("@/components/admin/OverviewPage.vue") },
+      { path: "request", name: "requestPage_admin", component: () => import("@/components/admin/RequestPage.vue") },
       { path: "save", name: "savePage_admin", component: () => import("@/components/user/SavePage.vue") },
     ]
   },
