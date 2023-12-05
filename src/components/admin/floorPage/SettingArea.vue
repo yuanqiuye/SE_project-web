@@ -16,8 +16,8 @@
             <td
               v-for="columnIndex in 5"
               :key="columnIndex"
-              :style="{ backgroundColor: getBlockBgColor(columnIndex, rowIndex) }"
-              @click="clickBlock(columnIndex, rowIndex)"
+              :style="{ backgroundColor: getBlockBgColor(columnIndex, rowIndex+1) }"
+              @click="clickBlock(columnIndex, rowIndex+1)"
             ></td>
           </tr>
         </tbody>
@@ -104,7 +104,7 @@
         
         for (let day = 1; day <= 5; day++){
           let p = null;
-          for (let period = 1; period <= config.periodTime.length+1; period++){
+          for (let period = 1; period <= config.periodTime.length; period++){
             if (this.periodState[day][period]){
               if (p == null) p = { day: day, startPeriod: period, endPeriod: period };
               else p.endPeriod = period;
