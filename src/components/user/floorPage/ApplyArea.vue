@@ -18,22 +18,36 @@
         </tbody>
       </table>
     </div>
-    <div class="confirm box">
-      <span class="confirm-emptyText" v-show="!confirm.enable">
-        <span class="ts-icon is-plus-icon is-huge"></span>
-        目前沒有選取任何時段，請直接點選左側的課表。
-      </span>
-      <span class="confirm-text" v-show="confirm.enable">
-        <span class="confirm-title">[ 已選擇 ]</span><br>
-        <span>
-          {{ classroomInfo.building }}<br>
-          {{ classroomInfo.name }}<br>
-          {{ confirm.day }}&nbsp;{{ confirm.time }}&nbsp;(&nbsp;{{ confirm.period }}&nbsp;)
+    <div>
+      <div class="confirm box">
+        <span class="confirm-emptyText" v-show="!confirm.enable">
+          <span class="ts-icon is-plus-icon is-huge"></span>
+          目前沒有選取任何時段，請直接點選左側的課表。
         </span>
-      </span>
-      <div class="confirm-buttons" v-show="confirm.enable">
-        <button class="borderShadow ts-button is-accent" @click="clickApplyButton()">送出申請</button>
-        <button class="borderShadow ts-button is-accent is-secondary" @click="resetsDP()">取消並重置</button>
+        <span class="confirm-text" v-show="confirm.enable">
+          <span class="confirm-title">[ 已選擇 ]</span><br>
+          <span>
+            {{ classroomInfo.building }}<br>
+            {{ classroomInfo.name }}<br>
+            {{ confirm.day }}&nbsp;{{ confirm.time }}&nbsp;(&nbsp;{{ confirm.period }}&nbsp;)
+          </span>
+        </span>
+        <div class="confirm-buttons" v-show="confirm.enable">
+          <button class="borderShadow ts-button is-accent" @click="clickApplyButton()">送出申請</button>
+          <button class="borderShadow ts-button is-accent is-secondary" @click="resetsDP()">取消並重置</button>
+        </div>
+      </div>
+      <div class="periodLegend box">
+        <div class="ts-box is-collapsed">
+          <table class="ts-table is-collapsed is-celled">
+            <tbody>
+              <tr v-for="legend in legendData" :key="legend.color">
+                <td :style="{ width: '50px', backgroundColor: legend.color }"></td>
+                <td>{{ legend.name }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -54,7 +68,14 @@
         periodTime: config.periodTime, // 第幾節,各節次的開始和結束時間
         periodState: null,
         sDP: { day: null, startPeriod: null, endPeriod: null }, // selected day & period
-        confirm: { enable: false, day: "", time: "", period: "" }
+        confirm: { enable: false, day: "", time: "", period: "" },
+        legendData: [
+          { name: "選取的時段", color: "#aaf" },
+          { name: "可借用", color: "#fff" },
+          { name: "被別人借用", color: "#fbb" },
+          { name: "被自己借用", color: "#bfb" },
+          { name: "無法借用", color: "#bbb" },
+        ]
       }
     },
     mounted(){
@@ -227,5 +248,9 @@
   }
   .confirm-buttons > button:nth-child(2):hover{
     background-color: #ddd;
+  }
+  .periodLegend{
+    width: 300px; height: fit-content;
+    margin: 8px 0 0 8px; padding: 8px;
   }
 </style>

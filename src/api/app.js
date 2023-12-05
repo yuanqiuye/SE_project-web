@@ -23,7 +23,7 @@ export function getAllUserPeriodData(){ // 獲取所有user的借用資料
     請參照 user-data
 */
 
-export function getEnablePeriodData(classroomID){ // 跟後端拿某個教室全部的借用資料
+export function getEnablePeriodData(classroomID){ // 跟後端拿某間教室的可借時段
   // 可修改區 start
   if (classroomID in enablePeriod) return enablePeriod[classroomID];
   // 可修改區 end
@@ -37,13 +37,20 @@ export function getEnablePeriodData(classroomID){ // 跟後端拿某個教室全
     請參照 enable-period.json
 */
 
-export function getAllEnablePeriodData(){ // 跟後端拿全部教室的借用資料
+export function getAllEnablePeriodData(){ // 跟後端拿全部教室的可借時段
   return enablePeriod;
 }
 /*
   return:
     請參照 enable-period.json
 */
+
+export function setEnablePeriod(classroomID, enablePeriod){ // 修改某間教室的可借時段
+  // 可修改區 start
+  alert(`[api/app/setEnablePeriod]\nclassroomID = ${classroomID}\nenablePeriod.length = ${enablePeriod.length}`); // debug
+  return 200;
+  // 可修改區 end
+}
 
 export function sendApply(classroomID, selectedPeriod){ // 送出借用教室的申請 (user)
   // 可修改區 start
@@ -151,6 +158,14 @@ export function rejectRequest(pid){ // 拒絕一個時段申請 (admin)
     if 成功 -> return 200
     if 失敗 -> return 400
 */
+
+export function getAllUserPoint(){ // 獲取所有的user的計點狀況 (admin)
+  return [
+    { account: "01057900", role: 0, point: 2, banned: 1 },
+    { account: "01057901", role: 1, point: 3, banned: 0 },
+    { account: "01057902", role: 2, point: 4, banned: 0 },
+  ];
+}
 
 export function getUserPoint(account){ // 獲取user的記點狀況 (admin)
   // 可修改區 start
