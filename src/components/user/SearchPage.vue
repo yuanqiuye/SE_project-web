@@ -30,7 +30,8 @@
         // 更新狀態表(可借用)
         
         const allUserPeriodData = getAllUserPeriodData();
-        for (const p of allUserPeriodData){
+        
+        for (const p of Object.values(allUserPeriodData)){
           if (p.classroomID == classroomID && (p.status == 2 || p.status == 3)){ // 教室相同,狀態介於2~3之間代表被借走
             for (let i = p.period.startPeriod; i <= p.period.endPeriod; i++) periodState[p.period.day][i] = false;
             // 更新狀態表 (false: 已被借用或不能借)

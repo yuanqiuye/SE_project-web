@@ -4,7 +4,12 @@
       <table class="ts-table is-definition is-celled">
         <thead>
           <tr>
-            <th></th><th>星期一</th><th>星期二</th><th>星期三</th><th>星期四</th><th>星期五</th>
+            <th></th>
+            <th>星期一</th>
+            <th>星期二</th>
+            <th>星期三</th>
+            <th>星期四</th>
+            <th>星期五</th>
           </tr>
         </thead>
         <tbody ref="scheduleTable">
@@ -13,12 +18,9 @@
               <div>第&nbsp;&nbsp;{{ period.nth }}&nbsp;&nbsp;節</div>
               {{ period.startTime }}&nbsp;~&nbsp;{{ period.endTime }}
             </td>
-            <td
-              v-for="columnIndex in 5"
-              :key="columnIndex"
-              :style="{ backgroundColor: getBlockBgColor(columnIndex, rowIndex+1) }"
-              @click="clickBlock(columnIndex, rowIndex+1)"
-            ></td>
+            <td v-for="columnIndex in 5" :key="columnIndex"
+              :style="{ backgroundColor: getBlockBgColor(columnIndex, rowIndex + 1) }"
+              @click="clickBlock(columnIndex, rowIndex + 1)"></td>
           </tr>
         </tbody>
       </table>
@@ -54,143 +56,182 @@
 </template>
 
 <script>
-  import config from "@/assets/schedule-config.json"; // 課表時段的設定檔
-  import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
-  import { getEnablePeriodData, setEnablePeriod } from '@/api/app';
+import config from "@/assets/schedule-config.json"; // 課表時段的設定檔
+import { getClassroomInfo } from "@/assets/import"; // 查詢教室資訊
+import { getEnablePeriodData, setEnablePeriod } from '@/api/app';
 
-  export default{
-    props: [
-      "classroomID"
-    ],
-    data(){
-      return {
-        classroomInfo: getClassroomInfo(null),
-        periodState: null,
-        confirm: { enable: false },
-        legendData: [
-          { name: "可借用", color: "#fff" },
-          { name: "無法借用", color: "#bbb" },
-        ]
-      }
+export default {
+  props: [
+    "classroomID"
+  ],
+  data() {
+    return {
+      classroomInfo: getClassroomInfo(null),
+      periodState: null,
+      confirm: { enable: false },
+      legendData: [
+        { name: "可借用", color: "#fff" },
+        { name: "無法借用", color: "#bbb" },
+      ]
+    }
+  },
+  async created() {
+      this.classroomInfo = getClassroomInfo(this.classroomID||'ins101');
+      await this.resetScheduleTable();
     },
-    created(){
-      this.resetScheduleTable();
+  methods: {
+    getPeriodTime() { // 獲取縱軸時段資料
+      return config.periodTime;
     },
-    methods: {
-      getPeriodTime(){ // 獲取縱軸時段資料
-        return config.periodTime;
-      },
-      getBlockBgColor(day, period){ // 格子的顏色
+    getBlockBgColor(day, period) {
+      // 確認 this.periodState 不為 null 且 day 是有效的索引
+      if (this.periodState && this.periodState[day]) {
         return this.periodState[day][period] ? "#fff" : "#bbb";
-      },
-      resetScheduleTable(){ // 重置課表
-        this.periodState = Array.from(Array(1+5), () => Array(config.periodTime.length+1).fill(false));
-        // 生成空狀態表(表格全部填無法借用)
-        
-        const enablePeriod = getEnablePeriodData(this.classroomInfo.id);
-        for (const p of enablePeriod){
-          for (let i = p.startPeriod; i <= p.endPeriod; i++) this.periodState[p.day][i] = true; // 更新狀態表 (true: 可借用)
+      }
+      // 如果不符合條件，返回默認的顏色或者你希望的其他處理方式
+      return "#bbb";
+    },
+
+    async resetScheduleTable() {
+      
+      this.periodState = Array.from(Array(1 + 5), () => Array(config.periodTime.length + 1).fill(false));
+
+      const enablePeriod = await getEnablePeriodData(this.classroomInfo.id);
+      console.log('enablePeriod:', enablePeriod);
+      if (enablePeriod) {
+        for (const p of enablePeriod) {
+          for (let i = p.startPeriod; i <= p.endPeriod; i++) this.periodState[p.day][i] = true;
         }
-        // 更新狀態表(可借用)
-        
-        this.confirm.enable = false;
-      },
-      clickBlock(day, period){ // 點選時段
-        this.confirm.enable = true;
-        this.periodState[day][period] = !this.periodState[day][period];
-      },
-      clickUpdateButton(){ // 確認修改時段
-        let enablePeriod = [];
-        
-        for (let day = 1; day <= 5; day++){
-          let p = null;
-          for (let period = 1; period <= config.periodTime.length; period++){
-            if (this.periodState[day][period]){
-              if (p == null) p = { day: day, startPeriod: period, endPeriod: period };
-              else p.endPeriod = period;
-            }else{
-              if (p != null){
-                enablePeriod.push(p);
-                p = null;
-              }
+      }
+      
+      this.confirm.enable = false;
+    },
+
+    clickBlock(day, period) { // 點選時段
+      this.confirm.enable = true;
+      this.periodState[day][period] = !this.periodState[day][period];
+    },
+    clickUpdateButton() { // 確認修改時段
+      let enablePeriod = [];
+
+      for (let day = 1; day <= 5; day++) {
+        let p = null;
+        for (let period = 1; period <= config.periodTime.length; period++) {
+          if (this.periodState[day][period]) {
+            if (p == null) p = { day: day, startPeriod: period, endPeriod: period };
+            else p.endPeriod = period;
+          } else {
+            if (p != null) {
+              enablePeriod.push(p);
+              p = null;
             }
           }
-          if (p != null){ // 連續可借節次持續到最末堂的例外處理
-            enablePeriod.push(p);
-            p = null;
-          }
-          // 求連續可借節次
         }
-        
-        setEnablePeriod(this.classroomInfo.id, enablePeriod); // 修改後端某間教室的可借時段
-        this.resetScheduleTable();
+        if (p != null) { // 連續可借節次持續到最末堂的例外處理
+          enablePeriod.push(p);
+          p = null;
+        }
+        // 求連續可借節次
       }
-    },
-    watch: {
-      classroomID(newValue){
-        this.classroomInfo = getClassroomInfo(newValue);
-        this.resetScheduleTable();
-      }
+      console.log("classroomInfo:",this.classroomInfo.id);
+      console.log("enablePeriodtest:",enablePeriod);
+      setEnablePeriod(this.classroomInfo.id, enablePeriod); // 修改後端某間教室的可借時段
+      this.resetScheduleTable();
     }
-  }
+  },
+  watch: {
+    async classroomID(newValue) {
+      this.classroomInfo = getClassroomInfo(newValue || "ins101");
+      await this.resetScheduleTable();
+    },
+  },
+}
 </script>
 
 <style scoped>
-  .applyArea{
-    margin-top: 8px;
-    display: flex;
-  }
-  .schedule{
-    white-space: nowrap;
-  }
-  .schedule table td, th{
-    text-align: center; vertical-align: middle;
-  }
-  .schedule table td:first-child{
-    padding: 6px;
-    font-size: 11px;
-  }
-  .schedule table td:first-child > div{
-    font-size: 14px;
-  }
-  .confirm{
-    width: 300px; height: fit-content;
-    margin-left: 8px; padding: 8px;
-    display: flex; flex-direction: column; align-items: center;
-  }
-  .confirm-emptyText{
-    margin-bottom: 8px;
-    font-size: 12px;
-    display: flex; flex-direction: column; align-items: center;
-  }
-  .confirm-emptyText > span.ts-icon{
-    margin-bottom: -10px;
-  }
-  .confirm-title{
-    font-size: 18px; font-weight: bold;
-  }
-  .confirm-text{
-    margin: 12px 0;
-    font-size: 16px; text-align: center;
-  }
-  .confirm-buttons{
-    margin: 12px 0;
-    display: flex; justify-content: space-around;
-  }
-  .confirm-buttons > button{
-    border: none;
-  }
-  .confirm-buttons > button:nth-child(1):hover{
-    background-color: #46c;
-  }
-  .confirm-buttons > button:nth-child(2){
-    margin-left: 16px;
-  }
-  .confirm-buttons > button:nth-child(2):hover{
-    background-color: #ddd;
-  }
-  .periodLegend{
-    width: 300px; height: fit-content;
-    margin: 8px 0 0 8px; padding: 8px;
-  }
+.applyArea {
+  margin-top: 8px;
+  display: flex;
+}
+
+.schedule {
+  white-space: nowrap;
+}
+
+.schedule table td,
+th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.schedule table td:first-child {
+  padding: 6px;
+  font-size: 11px;
+}
+
+.schedule table td:first-child>div {
+  font-size: 14px;
+}
+
+.confirm {
+  width: 300px;
+  height: fit-content;
+  margin-left: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.confirm-emptyText {
+  margin-bottom: 8px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.confirm-emptyText>span.ts-icon {
+  margin-bottom: -10px;
+}
+
+.confirm-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.confirm-text {
+  margin: 12px 0;
+  font-size: 16px;
+  text-align: center;
+}
+
+.confirm-buttons {
+  margin: 12px 0;
+  display: flex;
+  justify-content: space-around;
+}
+
+.confirm-buttons>button {
+  border: none;
+}
+
+.confirm-buttons>button:nth-child(1):hover {
+  background-color: #46c;
+}
+
+.confirm-buttons>button:nth-child(2) {
+  margin-left: 16px;
+}
+
+.confirm-buttons>button:nth-child(2):hover {
+  background-color: #ddd;
+}
+
+.periodLegend {
+  width: 300px;
+  height: fit-content;
+  margin: 8px 0 0 8px;
+  padding: 8px;
+}
 </style>

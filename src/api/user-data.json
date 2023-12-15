@@ -1,6 +1,6 @@
 {
-  "point": 0,
-  "banned": 0,
+  "point": { "value": 0 },
+  "banned":{ "value": 0 },
   "periodData": [
     { "pid": "01057111-20231202193634", "classroomID": "ins101", "period": { "day": 2, "startPeriod": 3, "endPeriod": 4 }, "status": 0 },
     { "pid": "01057111-20231202193635", "classroomID": "ins101", "period": { "day": 2, "startPeriod": 3, "endPeriod": 4 }, "status": 1 },

@@ -1,12 +1,36 @@
 {
   "ins101": [
-    { "day": 1, "startPeriod": 1, "endPeriod": 4 },
-    { "day": 2, "startPeriod": 1, "endPeriod": 9 },
-    { "day": 3, "startPeriod": 3, "endPeriod": 7 }
+    {
+      "day": 1,
+      "startPeriod": 1,
+      "endPeriod": 4
+    },
+    {
+      "day": 2,
+      "startPeriod": 1,
+      "endPeriod": 9
+    },
+    {
+      "day": 3,
+      "startPeriod": 3,
+      "endPeriod": 7
+    }
   ],
   "ins105": [
-    { "day": 1, "startPeriod": 1, "endPeriod": 9 },
-    { "day": 2, "startPeriod": 4, "endPeriod": 9 },
-    { "day": 3, "startPeriod": 3, "endPeriod": 7 }
+    {
+      "day": 1,
+      "startPeriod": 1,
+      "endPeriod": 9
+    },
+    {
+      "day": 2,
+      "startPeriod": 4,
+      "endPeriod": 9
+    },
+    {
+      "day": 3,
+      "startPeriod": 3,
+      "endPeriod": 7
+    }
   ]
 }

@@ -16,7 +16,8 @@
       }
     },
     created(){
-      this.insertData = getUserPeriodData();
+      this.insertData = Object.values(getUserPeriodData());
+      
     }
   }
 </script>
