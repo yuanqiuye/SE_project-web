@@ -5,7 +5,7 @@ export function getIsSave(classroomID) { // user是否有收藏某間教室
   if (arr == null) {
       arr = [];
   }
-  console.log(arr)
+ // console.log(arr)
   return arr.includes(classroomID);
   // return false;
 }
@@ -25,7 +25,7 @@ export function addSave(classroomID) { // 添加收藏
   }
   arr.push(classroomID);
   localStorage.setItem('issave', JSON.stringify(arr))
-  console.log(arr)
+  //console.log(arr)
 }
 /*
 input:
@@ -56,7 +56,7 @@ export function getAllSave() { // user的全部收藏
   if (arr == null) {
       arr = [];
   }
-  console.log(arr);
+  //console.log(arr);
   return arr;
 }
 /*

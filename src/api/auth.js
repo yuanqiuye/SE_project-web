@@ -157,5 +157,5 @@ export function userLogout(){ // 登出
 }
 
 export function getRole(){ // 不是api,獲取身分組
-  return "admin"; // 測試中,勿動
+  return "user"; // 測試中,勿動
 }

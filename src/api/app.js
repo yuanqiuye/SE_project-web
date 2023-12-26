@@ -306,7 +306,7 @@ export function getAllUserPoint() {
   // 将用户数据转化为数组形式
   const allUsers = Object.values(allUserData);
   // 从用户数据中提取違規點數信息
-  console.log(allUserData["01057902"].point);
+  //console.log(allUserData["01057902"].point);
   const allUserPoint = allUsers.map(user => ({
     account: user.account,
     role: user.role,
@@ -335,7 +335,7 @@ export function getUserPoint(account){ // 獲取user的記點狀況 (admin)
 export function setUserPoint(){ // 修改user的記點狀況 (admin)
   // 可修改區 start
   const allUserPeriodData = JSON.parse(localStorage.getItem('userPeriodData')) || {};
-  allUserPeriodData["01057901"].point=4;
+
   allUserPeriodData["01057902"].point=2;
   localStorage.setItem('userPeriodData', JSON.stringify(allUserPeriodData));
   getAllUserPoint();
