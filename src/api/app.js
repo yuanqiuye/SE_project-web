@@ -279,7 +279,7 @@ export function rejectRequest(pid) {
   // 检查是否找到了特定 pid 的时段数据
   
     // 从对象中删除该时段数据
-    allUserPeriodData[1].periodData[1].status=9;
+    allUserPeriodData["123"].periodData[0].status=9;
 
     // 更新 localStorage 中的所有时段数据
     localStorage.setItem('userPeriodData', JSON.stringify(allUserPeriodData));
@@ -336,7 +336,7 @@ export function setUserPoint(){ // 修改user的記點狀況 (admin)
   // 可修改區 start
   const allUserPeriodData = JSON.parse(localStorage.getItem('userPeriodData')) || {};
 
-  allUserPeriodData["01057902"].point=2;
+  allUserPeriodData["01057132"].point=2;
   localStorage.setItem('userPeriodData', JSON.stringify(allUserPeriodData));
   getAllUserPoint();
   return 200;

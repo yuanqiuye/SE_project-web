@@ -9,26 +9,40 @@ localStorage.setItem('userPeriodData', JSON.stringify({
     role: 2,
     periodData: [
       { "pid": "1-20231202193634", "classroomID": "ins101", "period": { "day": 2, "startPeriod": 3, "endPeriod": 4 }, "status": 3 },
-      { "pid": "1-20231202193734", "classroomID": "ins101", "period": { "day": 3, "startPeriod": 1, "endPeriod": 2 }, "status": 0 },
+      { "pid": "1-20231126161739", "classroomID": "ins101", "period": { "day": 1, "startPeriod": 3, "endPeriod": 3 }, "status": 0 },
       
     ]
   },
-  "01057901": {
-    account: "01057901",
-    password: "password2",
-    hint: "", // 可以根据需要添加提示
+  "123": {
+    account: "123",
+    password: "123",
+    hint: "123",
+    point: 0,
+    banned: 0,
+    role: 0,
+    periodData: [
+      { "pid": "123-20231226193634", "classroomID": "ins101", "period": { "day": 2, "startPeriod": 8, "endPeriod": 9 }, "status": 0},
+      { "pid": "123-20231226193737", "classroomID": "ins101", "period": { "day": 3, "startPeriod": 3, "endPeriod": 5 }, "status": 0 },
+      { "pid": "123-20231226193739", "classroomID": "ins101", "period": { "day": 1, "startPeriod": 3, "endPeriod": 3 }, "status": 0 },
+      
+    ]
+  },
+  "01057133": {
+    account: "01057133",
+    password: "01057133",
+    hint: "跟學號一樣", // 可以根据需要添加提示
     point: 3,
     banned: 0,
     role: 1,
     periodData: [
       { "pid": "01057111-20231202193635", "classroomID": "ins101", "period": { "day": 3, "startPeriod": 6, "endPeriod": 7 }, "status": 2 },
-      // ... 其他期间数据 ...
+      { "pid": "01057111-20231202193734", "classroomID": "ins101", "period": { "day": 3, "startPeriod": 1, "endPeriod": 2 }, "status": 0 },// ... 其他期间数据 ...
     ]
   },
-  "01057902": {
-    account: "01057902",
-    password: "password3",
-    hint: "", // 可以根据需要添加提示
+  "01057132": {
+    account: "01057132",
+    password: "01057132",
+    hint: "跟學號一樣", // 可以根据需要添加提示
     point: 4,
     banned: 1,
     role: 0,
@@ -39,11 +53,7 @@ localStorage.setItem('userPeriodData', JSON.stringify({
   },
 }));
 
-// 从 localStorage 获取 userPeriodData
-const storedUserPeriodData = JSON.parse(localStorage.getItem('userPeriodData'));
 
-// 输出存储的数据
-console.log(storedUserPeriodData);
 
 
 
@@ -96,7 +106,7 @@ export function userLogin(account, password) {
 export function userRegister(account, password, hint) {
   // 从 localStorage 获取 userPeriodData
   const storedUserPeriodData = JSON.parse(localStorage.getItem('userPeriodData')) || {};
-
+  
   // 檢查帳號是否已存在
   if (account in storedUserPeriodData) {
     return 400; // 帳號已存在
@@ -111,7 +121,7 @@ export function userRegister(account, password, hint) {
     banned: 0,
     periodData: [],
   };
-
+  localStorage.setItem('loggedInAccount', account);
   // 更新 localStorage 中的数据
   localStorage.setItem('userPeriodData', JSON.stringify({
     ...storedUserPeriodData,
@@ -157,5 +167,5 @@ export function userLogout(){ // 登出
 }
 
 export function getRole(){ // 不是api,獲取身分組
-  return "user"; // 測試中,勿動
+  return "admin"; // 測試中,勿動
 }
