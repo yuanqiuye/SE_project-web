@@ -183,6 +183,7 @@
             break;
         }
         this.resetsDP(); // 重設選取的時段
+        
       }
     },
     watch: {
