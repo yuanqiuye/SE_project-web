@@ -1,6 +1,5 @@
-//
+
 export async function getPasswordHint(account) { // 獲得某個帳號的密碼提示
-  // 可修改區 start
   try {
     const response = await fetch('https://qiuye.mooo.com/api/auth/getPasswordHint', {
       method: 'POST',
@@ -20,10 +19,6 @@ export async function getPasswordHint(account) { // 獲得某個帳號的密碼�
     console.error('获取密码提示失败', error);
     throw error;
   }
-  // if (account == "1") hint = "你知道的"; // 如果帳號存在,將 hint 設為該帳號的密碼提示
-  // // 可修改區 end
-
-
 }
 /*
   input:
@@ -32,7 +27,7 @@ export async function getPasswordHint(account) { // 獲得某個帳號的密碼�
   return:
     hint: <string>密碼提示 | <null>
 */
-//
+
 export async function userLogin(account, password) { // 送出登入請求
   try {
     const response = await fetch('https://qiuye.mooo.com/api/auth/userLogin', {
