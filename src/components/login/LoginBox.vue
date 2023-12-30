@@ -30,13 +30,13 @@
       }
     },
     methods: {
-      showPasswordHint(){
-        let hint = getPasswordHint(this.input.account);
+      async showPasswordHint(){
+        let hint = await getPasswordHint(this.input.account);
         if (hint != null) this.warningText = `[ 密碼提示 ]<br>${hint}`;
         else this.warningText = "帳號不存在 !";
       },
-      login(){
-        let returnCode = userLogin(this.input.account, this.input.password);
+      async login(){
+        let returnCode = await userLogin(this.input.account, this.input.password);
         switch (returnCode){
           case 200: // 帳號及密碼正確,跳轉至平面圖頁面
             this.$router.push({ name: "floorPage" });

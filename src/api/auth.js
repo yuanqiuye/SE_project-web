@@ -1,31 +1,29 @@
-//async
-export function getPasswordHint(account) { // 獲得某個帳號的密碼提示
-  let hint = null; // 預設回傳的密碼提示
-
+//
+export async function getPasswordHint(account) { // 獲得某個帳號的密碼提示
   // 可修改區 start
-  // try {
-  //   const response = await fetch('/api/auth/getPasswordHint', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ account }),
-  //   });
+  try {
+    const response = await fetch('https://qiuye.mooo.com/api/auth/getPasswordHint', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ account }),
+    });
 
-  //   if (!response.ok) {
-  //     throw new Error('请求失败');
-  //   }
+    if (!response.ok) {
+      throw new Error('请求失败');
+    }
 
-  //   const data = await response.json();
-  //   return data.hint;
-  // } catch (error) {
-  //   console.error('获取密码提示失败', error);
-  //   throw error;
-  // }
-  if (account == "1") hint = "你知道的"; // 如果帳號存在,將 hint 設為該帳號的密碼提示
-  // 可修改區 end
+    const data = await response.json();
+    return data.hint;
+  } catch (error) {
+    console.error('获取密码提示失败', error);
+    throw error;
+  }
+  // if (account == "1") hint = "你知道的"; // 如果帳號存在,將 hint 設為該帳號的密碼提示
+  // // 可修改區 end
 
-  return hint;
+
 }
 /*
   input:
@@ -34,33 +32,34 @@ export function getPasswordHint(account) { // 獲得某個帳號的密碼提示
   return:
     hint: <string>密碼提示 | <null>
 */
-//async
-export function userLogin(account, password) { // 送出登入請求
-  // 可修改區 start
-  // try {
-  //   const response = await fetch('/api/auth//userLogin', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ account, password }),
-  //   });
+//
+export async function userLogin(account, password) { // 送出登入請求
+  try {
+    const response = await fetch('https://qiuye.mooo.com/api/auth/userLogin', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ account, password }),
+    });
 
-  //   if (!response.ok) {
-  //     throw new Error('登录失败');
-  //   }
+    if (!response.ok) {
+      throw new Error('登录失败');
+    }
 
-  //   const data = await response.json();
+    const data = await response.json();
 
-  //   return data.status; // 假设后端返回 { status: 200 }，其中 status 是登录状态码
-  // } catch (error) {
-  //   console.error('登录请求失败', error);
-  //   throw error;
-  // }
-
-  if (account == "1" && password == "1") return 200;
-  // 可修改區 end
-  return 400;
+    if(data.status=="0")
+      return 200;
+    else if(data.status=="-1")
+      return 400;
+    else if(data.status=="-2")
+      return 403;
+    
+  } catch (error) {
+    console.error('登录请求失败', error);
+    throw error;
+  }
 }
 /*
   input:
@@ -72,35 +71,33 @@ export function userLogin(account, password) { // 送出登入請求
     if 帳號或密碼錯誤 -> return 400
     if 帳號遭到封鎖 -> return 403
 */
-//async
-export function userRegister(account, password, hint) { // 送出註冊帳號請求
-  // 可修改區 start
-  // todo 叫後端傳送驗證碼到user的海大信箱
-  // try {
-  //   const response = await fetch('/api/auth//userRegister', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ account, password, hint }),
-  //   });
+//
+export async function userRegister(account, password, hint) {
+  try {
+    const response = await fetch('https://qiuye.mooo.com/api/auth/userRegister', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ account, password, hint }),
+    });
 
-  //   if (!response.ok) {
-  //     throw new Error('登录失败');
-  //   }
+    if (!response.ok) {
+      throw new Error('注册失败');
+    }
 
-  //   const data = await response.json();
-
-  //   return data.status; // 假设后端返回 { status: 200 }，其中 status 是登录状态码
-  // } catch (error) {
-  //   console.error('登录请求失败', error);
-  //   throw error;
-  // }
-  password
-  hint
-  if (account == "1") return 400;
-  return 200;
-  // 可修改區 end
+    const data = await response.json();
+    
+    if (data.status=="-2") {
+      console.log((data.status));
+      return 400;  // 用户已存在
+    } else 
+      return 200;  //成功
+    
+  } catch (error) {
+    console.error('註冊请求失败', error);
+    throw error;
+  }
 }
 /*
   input:
@@ -160,5 +157,5 @@ export function userLogout() { // 登出
 }
 
 export function getRole() { // 不是api,獲取身分組
-  return "admin"; // 測試中,勿動
+  return "user"; // 測試中,勿動
 }

@@ -31,10 +31,10 @@
       }
     },
     methods: {
-      register(){
+      async register(){
         if (this.input.account == "" || this.input.password == "" || this.input.hint == "") this.warningText = "註冊資料未輸入完整";
         else{
-          let returnCode = userRegister(this.input.account, this.input.password, this.input.hint);
+          let returnCode =  await userRegister(this.input.account, this.input.password, this.input.hint);
           switch (returnCode){
             case 200: // 註冊成功,跳轉至驗證碼頁面
               this.$router.push({ name: "registerPage_verify", query: { account: this.input.account } });
