@@ -1,31 +1,29 @@
-//async
-export function getPasswordHint(account) { // 獲得某個帳號的密碼提示
-  let hint = null; // 預設回傳的密碼提示
-
+//
+export async function getPasswordHint(account) { // 獲得某個帳號的密碼提示
   // 可修改區 start
-  // try {
-  //   const response = await fetch('/api/auth/getPasswordHint', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ account }),
-  //   });
+  try {
+    const response = await fetch('https://qiuye.mooo.com/api/auth/getPasswordHint', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ account }),
+    });
 
-  //   if (!response.ok) {
-  //     throw new Error('请求失败');
-  //   }
+    if (!response.ok) {
+      throw new Error('请求失败');
+    }
 
-  //   const data = await response.json();
-  //   return data.hint;
-  // } catch (error) {
-  //   console.error('获取密码提示失败', error);
-  //   throw error;
-  // }
-  if (account == "1") hint = "你知道的"; // 如果帳號存在,將 hint 設為該帳號的密碼提示
-  // 可修改區 end
+    const data = await response.json();
+    return data.hint;
+  } catch (error) {
+    console.error('获取密码提示失败', error);
+    throw error;
+  }
+  // if (account == "1") hint = "你知道的"; // 如果帳號存在,將 hint 設為該帳號的密碼提示
+  // // 可修改區 end
 
-  return hint;
+
 }
 /*
   input:
