@@ -34,7 +34,7 @@ export async function getUserPeriodData(useraccount) { // 獲取user的借用資
 
 export function getAllUserPeriodData() {
     // 可修改區 start
-    const apiUrl = `hhttps://qiuye.mooo.com/api/app/getUserPeriodData`; // 假設有一個名為 "periodData" 的 JSON Server 路由
+    const apiUrl = `https://qiuye.mooo.com/api/app/getUserPeriodData`; // 假設有一個名為 "periodData" 的 JSON Server 路由
 
     // 發送 GET 請求
     return fetch(apiUrl, {
@@ -43,6 +43,7 @@ export function getAllUserPeriodData() {
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
         })
         .then(response => {
             if (!response.ok) {
@@ -70,6 +71,7 @@ export async function getEnablePeriodData(classroomID) {
             'Content-Type': 'application/json',
             'Origin': 'Origin',
         },
+        credentials: 'include',
         body: JSON.stringify({ classroomID }),
     });
 

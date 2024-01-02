@@ -49,6 +49,7 @@ export async function userLogin(account, password) { // 送出登入請求
         if (data.status == "0") {
             localStorage.setItem('loggedInAccount', account);
             localStorage.setItem('level', data.level);
+
             return 200;
         } else if (data.status == "-1")
             return 400;

@@ -1,31 +1,32 @@
-// import user from "@/api/user-data.json"; // 後端完成後可刪
-
-export async function getIsSave(classroomID) { // user是否有收藏某間教室
-
-
+export async function getIsSave(classroomID) {
+    console.log(document.cookie);
     try {
         var account = JSON.parse(localStorage.getItem('loggedInAccount')).toString();
-        const response = await fetch('https://qiuye.mooo.com/api/app/getIsSave', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userAccount: account,
-                classroomID: classroomID
-            }),
-        });
+        if (classroomID != null) {
+            const response = await fetch('https://qiuye.mooo.com/api/app/getIsSave', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include', // 添加这一行以携带凭据
+                body: JSON.stringify({
+                    userAccount: account,
+                    classroomID: classroomID
+                }),
+            });
 
-        if (!response.ok) {
-            throw new Error('请求失败');
+            if (!response.ok) {
+                throw new Error('请求失败');
+            }
+            return await !response.json();
         }
-        return await response.json();
+        return false;
     } catch (error) {
         console.error(error);
         throw error;
     }
-    // account
 }
+
 /*
 input:
   classroomID: 教室id
@@ -42,6 +43,7 @@ export async function addSave(classroomID) { // 添加收藏
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
             userAccount: account,
             classroomID: classroomID,
@@ -61,6 +63,7 @@ export async function removeSave(classroomID) { // 移除收藏
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
             userAccount: account,
             classroomID: classroomID,
@@ -81,6 +84,7 @@ export async function getAllSave() { // user的全部收藏
             headers: {
                 'Content-Type': 'application/json',
             },
+            credentials: 'include',
             body: JSON.stringify({ account }),
         });
 
