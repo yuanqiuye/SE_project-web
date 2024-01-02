@@ -6,6 +6,7 @@ export async function getPasswordHint(account) { // 獲得某個帳號的密碼�
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ account }),
         });
 
@@ -30,6 +31,7 @@ export async function getPasswordHint(account) { // 獲得某個帳號的密碼�
 
 export async function userLogin(account, password) { // 送出登入請求
     try {
+        // account = account.toString();
         const response = await fetch('https://qiuye.mooo.com/api/auth/userLogin', {
             method: 'POST',
             credentials: 'include',

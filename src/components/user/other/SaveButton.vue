@@ -28,8 +28,8 @@
       }
     },
     watch: {
-      classroomID(){ // 教室id改變時,更新cilent端的"教室是否被收藏"
-        this.isSave = getIsSave(this.classroomID);
+      async classroomID(){ // 教室id改變時,更新cilent端的"教室是否被收藏"
+        this.isSave = await getIsSave(this.classroomID);
       }
     }
   }

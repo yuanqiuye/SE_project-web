@@ -1,30 +1,24 @@
 export async function getIsSave(classroomID) {
-    console.log(document.cookie);
-    try {
-        var account = JSON.parse(localStorage.getItem('loggedInAccount')).toString();
-        if (classroomID != null) {
-            const response = await fetch('https://qiuye.mooo.com/api/app/getIsSave', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include', // 添加这一行以携带凭据
-                body: JSON.stringify({
-                    userAccount: account,
-                    classroomID: classroomID
-                }),
-            });
+    var account = localStorage.getItem('loggedInAccount').toString();
+    if (classroomID != null) {
+        const response = await fetch('https://qiuye.mooo.com/api/app/getIsSave', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include', // 添加这一行以携带凭据
+            body: JSON.stringify({
+                userAccount: account,
+                classroomID: classroomID
+            }),
+        });
 
-            if (!response.ok) {
-                throw new Error('请求失败');
-            }
-            return await !response.json();
+        if (!response.ok) {
+            throw new Error('请求失败');
         }
-        return false;
-    } catch (error) {
-        console.error(error);
-        throw error;
+        return response.json();
     }
+    return false;
 }
 
 /*
@@ -37,7 +31,7 @@ return: <bool>
 
 export async function addSave(classroomID) { // 添加收藏
     // alert(`[api/save/addSave]\nclassroomID = ${classroomID}`); // debug
-    const account = JSON.parse(localStorage.getItem('loggedInAccount'));
+    const account = localStorage.getItem('loggedInAccount');
     await fetch('https://qiuye.mooo.com/api/app/addSave', {
         method: 'POST',
         headers: {
@@ -57,8 +51,8 @@ userAccount: <string>
 */
 
 export async function removeSave(classroomID) { // 移除收藏
-    const account = JSON.parse(localStorage.getItem('loggedInAccount'));
-    await fetch('https://qiuye.mooo.com/api/app/removeSave', {
+    const account = localStorage.getItem('loggedInAccount');
+    await fetch('https://qiuye.mooo.com/api/app/romoveSave', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -93,9 +87,9 @@ export async function getAllSave() { // user的全部收藏
         }
 
         const data = await response.json();
-        return data.hint;
+        return data;
     } catch (error) {
-        console.error('获取密码提示失败', error);
+        console.error(error);
         throw error;
     }
 

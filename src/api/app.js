@@ -11,6 +11,7 @@ export async function getUserPeriodData(useraccount) { // 獲取user的借用資
             headers: {
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
+                'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify({ useraccount }),
         });
@@ -94,6 +95,7 @@ export async function setEnablePeriod(classroomID, enablePeriod) {
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ classroomID, enablePeriod }),
         });
 
@@ -112,29 +114,27 @@ export async function setEnablePeriod(classroomID, enablePeriod) {
 
 
 //加async
-export function getAllEnablePeriodData() { // 跟後端拿全部教室的可借時段
-    const apiUrl = `https://qiuye.mooo.com/api/app/getAllEnablePeriodData`; // 假設有一個名為 "periodData" 的 JSON Server 路由
-
-    return fetch(apiUrl, {
+export async function getAllEnablePeriodData() { // 跟後端拿全部教室的可借時段
+    try {
+        const response = await fetch('https://qiuye.mooo.com/api/app/getAllEnablePeriodData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            return data;
-        })
-        .catch(error => {
-            console.error('There has been a problem with your fetch operation:', error);
-            throw error;
+            body: JSON.stringify({}),
         });
+
+        if (!response.ok) {
+            throw new Error('请求失败');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
 /*
   return:
