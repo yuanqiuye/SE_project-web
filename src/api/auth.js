@@ -4,6 +4,7 @@ export async function getPasswordHint(account) { // 獲得某個帳號的密碼�
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Origin': 'Origin',
             },
             body: JSON.stringify({ account }),
         });
@@ -31,8 +32,10 @@ export async function userLogin(account, password) { // 送出登入請求
     try {
         const response = await fetch('https://qiuye.mooo.com/api/auth/userLogin', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
+                'Origin': 'Origin',
             },
             body: JSON.stringify({ account, password }),
         });
@@ -74,6 +77,7 @@ export async function userRegister(account, password, hint) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Origin': 'Origin',
             },
             body: JSON.stringify({ account, password, hint }),
         });
