@@ -10,6 +10,8 @@ export async function getUserPeriodData(useraccount) { // 獲取user的借用資
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Origin': 'Origin',
+                'Access-Control-Allow-Origin': '*',
             },
             body: JSON.stringify({ useraccount }),
         });
@@ -30,17 +32,19 @@ export async function getUserPeriodData(useraccount) { // 獲取user的借用資
 }
 
 
-//!!!!!完成，在溝通取得全部要如何拿
+
 export function getAllUserPeriodData() {
     // 可修改區 start
-    const apiUrl = `hhttps://qiuye.mooo.com/api/app/getUserPeriodData`; // 假設有一個名為 "periodData" 的 JSON Server 路由
+    const apiUrl = `https://qiuye.mooo.com/api/app/getUserPeriodData`; // 假設有一個名為 "periodData" 的 JSON Server 路由
 
     // 發送 GET 請求
     return fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Origin': 'Origin',
             },
+            credentials: 'include',
         })
         .then(response => {
             if (!response.ok) {
@@ -61,14 +65,14 @@ export function getAllUserPeriodData() {
     // 可修改區 end
 }
 
-//!!!!!完成
 export async function getEnablePeriodData(classroomID) {
-
     const response = await fetch('https://qiuye.mooo.com/api/app/getEnablePeriodData', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Origin': 'Origin',
         },
+        credentials: 'include',
         body: JSON.stringify({ classroomID }),
     });
 
@@ -78,11 +82,9 @@ export async function getEnablePeriodData(classroomID) {
 
     const data = await response.json();
     return data;
-
 }
 
 
-//要等成功後再測試
 export async function setEnablePeriod(classroomID, enablePeriod) {
     try {
         const apiUrl = `https://qiuye.mooo.com/api/app/setEnablePeriod`; // 根据实际后端 API 地址修改
@@ -91,10 +93,10 @@ export async function setEnablePeriod(classroomID, enablePeriod) {
             method: 'POST', // 根据你的 API 需求，可能是 'POST' 或 'PUT'
             headers: {
                 'Content-Type': 'application/json',
+                'Origin': 'Origin',
             },
-            body: JSON.stringify({
-                enablePeriod: enablePeriod,
-            }),
+            credentials: 'include',
+            body: JSON.stringify({ classroomID, enablePeriod }),
         });
 
         if (!response.ok) {
@@ -112,37 +114,33 @@ export async function setEnablePeriod(classroomID, enablePeriod) {
 
 
 //加async
-export function getAllEnablePeriodData() { // 跟後端拿全部教室的可借時段
-    const apiUrl = `https://qiuye.mooo.com/api/app/getAllEnablePeriodData`; // 假設有一個名為 "periodData" 的 JSON Server 路由
-
-    // // 發送 GET 請求
-    return fetch(apiUrl, {
+export async function getAllEnablePeriodData() { // 跟後端拿全部教室的可借時段
+    try {
+        const response = await fetch('https://qiuye.mooo.com/api/app/getAllEnablePeriodData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Origin': 'Origin',
             },
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            return data;
-        })
-        .catch(error => {
-            console.error('There has been a problem with your fetch operation:', error);
-            throw error;
+            body: JSON.stringify({}),
         });
-    // return enablePeriod;
+
+        if (!response.ok) {
+            throw new Error('请求失败');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
 /*
   return:
     請參照 enable-period.json
 */
 
-//之後要再做測試
 export async function sendApply(classroomID, selectedPeriod) {
     const apiUrl = 'https://qiuye.mooo.com/api/app/sendApply';
 
@@ -151,11 +149,9 @@ export async function sendApply(classroomID, selectedPeriod) {
             method: 'POST', // 或者 'PUT'，取決於你的後端接口
             headers: {
                 'Content-Type': 'application/json',
+                'Origin': 'Origin',
             },
-            body: JSON.stringify({
-                classroomID: classroomID,
-                selectedPeriod: selectedPeriod,
-            }),
+            body: JSON.stringify({ classroomID, selectedPeriod, })
         });
 
         if (!response.ok) {
@@ -181,14 +177,15 @@ export async function sendApply(classroomID, selectedPeriod) {
 */
 
 export async function cancelApply(pid) {
+    pid
     try {
-        const response = await fetch(`https://qiuye.mooo.com/api/app/cancelApply/${pid}`, {
+        const response = await fetch(`https://qiuye.mooo.com/api/app/cancelApply`, {
             method: 'POST', // 假设取消申请是一个DELETE请求
             headers: {
                 'Content-Type': 'application/json',
-                // 可根据需要添加其他头部信息
+                'Origin': 'Origin',
             },
-            // 可根据需要添加请求体
+            body: JSON.stringify({ pid }),
         });
 
         if (!response.ok) {
@@ -216,13 +213,13 @@ export async function cancelApply(pid) {
 export async function deletePeriodData(pid) { // 刪除特定狀態的借用紀錄 (user) ( ex: 申請被拒絕 / 借用完畢(已還鑰匙) / 已取消申請 )
     // 可修改區 start
     try {
-        const response = await fetch(`https://qiuye.mooo.com/api/app/deletePeriodData/${pid}`, {
+        const response = await fetch(`https://qiuye.mooo.com/api/app/deletePeriodData`, {
             method: 'POST', // 假设刪除申请是一个DELETE请求
             headers: {
                 'Content-Type': 'application/json',
-                // 可根据需要添加其他头部信息
+                'Origin': 'Origin',
             },
-            // 可根据需要添加请求体
+            body: JSON.stringify({ pid }),
         });
 
         if (!response.ok) {
@@ -251,13 +248,13 @@ export async function deletePeriodData(pid) { // 刪除特定狀態的借用紀�
 export async function LendKey(pid) { // 借出鑰匙 (admin)
     // 可修改區 start
     try {
-        const response = await fetch(`https://qiuye.mooo.com/api/app/LendKey/${pid}`, {
+        const response = await fetch(`https://qiuye.mooo.com/api/app/LendKey`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 可根据需要添加其他头部信息
+                'Origin': 'Origin',
             },
-            // 可根据需要添加请求体
+            body: JSON.stringify({ pid }),
         });
 
         if (!response.ok) {
@@ -286,13 +283,13 @@ export async function LendKey(pid) { // 借出鑰匙 (admin)
 export async function ReceiveKey(pid) { // 收到歸還的鑰匙 (admin)
     // 可修改區 start
     try {
-        const response = await fetch(`https://qiuye.mooo.com/api/app/ReceiveKey/${pid}`, {
+        const response = await fetch(`https://qiuye.mooo.com/api/app/ReceiveKey`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 可根据需要添加其他头部信息
+                'Origin': 'Origin',
             },
-            // 可根据需要添加请求体
+            body: JSON.stringify({ pid }),
         });
 
         if (!response.ok) {
@@ -321,13 +318,13 @@ export async function ReceiveKey(pid) { // 收到歸還的鑰匙 (admin)
 export async function acceptRequest(pid) { // 接受一個時段申請 (admin)
     // 可修改區 start
     try {
-        const response = await fetch(`https://qiuye.mooo.com/api/app/acceptRequest/${pid}`, {
+        const response = await fetch(`https://qiuye.mooo.com/api/app/acceptRequest`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 可根据需要添加其他头部信息
+                'Origin': 'Origin',
             },
-            // 可根据需要添加请求体
+            body: JSON.stringify({ pid }),
         });
 
         if (!response.ok) {
@@ -356,13 +353,13 @@ export async function acceptRequest(pid) { // 接受一個時段申請 (admin)
 export async function rejectRequest(pid) { // 拒絕一個時段申請 (admin)
     // 可修改區 start
     try {
-        const response = await fetch(`https://qiuye.mooo.com/api/app/rejectRequest/${pid}`, {
+        const response = await fetch(`https://qiuye.mooo.com/api/app/rejectRequest`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // 可根据需要添加其他头部信息
+                'Origin': 'Origin',
             },
-            // 可根据需要添加请求体
+            body: JSON.stringify({ pid }),
         });
 
         if (!response.ok) {
@@ -388,7 +385,6 @@ export async function rejectRequest(pid) { // 拒絕一個時段申請 (admin)
     if 失敗 -> return 400
 */
 
-//加async
 export async function getAllUserPoint() { // 獲取所有的user的計點狀況 (admin)
     try {
         const response = await fetch('https://qiuye.mooo.com/api/app/getAllUserPoint'); // 替换为实际的 API 地址
@@ -402,32 +398,30 @@ export async function getAllUserPoint() { // 獲取所有的user的計點狀況 
         console.error('獲取計點狀況失败', error);
         throw error;
     }
-    // return [
-    //     { account: "01057900", role: 0, point: 2, banned: 1 },
-    //     { account: "01057901", role: 1, point: 3, banned: 0 },
-    //     { account: "01057902", role: 2, point: 4, banned: 0 },
-    // ];
 }
 
 export async function getUserPoint(userAccount) { // 獲取user的記點狀況 (admin)
     // 可修改區 start
-    const response = await fetch('https://qiuye.mooo.com/api/app/getUserPoint', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userAccount }),
-    });
+    try {
+        const response = await fetch('https://qiuye.mooo.com/api/auth/getUserPoint', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Origin': 'Origin',
+            },
+            body: JSON.stringify({ userAccount }),
+        });
 
-    if (!response.ok) {
-        throw new Error('请求失败');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+        throw error;
     }
-
-    const data = await response.json();
-    return data;
-
-    // userAccount
-    // return user.point;
     // 可修改區 end
 }
 /*
@@ -441,10 +435,11 @@ export async function getUserPoint(userAccount) { // 獲取user的記點狀況 (
 export async function setUserPoint(account, point) { // 修改user的記點狀況 (admin)
     // 可修改區 start
     try {
-        const response = await fetch('https://qiuye.mooo.com/api/app/setUserPoint', {
-            method: 'POST', // 通常在修改数据时使用 POST 请求
+        const response = await fetch('https://qiuye.mooo.com/api/auth/setUserPoint', {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Origin': 'Origin',
             },
             body: JSON.stringify({ account, point }),
         });
@@ -458,9 +453,6 @@ export async function setUserPoint(account, point) { // 修改user的記點狀�
         console.error('设置用户计分数据失败', error);
         throw error;
     }
-    // account
-    // point
-    // return 200;
     // 可修改區 end
 }
 /*
@@ -473,14 +465,14 @@ export async function setUserPoint(account, point) { // 修改user的記點狀�
     if 失敗 -> return 400
 */
 
-//async 
 export async function setUserBanState(account, state) {
     // 可修改區 start
     try {
-        const response = await fetch('https://qiuye.mooo.com/api/app/setUserBanState', {
+        const response = await fetch('https://qiuye.mooo.com/api/auth/setUserBanState', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Origin': 'Origin',
             },
             body: JSON.stringify({ account, state }),
         });
@@ -491,11 +483,8 @@ export async function setUserBanState(account, state) {
 
         return response.status;
     } catch (error) {
-        console.error('设置用户封禁状态失败', error);
+        console.error('设置用户计分数据失败', error);
         throw error;
     }
-    // account
-    // state
-    // return 200;
     // 可修改區 end
 }
