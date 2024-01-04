@@ -14,7 +14,8 @@ export async function getUserPeriodData() { // 獲取user的借用資料
                 'Origin': 'Origin',
                 'Access-Control-Allow-Origin': '*',
             },
-            body: JSON.stringify({ account }),
+            credentials: 'include',
+            body: JSON.stringify({ userAccount: account }),
         });
 
         if (!response.ok) {
@@ -144,6 +145,7 @@ export async function getAllEnablePeriodData() { // 跟後端拿全部教室的�
 
 export async function sendApply(classroomID, selectedPeriod) {
     const apiUrl = 'https://qiuye.mooo.com/api/app/sendApply';
+    const account = JSON.parse(localStorage.getItem('loggedInAccount'));
 
     try {
         const response = await fetch(apiUrl, {
@@ -152,7 +154,8 @@ export async function sendApply(classroomID, selectedPeriod) {
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
-            body: JSON.stringify({ classroomID, selectedPeriod, })
+            credentials: 'include',
+            body: JSON.stringify({ classroomID: classroomID, selectedPeriod: selectedPeriod, userAccount: account })
         });
 
         if (!response.ok) {
@@ -409,8 +412,10 @@ export async function getUserPoint(userAccount) { // 獲取user的記點狀況 (
             headers: {
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
+                'Access-Control-Allow-Origin': '*',
             },
-            body: JSON.stringify({ userAccount }),
+            credentials: 'include',
+            body: JSON.stringify({ account: userAccount }),
         });
 
         if (!response.ok) {
