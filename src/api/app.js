@@ -2,9 +2,10 @@
 // import user from "@/api/user-data.json"; // 後端完成後可刪
 
 //加async、useraccount
-export async function getUserPeriodData(useraccount) { // 獲取user的借用資料
+export async function getUserPeriodData() { // 獲取user的借用資料
     // 可修改區 start
 
+    const account = localStorage.getItem('loggedInAccount');
     try {
         const response = await fetch('https://qiuye.mooo.com/api/app/getUserPeriodData', {
             method: 'POST',
@@ -13,7 +14,7 @@ export async function getUserPeriodData(useraccount) { // 獲取user的借用資
                 'Origin': 'Origin',
                 'Access-Control-Allow-Origin': '*',
             },
-            body: JSON.stringify({ useraccount }),
+            body: JSON.stringify({ account }),
         });
 
         if (!response.ok) {
@@ -21,9 +22,9 @@ export async function getUserPeriodData(useraccount) { // 獲取user的借用資
         }
 
         const data = await response.json();
-        return data.periodData;
+        return data;
     } catch (error) {
-        console.error('获取密码提示失败', error);
+        console.error(error);
         throw error;
     }
 
@@ -35,7 +36,7 @@ export async function getUserPeriodData(useraccount) { // 獲取user的借用資
 
 export function getAllUserPeriodData() {
     // 可修改區 start
-    const apiUrl = `https://qiuye.mooo.com/api/app/getUserPeriodData`; // 假設有一個名為 "periodData" 的 JSON Server 路由
+    const apiUrl = `https://qiuye.mooo.com/api/app/getAllUserPeriodData`; // 假設有一個名為 "periodData" 的 JSON Server 路由
 
     // 發送 GET 請求
     return fetch(apiUrl, {

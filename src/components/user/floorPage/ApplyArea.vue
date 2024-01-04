@@ -122,7 +122,7 @@ export default {
         }
         // 更新狀態表(已被借用)
 
-        const userPeriodData = getUserPeriodData();
+        const userPeriodData = await getUserPeriodData();
         for (const p of Object.values(userPeriodData)) {
           if (p.classroomID == this.classroomInfo.id && (p.status == 2 || p.status == 3)) {
             // 教室相同,狀態介於2~5之間代表正在借用

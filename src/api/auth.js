@@ -55,8 +55,12 @@ export async function userLogin(account, password) { // 送出登入請求
             return 200;
         } else if (data.status == "-1")
             return 400;
-        else if (data.status == "-2")
+        else if (data.status == "-2") {
+            if (account == "" || password == "") {
+                return 400;
+            }
             return 403;
+        }
 
     } catch (error) {
         console.error('登录请求失败', error);
