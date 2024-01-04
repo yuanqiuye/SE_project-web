@@ -87,7 +87,9 @@ export async function getAllSave() { // user的全部收藏
         }
 
         const data = await response.json();
+        console.log(data);
         return data;
+        
     } catch (error) {
         console.error(error);
         throw error;
