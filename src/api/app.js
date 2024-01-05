@@ -211,7 +211,7 @@ function convertToTimeString(day, startPeriod, endPeriod) {
     const daysUntilMonday = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1;
     const currentMonday = new Date(baseDate);
     currentMonday.setDate(baseDate.getDate() - daysUntilMonday);
-    var baseDate = new Date(baseDate);
+    baseDate = new Date(baseDate);
     baseDate.setDate(currentMonday.getDate() + day - 1);
     // 计算给定 day、startPeriod 和 endPeriod 对应的时间
     const startDateTime = new Date(baseDate);
