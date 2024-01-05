@@ -321,6 +321,7 @@
             alert(`${resultText}成功 !`);
             break;
         }
+        window.location.reload(); // force reload
       },
       infoButton(classroomID){ // 每列資訊最右側的"i"按鈕(更多資訊)被按下
         if (getRole() == "user") this.$router.push({ name: 'floorPage', query: { id: classroomID } }); // 跳轉到平面圖頁面,並切換到特定教室

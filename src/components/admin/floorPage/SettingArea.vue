@@ -137,6 +137,7 @@ export default {
       console.log("enablePeriodtest:",enablePeriod);
       setEnablePeriod(this.classroomInfo.id, enablePeriod); // 修改後端某間教室的可借時段
       this.resetScheduleTable();
+      window.location.reload(); // force reload
     }
   },
   watch: {

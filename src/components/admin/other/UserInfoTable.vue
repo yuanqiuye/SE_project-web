@@ -166,6 +166,7 @@
             alert(`${resultText}成功 !`);
             break;
         }
+        window.location.reload(); // force reload
       },
       banButton(account){ // 封鎖按鈕
         this.runConfirmDialog("是否要封鎖此人", "封鎖", setUserBanState, account, 1);

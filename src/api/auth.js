@@ -163,7 +163,7 @@ export function verifyCode(account, code) { // 檢查驗證碼是否正確
 //不確定要甚麼?
 export function userLogout() { // 登出
     // 可修改區 start
-    alert("[api/auth/userLogout]"); // debug
+ // debug
     // 可修改區 end
 }
 
