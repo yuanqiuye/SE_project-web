@@ -113,7 +113,7 @@ export default {
 
         const allUserPeriodData = await getAllUserPeriodData();
 
-        for (const p of Object.values(allUserPeriodData)) {
+        for (const p of allUserPeriodData) {
           if (p.classroomID == this.classroomInfo.id && (p.status == 2 || p.status == 3)) {
             // 教室相同,狀態介於2~5之間代表被借走
             for (let i = p.period.startPeriod; i <= p.period.endPeriod; i++) {
@@ -193,7 +193,6 @@ export default {
     },
     async clickApplyButton() { // 按下申請按鈕
       const returnCode =await sendApply(this.classroomInfo.id, this.sDP);
-      console.log(returnCode)
       switch (returnCode) {
         case 200:
           alert("申請成功 !\n請至借用紀錄頁面查看最新狀態，管理員將盡速審核你的請求。\n鑰匙歸還期限為借用日後一日系辦關門前。");
