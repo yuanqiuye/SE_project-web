@@ -16,8 +16,8 @@
         insertData: []
       }
     },
-    created(){
-      const enablePeriodData = getAllEnablePeriodData(); // 全部教室的借用資料
+    async created(){
+      const enablePeriodData = await getAllEnablePeriodData(); // 全部教室的借用資料
       const periodNumber = config.periodTime.length;
       
       for (let classroomID of Object.keys(enablePeriodData)){ // 遍歷所有教室
