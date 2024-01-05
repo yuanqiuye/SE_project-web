@@ -11,9 +11,8 @@ export async function getUserPeriodData() { // 獲取user的借用資料
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
-                'Access-Control-Allow-Origin': '*',
             },
+            credentials: 'include',
             body: JSON.stringify({ account }),
         });
 
@@ -22,6 +21,7 @@ export async function getUserPeriodData() { // 獲取user的借用資料
         }
 
         const data = await response.json();
+        console.log("getUserPeriodData",data);
         return data;
     } catch (error) {
         console.error(error);
@@ -34,44 +34,75 @@ export async function getUserPeriodData() { // 獲取user的借用資料
 
 
 
-export function getAllUserPeriodData() {
-    // 可修改區 start
-    const apiUrl = `https://qiuye.mooo.com/api/app/getAllUserPeriodData`; // 假設有一個名為 "periodData" 的 JSON Server 路由
-
-    // 發送 GET 請求
-    return fetch(apiUrl, {
+export async function getAllUserPeriodData() {
+    try {
+        const response = await fetch('https://qiuye.mooo.com/api/app/getAllUserPeriodData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
             },
             credentials: 'include',
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            // 将对象的值转换为数组
-            const dataArray = Object.values(data);
-            console.log(dataArray);
-            return dataArray;
-        })
-        .catch(error => {
-            console.error('There has been a problem with your fetch operation:', error);
-            throw error;
         });
-    // 可修改區 end
+
+        if (!response.ok) {
+            throw new Error('请求失败');
+        }
+
+        const data = await response.json();
+        // 将对象的值转换为数组
+        const dataArray = Object.values(data);
+        //console.log("dataArray",data);
+        const updatedData = await Promise.all(dataArray.map(async (item) => {
+            var startTotalMinutes = getMinutesFromTimeString(item.period.startPeriod);
+            var endTotalMinutes = getMinutesFromTimeString(item.period.endPeriod);
+
+            if(startTotalMinutes<=480) startTotalMinutes= 481;
+
+            const  n1=Math.ceil((startTotalMinutes - 8 * 60)/60);
+            const  n2=Math.ceil((endTotalMinutes - 8 * 60)/60);
+            const  day = new Date("2024-01-04T03:24:00.000Z");
+            const n3 = day.getDay(); // 返回 1 (星期一)
+
+            //console.log(n1);
+            //console.log(n2);
+            // 創建新的 period 物件
+            const newPeriod = {
+                "day": n3, // 星期幾，這裡是示範值，根據實際情況調整
+                "startPeriod": n1, // 開始時間
+                "endPeriod": n2 // 結束時間
+            };
+
+            // 將新的 period 物件替換原來的 period
+            item.period = newPeriod;
+
+            return item;
+        }));
+
+        console.log(updatedData);
+
+        // 回傳處理後的 JSON 物件
+        return updatedData;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
+
+// 將這兩個函數的聲明移到頂部
+function getMinutesFromTimeString(timeString) {
+    const date = new Date(timeString);
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+    return hours * 60 + minutes;
+}
+
 
 export async function getEnablePeriodData(classroomID) {
     const response = await fetch('https://qiuye.mooo.com/api/app/getEnablePeriodData', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Origin': 'Origin',
+
         },
         credentials: 'include',
         body: JSON.stringify({ classroomID }),
@@ -94,7 +125,6 @@ export async function setEnablePeriod(classroomID, enablePeriod) {
             method: 'POST', // 根据你的 API 需求，可能是 'POST' 或 'PUT'
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
             },
             credentials: 'include',
             body: JSON.stringify({ classroomID, enablePeriod }),
