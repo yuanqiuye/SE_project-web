@@ -3,10 +3,10 @@ import { getRole } from "@/api/auth";
 
 const routes = [
   {
-    path: "/", component: () => import("@/views/LoginView.vue"),
+    path: "./", component: () => import("@/views/LoginView.vue"),
     children: [
-      { path: "", redirect: "/login" },
-      { path: "login", name: "loginPage", component: () => import("@/components/login/LoginBox.vue") },
+      { path: "./", redirect: "./login" },
+      { path: "./login", name: "loginPage", component: () => import("@/components/login/LoginBox.vue") },
       {
         path: "register", component: () => import("@/components/login/RegisterBox.vue"),
         children: [
@@ -18,7 +18,7 @@ const routes = [
     ]
   },
   {
-    path: "/", component: () => import("@/views/MainView.vue"),
+    path: "./", component: () => import("@/views/MainView.vue"),
     beforeEnter: (to, from, next) => {
       const role = getRole();
       if (role == "user") next();
@@ -33,7 +33,7 @@ const routes = [
     ]
   },
   {
-    path: "/admin", component: () => import("@/views/MainView.vue"),
+    path: "./admin", component: () => import("@/views/MainView.vue"),
     beforeEnter: (to, from, next) => {
       const role = getRole();
       if (role == "user") next({ name: "floorPage" });
