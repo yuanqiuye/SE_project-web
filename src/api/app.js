@@ -205,11 +205,16 @@ export async function getAllEnablePeriodData() { // 跟後端拿全部教室的�
     請參照 enable-period.json
 */
 function convertToTimeString(day, startPeriod, endPeriod) {
-    const baseDate = new Date();
-  
+    var baseDate = new Date();
+    baseDate.setHours(0,0,0,0);
+    const currentDayOfWeek = baseDate.getDay();
+    const daysUntilMonday = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1;
+    const currentMonday = new Date(baseDate);
+    currentMonday.setDate(baseDate.getDate() - daysUntilMonday);
+    var baseDate = new Date(baseDate);
+    baseDate.setDate(currentMonday.getDate() + day - 1);
     // 计算给定 day、startPeriod 和 endPeriod 对应的时间
     const startDateTime = new Date(baseDate);
-    startDateTime.setDate(baseDate.getDate() + day - 1);
     if (startPeriod === 1) startDateTime.setHours(9, 0, 0, 0);
     else if (startPeriod === 2) startDateTime.setHours(10, 0, 0, 0);
     else if (startPeriod === 3) startDateTime.setHours(11, 0, 0, 0);
@@ -223,7 +228,6 @@ function convertToTimeString(day, startPeriod, endPeriod) {
     }
   
     const endDateTime = new Date(baseDate);
-    endDateTime.setDate(baseDate.getDate() + day - 1);
     if (endDateTime === 1) endDateTime.setHours(9, 0, 0, 0);
     else if (endPeriod === 2) endDateTime.setHours(10, 0, 0, 0);
     else if (endPeriod === 3) endDateTime.setHours(11, 0, 0, 0);
