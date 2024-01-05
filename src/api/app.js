@@ -54,7 +54,7 @@ export async function getUserPeriodData() { // 獲取user的借用資料
 
         // 回傳處理後的 JSON 物件
         return updatedData;
-        
+
 
     } catch (error) {
         console.error(error);
@@ -204,56 +204,135 @@ export async function getAllEnablePeriodData() { // 跟後端拿全部教室的�
   return:
     請參照 enable-period.json
 */
+
+
+// function formatMinutesToTime(minutes) {
+//     const hours = Math.floor(minutes / 60);
+//     const mins = minutes % 60;
+//     return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}`;
+// }
+
 function convertToTimeString(day, startPeriod, endPeriod) {
-    const baseDate = new Date('2024-01-01');
-  
-    // 计算给定 day、startPeriod 和 endPeriod 对应的时间
-    const startDateTime = new Date(baseDate);
-    startDateTime.setDate(baseDate.getDate() + day - 1);
-  
-    if (startPeriod === 1) startDateTime.setUTCHours(9);
-    else if (startPeriod === 2) startDateTime.setUTCHours(10);
-    else if (startPeriod === 3) startDateTime.setUTCHours(11);
-    else if (startPeriod === 4) startDateTime.setUTCHours(12);
-    else if (startPeriod === 5) startDateTime.setUTCHours(13);
-    else if (startPeriod === 6) startDateTime.setUTCHours(14);
-    else if (startPeriod === 7) startDateTime.setUTCHours(15);
-    else if (startPeriod === 8) startDateTime.setUTCHours(16);
-    else if (startPeriod === 9) {
-      startDateTime.setUTCHours(16);
-      startDateTime.setUTCMinutes(30);
+
+    // 基准日期为2024年1月1日星期五
+    const baseDate = new Date(2024, 0, 1); // 月份从0开始，所以0代表1月
+    const currentDate = new Date();
+
+    const daysDifference = getDaysDifference(currentDate, baseDate); // 计算相对于基准日期的天数
+    const todayday = ((daysDifference - 1) % 7) + 1; //算出今天星期幾
+
+    const startDateTime = new Date();
+    const endDateTime = new Date();
+
+    if (todayday < day) {
+        startDateTime.setDate(currentDate.getDate() + day - todayday);
+        endDateTime.setDate(currentDate.getDate() + day - todayday);
+    } else {
+        startDateTime.setDate(currentDate.getDate() + 7 - todayday + day);
+        endDateTime.setDate(currentDate.getDate() + 7 - todayday + day);
     }
-  
-    const endDateTime = new Date(baseDate);
-    endDateTime.setDate(baseDate.getDate() + day - 1);
-    if (endDateTime === 1) endDateTime.setUTCHours(9);
-    else if (endPeriod === 2) endDateTime.setUTCHours(10);
-    else if (endPeriod === 3) endDateTime.setUTCHours(11);
-    else if (endPeriod === 4) endDateTime.setUTCHours(12);
-    else if (endPeriod === 5) endDateTime.setUTCHours(13);
-    else if (endPeriod === 6) endDateTime.setUTCHours(14);
-    else if (endPeriod === 7) endDateTime.setUTCHours(15);
-    else if (endPeriod === 8) endDateTime.setUTCHours(16);
-    else if (endPeriod === 9) {
-        endDateTime.setUTCHours(16);
-        endDateTime.setUTCMinutes(30);
+
+    if (startPeriod === 1) startDateTime.setHours(8, 20, 0, 0);
+    else if (startPeriod === 2) startDateTime.setHours(9, 20, 0, 0);
+    else if (startPeriod === 3) startDateTime.setHours(10, 20, 0, 0);
+    else if (startPeriod === 4) startDateTime.setHours(11, 15, 0, 0);
+    else if (startPeriod === 5) startDateTime.setHours(12, 10, 0, 0);
+    else if (startPeriod === 6) startDateTime.setHours(13, 10, 0, 0);
+    else if (startPeriod === 7) startDateTime.setHours(14, 10, 0, 0);
+    else if (startPeriod === 8) startDateTime.setHours(15, 10, 0, 0);
+    else if (startPeriod === 9) startDateTime.setHours(16, 05, 0, 0);
+
+    if (endDateTime === 1) endDateTime.setHours(9, 10, 0, 0);
+    else if (endPeriod === 2) endDateTime.setHours(10, 10, 0, 0);
+    else if (endPeriod === 3) endDateTime.setHours(11, 10, 0, 0);
+    else if (endPeriod === 4) endDateTime.setHours(12, 05, 0, 0);
+    else if (endPeriod === 5) endDateTime.setHours(13, 0, 0, 0);
+    else if (endPeriod === 6) endDateTime.setHours(14, 0, 0, 0);
+    else if (endPeriod === 7) endDateTime.setHours(15, 0, 0, 0);
+    else if (endPeriod === 8) endDateTime.setHours(16, 0, 0, 0);
+    else if (endPeriod === 9) endDateTime.setHours(16, 55, 0, 0);
+
+    const result = {
+        startPeriod: startDateTime.toISOString(),
+        endPeriod: endDateTime.toISOString()
     }
-    return {
-      startPeriod: startDateTime.toJSON(),
-      endPeriod: endDateTime.toJSON()
-    };
-  }
-  
-  
-  
-  // 举例：星期三（day: 3），第 4 節（startPeriod: 4），第 5 節（endPeriod: 5）
- 
-  
+
+    return result;
+
+}
+
+function getDaysDifference(date1, date2) {
+    // 获取两个日期的时间戳（毫秒数）
+    const time1 = date1.getTime();
+    const time2 = date2.getTime();
+
+    // 计算毫秒数差异
+    const timeDiff = Math.abs(time2 - time1);
+
+    // 计算天数差异
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+    return daysDiff;
+}
+
+// 示例
+
+// const result = convertToTimeString(3, 2, 3);  // 星期三，第2到第3节课
+// console.log(result);
+
+
+
+// function convertToTimeString(day, startPeriod, endPeriod) {
+//     const baseDate = new Date('2024-01-01');
+
+//     // 计算给定 day、startPeriod 和 endPeriod 对应的时间
+//     const startDateTime = new Date(baseDate);
+//     startDateTime.setDate(baseDate.getDate() + day - 1);
+
+//     if (startPeriod === 1) startDateTime.setUTCHours(9);
+//     else if (startPeriod === 2) startDateTime.setUTCHours(10);
+//     else if (startPeriod === 3) startDateTime.setUTCHours(11);
+//     else if (startPeriod === 4) startDateTime.setUTCHours(12);
+//     else if (startPeriod === 5) startDateTime.setUTCHours(13);
+//     else if (startPeriod === 6) startDateTime.setUTCHours(14);
+//     else if (startPeriod === 7) startDateTime.setUTCHours(15);
+//     else if (startPeriod === 8) startDateTime.setUTCHours(16);
+//     else if (startPeriod === 9) {
+//         startDateTime.setUTCHours(16);
+//         startDateTime.setUTCMinutes(30);
+//     }
+
+//     const endDateTime = new Date(baseDate);
+//     endDateTime.setDate(baseDate.getDate() + day - 1);
+//     if (endDateTime === 1) endDateTime.setUTCHours(9);
+//     else if (endPeriod === 2) endDateTime.setUTCHours(10);
+//     else if (endPeriod === 3) endDateTime.setUTCHours(11);
+//     else if (endPeriod === 4) endDateTime.setUTCHours(12);
+//     else if (endPeriod === 5) endDateTime.setUTCHours(13);
+//     else if (endPeriod === 6) endDateTime.setUTCHours(14);
+//     else if (endPeriod === 7) endDateTime.setUTCHours(15);
+//     else if (endPeriod === 8) endDateTime.setUTCHours(16);
+//     else if (endPeriod === 9) {
+//         endDateTime.setUTCHours(16);
+//         endDateTime.setUTCMinutes(30);
+//     }
+//     return {
+//         startPeriod: startDateTime.toJSON(),
+//         endPeriod: endDateTime.toJSON()
+//     };
+// }
+
+
+
+// 举例：星期三（day: 3），第 4 節（startPeriod: 4），第 5 節（endPeriod: 5）
+
+
 export async function sendApply(classroomID, selectedPeriod) {
+    // console.log(selectedPeriod.day, selectedPeriod.startPeriod, selectedPeriod.endPeriod)
     const result = convertToTimeString(selectedPeriod.day, selectedPeriod.startPeriod, selectedPeriod.endPeriod);
     const apiUrl = 'https://qiuye.mooo.com/api/app/sendApply';
     const account = JSON.parse(localStorage.getItem('loggedInAccount'));
-    selectedPeriod=result;
+    selectedPeriod = result;
     console.log(selectedPeriod);
     try {
         const response = await fetch(apiUrl, {
@@ -298,6 +377,7 @@ export async function cancelApply(pid) {
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -332,6 +412,7 @@ export async function deletePeriodData(pid) { // 刪除特定狀態的借用紀�
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -367,6 +448,7 @@ export async function LendKey(pid) { // 借出鑰匙 (admin)
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -402,6 +484,7 @@ export async function ReceiveKey(pid) { // 收到歸還的鑰匙 (admin)
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -437,6 +520,7 @@ export async function acceptRequest(pid) { // 接受一個時段申請 (admin)
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -472,6 +556,7 @@ export async function rejectRequest(pid) { // 拒絕一個時段申請 (admin)
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -561,6 +646,7 @@ export async function setUserPoint(account, point) {
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ account, point }),
         });
 
@@ -594,6 +680,7 @@ export async function setUserBanState(account, state) {
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ account, state }),
         });
 
