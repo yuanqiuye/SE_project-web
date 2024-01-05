@@ -24,7 +24,7 @@ export async function getUserPeriodData() { // 獲取user的借用資料
         // 将对象的值转换为数组
         const dataArray = Object.values(data);
         //console.log("dataArray",data);
-        const updatedData = await Promise.all(dataArray.map(async(item) => {
+        const updatedData = dataArray.map((item) => {
             var startTotalMinutes = getMinutesFromTimeString(item.period.startPeriod);
             var endTotalMinutes = getMinutesFromTimeString(item.period.endPeriod);
 
@@ -48,7 +48,7 @@ export async function getUserPeriodData() { // 獲取user的借用資料
             item.period = newPeriod;
 
             return item;
-        }));
+        });
 
         console.log("getUserPeriodData", updatedData);
 
@@ -85,7 +85,7 @@ export async function getAllUserPeriodData() {
         // 将对象的值转换为数组
         const dataArray = Object.values(data);
         //console.log("dataArray",data);
-        const updatedData = await Promise.all(dataArray.map(async(item) => {
+        const updatedData = dataArray.map((item) => {
             var startTotalMinutes = getMinutesFromTimeString(item.period.startPeriod);
             var endTotalMinutes = getMinutesFromTimeString(item.period.endPeriod);
 
@@ -109,7 +109,7 @@ export async function getAllUserPeriodData() {
             item.period = newPeriod;
 
             return item;
-        }));
+        });
 
         console.log(updatedData);
 
@@ -124,8 +124,8 @@ export async function getAllUserPeriodData() {
 // 將這兩個函數的聲明移到頂部
 function getMinutesFromTimeString(timeString) {
     const date = new Date(timeString);
-    const hours = date.getUTCHours();
-    const minutes = date.getUTCMinutes();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
     return hours * 60 + minutes;
 }
 
@@ -205,38 +205,35 @@ export async function getAllEnablePeriodData() { // 跟後端拿全部教室的�
     請參照 enable-period.json
 */
 function convertToTimeString(day, startPeriod, endPeriod) {
-    const baseDate = new Date('2024-01-01');
+    const baseDate = new Date();
   
     // 计算给定 day、startPeriod 和 endPeriod 对应的时间
     const startDateTime = new Date(baseDate);
     startDateTime.setDate(baseDate.getDate() + day - 1);
-  
-    if (startPeriod === 1) startDateTime.setUTCHours(9);
-    else if (startPeriod === 2) startDateTime.setUTCHours(10);
-    else if (startPeriod === 3) startDateTime.setUTCHours(11);
-    else if (startPeriod === 4) startDateTime.setUTCHours(12);
-    else if (startPeriod === 5) startDateTime.setUTCHours(13);
-    else if (startPeriod === 6) startDateTime.setUTCHours(14);
-    else if (startPeriod === 7) startDateTime.setUTCHours(15);
-    else if (startPeriod === 8) startDateTime.setUTCHours(16);
+    if (startPeriod === 1) startDateTime.setHours(9, 0, 0, 0);
+    else if (startPeriod === 2) startDateTime.setHours(10, 0, 0, 0);
+    else if (startPeriod === 3) startDateTime.setHours(11, 0, 0, 0);
+    else if (startPeriod === 4) startDateTime.setHours(12, 0, 0, 0);
+    else if (startPeriod === 5) startDateTime.setHours(13, 0, 0, 0);
+    else if (startPeriod === 6) startDateTime.setHours(14, 0, 0, 0);
+    else if (startPeriod === 7) startDateTime.setHours(15, 0, 0, 0);
+    else if (startPeriod === 8) startDateTime.setHours(16, 0, 0, 0);
     else if (startPeriod === 9) {
-      startDateTime.setUTCHours(16);
-      startDateTime.setUTCMinutes(30);
+      startDateTime.setHours(16, 30, 0, 0);
     }
   
     const endDateTime = new Date(baseDate);
     endDateTime.setDate(baseDate.getDate() + day - 1);
-    if (endDateTime === 1) endDateTime.setUTCHours(9);
-    else if (endPeriod === 2) endDateTime.setUTCHours(10);
-    else if (endPeriod === 3) endDateTime.setUTCHours(11);
-    else if (endPeriod === 4) endDateTime.setUTCHours(12);
-    else if (endPeriod === 5) endDateTime.setUTCHours(13);
-    else if (endPeriod === 6) endDateTime.setUTCHours(14);
-    else if (endPeriod === 7) endDateTime.setUTCHours(15);
-    else if (endPeriod === 8) endDateTime.setUTCHours(16);
+    if (endDateTime === 1) endDateTime.setHours(9, 0, 0, 0);
+    else if (endPeriod === 2) endDateTime.setHours(10, 0, 0, 0);
+    else if (endPeriod === 3) endDateTime.setHours(11, 0, 0, 0);
+    else if (endPeriod === 4) endDateTime.setHours(12, 0, 0, 0);
+    else if (endPeriod === 5) endDateTime.setHours(13, 0, 0, 0);
+    else if (endPeriod === 6) endDateTime.setHours(14, 0, 0, 0);
+    else if (endPeriod === 7) endDateTime.setHours(15, 0, 0, 0);
+    else if (endPeriod === 8) endDateTime.setHours(16, 0, 0, 0);
     else if (endPeriod === 9) {
-        endDateTime.setUTCHours(16);
-        endDateTime.setUTCMinutes(30);
+        endDateTime.setHours(16, 30, 0, 0);
     }
     return {
       startPeriod: startDateTime.toJSON(),

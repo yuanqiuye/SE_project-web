@@ -105,7 +105,7 @@
           <td><span class="ts-icon is-gears-icon"></span></td>
         </tr>
         <tr v-for="rowData in getTableData()" :key="rowData.classroom.id" v-show="isShow(rowData)">
-          <td v-if="'account' in enableCol">{{ rowData.account }} ( {{ getPoint(rowData.account) }}違規點 )</td>
+          <td v-if="'account' in enableCol">{{ rowData.account }}</td>
           <td>{{ rowData.classroom.id.toUpperCase() }}</td>
           <td>{{ rowData.classroom.building }}</td>
           <td class="saveButton-tdFix" style="justify-content:center;">
@@ -281,7 +281,6 @@
           
           const classroomName = rowData.classroom.name;
           rowData.classroom.name = classroomName.slice(0, classroomName.indexOf("(")).trim(); // 縮短教室名稱,因為status表格太寬了
-          
           tableData.push(rowData);
         }
         return tableData;
@@ -291,6 +290,7 @@
         return this.userPoint[account];
       },
       getPeriodText(period){ // <struct>period 轉 <string>時段資訊
+        console.log(period)
         const nthDay = [ "", "星期一", "星期二", "星期三", "星期四", "星期五" ];
         let periodText = "";
         if (period != undefined){

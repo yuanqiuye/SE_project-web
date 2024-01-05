@@ -19,7 +19,7 @@ export default {
       insertData: [],
     };
   },
-  async created() {
+  async beforeCreate() {
     try {
       const allUserPeriodData = await getAllUserPeriodData();
       const dataArray = Object.values(allUserPeriodData);
