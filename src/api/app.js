@@ -21,7 +21,7 @@ export async function getUserPeriodData() { // 獲取user的借用資料
         }
 
         const data = await response.json();
-        //console.log("getUserPeriodData", data);
+        console.log("getUserPeriodData", data);
         return data;
     } catch (error) {
         console.error(error);
@@ -78,7 +78,7 @@ export async function getAllUserPeriodData() {
             return item;
         }));
 
-        //console.log(updatedData);
+        console.log(updatedData);
 
         // 回傳處理後的 JSON 物件
         return updatedData;
@@ -189,10 +189,14 @@ export async function sendApply(classroomID, selectedPeriod) {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-        return 200;
+
+        const data = await response.json();
+        console.log(data.code)
+        if(data.code=="200") return 200;
+        else if(data.code=="400") return 400;
     } catch (error) {
         console.error('There has been a problem with your fetch operation:', error);
-        return 400;
+        throw error;
     }
 }
 /*
@@ -213,8 +217,8 @@ export async function cancelApply(pid) {
             method: 'POST', // 假设取消申请是一个DELETE请求
             headers: {
                 'Content-Type': 'application/json',
+                'Origin': 'Origin',
             },
-            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
