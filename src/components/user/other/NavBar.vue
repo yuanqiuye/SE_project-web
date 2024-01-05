@@ -20,6 +20,10 @@
       <div class="ts-icon is-power-off-icon"></div>
       <div class="label">登出</div>
     </a>
+		<a class="item">
+      <div class="ts-icon is-circle-user-icon"></div>
+      <div class="label">學生</div>
+    </a>
   </div>
   <div class="navBar ts-app-navbar" v-if="role == 'admin'">
     <router-link :class="getClass('floorPage_admin')" :to="{ name: 'floorPage_admin' }">
@@ -45,6 +49,10 @@
     <a class="item" @click="logout()">
       <div class="ts-icon is-power-off-icon"></div>
       <div class="label">登出</div>
+    </a>
+		<a class="item">
+      <div class="ts-icon is-circle-user-icon"></div>
+      <div class="label">管理員</div>
     </a>
   </div>
 </template>
@@ -92,9 +100,12 @@
     margin: 0 4px !important;
     white-space: nowrap; user-select: none;
   }
-  .navBar > a:hover{
+  .navBar > a:not(:last-child):hover{
     background-color: #fff4;
   }
+	.navBar > a:last-child{
+		color: #00e;
+	}
   .navBar-selected{
     background-color: #fec !important;
   }
