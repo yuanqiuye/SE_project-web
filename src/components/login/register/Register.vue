@@ -37,7 +37,7 @@
           let returnCode =  await userRegister(this.input.account, this.input.password, this.input.hint);
           switch (returnCode){
             case 200: // 註冊成功,跳轉至驗證碼頁面
-              this.$router.push({ name: "registerPage_verify", query: { account: this.input.account } });
+              this.$router.push({ name: "registerPage_result", query: { result: "success" } });
               break;
             case 400: // 帳號已存在,跳轉至註冊結果頁面(顯示帳號已存在)
               this.$router.push({ name: "registerPage_result", query: { result: "exist" } });
