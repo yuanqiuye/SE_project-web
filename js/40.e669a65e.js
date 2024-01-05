@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkcr"]=self["webpackChunkcr"]||[]).push([[40],{9040:function(r,n,e){e.r(n),e.d(n,{default:function(){return o}});var t=e(3396);const c={class:"ts-center"};function u(r,n){const e=(0,t.up)("router-view");return(0,t.wg)(),(0,t.iD)("div",c,[(0,t.Wm)(e)])}var s=e(89);const a={},i=(0,s.Z)(a,[["render",u]]);var o=i}}]);
+//# sourceMappingURL=40.e669a65e.js.map
