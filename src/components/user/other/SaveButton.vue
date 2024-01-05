@@ -23,8 +23,8 @@
         if (!(this.classroomID in allClassroomInfo)) return; // 如果教室資料不存在,無法更新
         
         this.isSave = !this.isSave;
-        if (this.isSave) addSave(this.classroomID);
-        else removeSave(this.classroomID);
+        if (this.isSave) await addSave(this.classroomID);
+        else await removeSave(this.classroomID);
         this.isSave = await getIsSave(this.classroomID);
       }
     },
