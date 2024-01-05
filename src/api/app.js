@@ -13,7 +13,7 @@ export async function getUserPeriodData() { // 獲取user的借用資料
                 'Content-Type': 'application/json',
             },
             credentials: 'include',
-            body: JSON.stringify({ account }),
+            body: JSON.stringify({ userAccount: account }),
         });
 
         if (!response.ok) {
@@ -21,7 +21,7 @@ export async function getUserPeriodData() { // 獲取user的借用資料
         }
 
         const data = await response.json();
-        console.log("getUserPeriodData",data);
+        console.log("getUserPeriodData", data);
         return data;
     } catch (error) {
         console.error(error);
@@ -52,15 +52,15 @@ export async function getAllUserPeriodData() {
         // 将对象的值转换为数组
         const dataArray = Object.values(data);
         //console.log("dataArray",data);
-        const updatedData = await Promise.all(dataArray.map(async (item) => {
+        const updatedData = await Promise.all(dataArray.map(async(item) => {
             var startTotalMinutes = getMinutesFromTimeString(item.period.startPeriod);
             var endTotalMinutes = getMinutesFromTimeString(item.period.endPeriod);
 
-            if(startTotalMinutes<=480) startTotalMinutes= 481;
+            if (startTotalMinutes <= 480) startTotalMinutes = 481;
 
-            const  n1=Math.ceil((startTotalMinutes - 8 * 60)/60);
-            const  n2=Math.ceil((endTotalMinutes - 8 * 60)/60);
-            const  day = new Date("2024-01-04T03:24:00.000Z");
+            const n1 = Math.ceil((startTotalMinutes - 8 * 60) / 60);
+            const n2 = Math.ceil((endTotalMinutes - 8 * 60) / 60);
+            const day = new Date("2024-01-04T03:24:00.000Z");
             const n3 = day.getDay(); // 返回 1 (星期一)
 
             //console.log(n1);
