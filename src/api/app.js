@@ -24,37 +24,30 @@ export async function getUserPeriodData() { // 獲取user的借用資料
         // 将对象的值转换为数组
         const dataArray = Object.values(data);
         //console.log("dataArray",data);
-        const updatedData = dataArray.map((item) => {
-            var startTotalMinutes = getMinutesFromTimeString(item.period.startPeriod);
-            var endTotalMinutes = getMinutesFromTimeString(item.period.endPeriod);
+        const updatedData = await Promise.all(dataArray.map(async(item) => {
+            var start = item.period.startPeriod;
+            var end = item.period.endPeriod;
 
-            if (startTotalMinutes <= 480) startTotalMinutes = 481;
+            const daystart = new Date(start);
+            const dateend = new Date(end);
 
-            const n1 = Math.ceil((startTotalMinutes - 8 * 60) / 60);
-            const n2 = Math.ceil((endTotalMinutes - 8 * 60) / 60);
-            const day = new Date(item.period.startPeriod); //修正
-            const n3 = day.getDay();
-
-            //console.log(n1);
-            //console.log(n2);
             // 創建新的 period 物件
             const newPeriod = {
-                "day": n3, // 星期幾，這裡是示範值，根據實際情況調整
-                "startPeriod": n1, // 開始時間
-                "endPeriod": n2 // 結束時間
+                "day": daystart.getDay(), // 星期幾，這裡是示範值，根據實際情況調整
+                "startPeriod": daystart.getHours() - 7, // 開始時間
+                "endPeriod": dateend.getHours() - 8 // 結束時間
             };
 
             // 將新的 period 物件替換原來的 period
             item.period = newPeriod;
-
             return item;
-        });
+        }));
 
         console.log("getUserPeriodData", updatedData);
 
         // 回傳處理後的 JSON 物件
         return updatedData;
-        
+
 
     } catch (error) {
         console.error(error);
@@ -86,28 +79,21 @@ export async function getAllUserPeriodData() {
         const dataArray = Object.values(data);
         //console.log("dataArray",data);
         const updatedData = dataArray.map((item) => {
-            var startTotalMinutes = getMinutesFromTimeString(item.period.startPeriod);
-            var endTotalMinutes = getMinutesFromTimeString(item.period.endPeriod);
+            var start = item.period.startPeriod;
+            var end = item.period.endPeriod;
 
-            if (startTotalMinutes <= 480) startTotalMinutes = 481;
+            const daystart = new Date(start);
+            const dateend = new Date(end);
 
-            const n1 = Math.ceil((startTotalMinutes - 8 * 60) / 60);
-            const n2 = Math.ceil((endTotalMinutes - 8 * 60) / 60);
-            const day = new Date(item.period.startPeriod); //修正
-            const n3 = day.getDay();
-
-            //console.log(n1);
-            //console.log(n2);
             // 創建新的 period 物件
             const newPeriod = {
-                "day": n3, // 星期幾，這裡是示範值，根據實際情況調整
-                "startPeriod": n1, // 開始時間
-                "endPeriod": n2 // 結束時間
+                "day": daystart.getDay(), // 星期幾，這裡是示範值，根據實際情況調整
+                "startPeriod": daystart.getHours() - 7, // 開始時間
+                "endPeriod": dateend.getHours() - 8 // 結束時間
             };
 
             // 將新的 period 物件替換原來的 period
             item.period = newPeriod;
-
             return item;
         });
 
@@ -119,14 +105,6 @@ export async function getAllUserPeriodData() {
         console.error(error);
         throw error;
     }
-}
-
-// 將這兩個函數的聲明移到頂部
-function getMinutesFromTimeString(timeString) {
-    const date = new Date(timeString);
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    return hours * 60 + minutes;
 }
 
 
@@ -204,57 +182,133 @@ export async function getAllEnablePeriodData() { // 跟後端拿全部教室的�
   return:
     請參照 enable-period.json
 */
+
+
+// function convertToTimeString(day, startPeriod, endPeriod) {
+
+//     // 基准日期为2024年1月1日星期五
+//     const baseDate = new Date(2024, 0, 1); // 月份从0开始，所以0代表1月
+//     const currentDate = new Date();
+
+//     const daysDifference = getDaysDifference(currentDate, baseDate); // 计算相对于基准日期的天数
+//     const todayday = ((daysDifference - 1) % 7) + 1; //算出今天星期幾
+
+//     const startDateTime = new Date();
+//     const endDateTime = new Date();
+
+//     if (todayday < day) {
+//         startDateTime.setDate(currentDate.getDate() + day - todayday);
+//         endDateTime.setDate(currentDate.getDate() + day - todayday);
+//     } else {
+//         startDateTime.setDate(currentDate.getDate() + 7 - todayday + day);
+//         endDateTime.setDate(currentDate.getDate() + 7 - todayday + day);
+//     }
+
+//     if (startPeriod === 1) startDateTime.setHours(8, 20, 0, 0);
+//     else if (startPeriod === 2) startDateTime.setHours(9, 20, 0, 0);
+//     else if (startPeriod === 3) startDateTime.setHours(10, 20, 0, 0);
+//     else if (startPeriod === 4) startDateTime.setHours(11, 15, 0, 0);
+//     else if (startPeriod === 5) startDateTime.setHours(12, 10, 0, 0);
+//     else if (startPeriod === 6) startDateTime.setHours(13, 10, 0, 0);
+//     else if (startPeriod === 7) startDateTime.setHours(14, 10, 0, 0);
+//     else if (startPeriod === 8) startDateTime.setHours(15, 10, 0, 0);
+//     else if (startPeriod === 9) startDateTime.setHours(16, 5, 0, 0);
+
+//     if (endDateTime === 1) endDateTime.setHours(9, 10, 0, 0);
+//     else if (endPeriod === 2) endDateTime.setHours(10, 10, 0, 0);
+//     else if (endPeriod === 3) endDateTime.setHours(11, 10, 0, 0);
+//     else if (endPeriod === 4) endDateTime.setHours(12, 5, 0, 0);
+//     else if (endPeriod === 5) endDateTime.setHours(13, 0, 0, 0);
+//     else if (endPeriod === 6) endDateTime.setHours(14, 0, 0, 0);
+//     else if (endPeriod === 7) endDateTime.setHours(15, 0, 0, 0);
+//     else if (endPeriod === 8) endDateTime.setHours(16, 0, 0, 0);
+//     else if (endPeriod === 9) endDateTime.setHours(16, 55, 0, 0);
+
+//     const result = {
+//         startPeriod: startDateTime.toISOString(),
+//         endPeriod: endDateTime.toISOString()
+//     }
+
+//     return result;
+
+// }
+
+// function getDaysDifference(date1, date2) {
+//     // 获取两个日期的时间戳（毫秒数）
+//     const time1 = date1.getTime();
+//     const time2 = date2.getTime();
+
+//     // 计算毫秒数差异
+//     const timeDiff = Math.abs(time2 - time1);
+
+//     // 计算天数差异
+//     const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+//     return daysDiff;
+// }
+
+// 示例
+
+// const result = convertToTimeString(3, 2, 3);  // 星期三，第2到第3节课
+// console.log(result);
+
+
+
 function convertToTimeString(day, startPeriod, endPeriod) {
     var baseDate = new Date();
-    baseDate.setHours(0,0,0,0);
+    baseDate.setHours(0, 0, 0, 0);
     const currentDayOfWeek = baseDate.getDay();
     const daysUntilMonday = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1;
     const currentMonday = new Date(baseDate);
     currentMonday.setDate(baseDate.getDate() - daysUntilMonday);
     baseDate = new Date(baseDate);
-    baseDate.setDate(currentMonday.getDate() + day - 1);
+
+    if (currentDayOfWeek == 6 || currentDayOfWeek == 7) {
+        baseDate.setDate(currentMonday.getDate() + day + 6);
+    } else baseDate.setDate(currentMonday.getDate() + day - 1);
     // 计算给定 day、startPeriod 和 endPeriod 对应的时间
     const startDateTime = new Date(baseDate);
-    if (startPeriod === 1) startDateTime.setHours(9, 0, 0, 0);
-    else if (startPeriod === 2) startDateTime.setHours(10, 0, 0, 0);
-    else if (startPeriod === 3) startDateTime.setHours(11, 0, 0, 0);
-    else if (startPeriod === 4) startDateTime.setHours(12, 0, 0, 0);
-    else if (startPeriod === 5) startDateTime.setHours(13, 0, 0, 0);
-    else if (startPeriod === 6) startDateTime.setHours(14, 0, 0, 0);
-    else if (startPeriod === 7) startDateTime.setHours(15, 0, 0, 0);
-    else if (startPeriod === 8) startDateTime.setHours(16, 0, 0, 0);
+    if (startPeriod === 1) startDateTime.setHours(8, 20, 0, 0);
+    else if (startPeriod === 2) startDateTime.setHours(9, 20, 0, 0);
+    else if (startPeriod === 3) startDateTime.setHours(10, 20, 0, 0);
+    else if (startPeriod === 4) startDateTime.setHours(11, 15, 0, 0);
+    else if (startPeriod === 5) startDateTime.setHours(12, 10, 0, 0);
+    else if (startPeriod === 6) startDateTime.setHours(13, 10, 0, 0);
+    else if (startPeriod === 7) startDateTime.setHours(14, 10, 0, 0);
+    else if (startPeriod === 8) startDateTime.setHours(15, 10, 0, 0);
     else if (startPeriod === 9) {
-      startDateTime.setHours(16, 30, 0, 0);
+        startDateTime.setHours(16, 5, 0, 0);
     }
-  
+
     const endDateTime = new Date(baseDate);
-    if (endDateTime === 1) endDateTime.setHours(9, 0, 0, 0);
-    else if (endPeriod === 2) endDateTime.setHours(10, 0, 0, 0);
-    else if (endPeriod === 3) endDateTime.setHours(11, 0, 0, 0);
-    else if (endPeriod === 4) endDateTime.setHours(12, 0, 0, 0);
+
+    if (endDateTime === 1) endDateTime.setHours(9, 10, 0, 0);
+    else if (endPeriod === 2) endDateTime.setHours(10, 10, 0, 0);
+    else if (endPeriod === 3) endDateTime.setHours(11, 10, 0, 0);
+    else if (endPeriod === 4) endDateTime.setHours(12, 5, 0, 0);
     else if (endPeriod === 5) endDateTime.setHours(13, 0, 0, 0);
     else if (endPeriod === 6) endDateTime.setHours(14, 0, 0, 0);
     else if (endPeriod === 7) endDateTime.setHours(15, 0, 0, 0);
     else if (endPeriod === 8) endDateTime.setHours(16, 0, 0, 0);
     else if (endPeriod === 9) {
-        endDateTime.setHours(16, 30, 0, 0);
+        endDateTime.setHours(16, 55, 0, 0);
     }
     return {
-      startPeriod: startDateTime.toJSON(),
-      endPeriod: endDateTime.toJSON()
+        startPeriod: startDateTime.toJSON(),
+        endPeriod: endDateTime.toJSON()
     };
-  }
-  
-  
-  
-  // 举例：星期三（day: 3），第 4 節（startPeriod: 4），第 5 節（endPeriod: 5）
- 
-  
+}
+
+
+// 举例：星期三（day: 3），第 4 節（startPeriod: 4），第 5 節（endPeriod: 5）
+
+
 export async function sendApply(classroomID, selectedPeriod) {
+    // console.log(selectedPeriod.day, selectedPeriod.startPeriod, selectedPeriod.endPeriod)
     const result = convertToTimeString(selectedPeriod.day, selectedPeriod.startPeriod, selectedPeriod.endPeriod);
     const apiUrl = 'https://qiuye.mooo.com/api/app/sendApply';
     const account = JSON.parse(localStorage.getItem('loggedInAccount'));
-    selectedPeriod=result;
+    selectedPeriod = result;
     console.log(selectedPeriod);
     try {
         const response = await fetch(apiUrl, {
@@ -332,6 +386,7 @@ export async function deletePeriodData(pid) { // 刪除特定狀態的借用紀�
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -367,6 +422,7 @@ export async function LendKey(pid) { // 借出鑰匙 (admin)
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -402,6 +458,7 @@ export async function ReceiveKey(pid) { // 收到歸還的鑰匙 (admin)
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
