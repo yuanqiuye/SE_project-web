@@ -21,7 +21,7 @@ export async function getUserPeriodData() { // 獲取user的借用資料
         }
 
         const data = await response.json();
-        console.log("getUserPeriodData", data);
+        //console.log("getUserPeriodData", data);
         return data;
     } catch (error) {
         console.error(error);
@@ -60,8 +60,8 @@ export async function getAllUserPeriodData() {
 
             const n1 = Math.ceil((startTotalMinutes - 8 * 60) / 60);
             const n2 = Math.ceil((endTotalMinutes - 8 * 60) / 60);
-            const day = new Date("2024-01-04T03:24:00.000Z");
-            const n3 = day.getDay(); // 返回 1 (星期一)
+            const day = new Date(item.period.startPeriod); //修正
+            const n3 = day.getDay(); 
 
             //console.log(n1);
             //console.log(n2);
@@ -78,7 +78,7 @@ export async function getAllUserPeriodData() {
             return item;
         }));
 
-        console.log(updatedData);
+        //console.log(updatedData);
 
         // 回傳處理後的 JSON 物件
         return updatedData;
@@ -151,10 +151,8 @@ export async function getAllEnablePeriodData() { // 跟後端拿全部教室的�
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
             },
             credentials: 'include',
-            body: JSON.stringify({}),
         });
 
         if (!response.ok) {
@@ -162,6 +160,7 @@ export async function getAllEnablePeriodData() { // 跟後端拿全部教室的�
         }
 
         const data = await response.json();
+        console.log(data)
         return data;
     } catch (error) {
         console.error(error);
@@ -182,7 +181,6 @@ export async function sendApply(classroomID, selectedPeriod) {
             method: 'POST', // 或者 'PUT'，取決於你的後端接口
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
             },
             credentials: 'include',
             body: JSON.stringify({ classroomID: classroomID, selectedPeriod: selectedPeriod, userAccount: account })
@@ -191,12 +189,10 @@ export async function sendApply(classroomID, selectedPeriod) {
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
-
-        const data = await response.json();
-        return data; // 可能是一個包含成功或失敗信息的對象，取決於你的後端實現
+        return 200;
     } catch (error) {
         console.error('There has been a problem with your fetch operation:', error);
-        throw error;
+        return 400;
     }
 }
 /*
@@ -217,7 +213,6 @@ export async function cancelApply(pid) {
             method: 'POST', // 假设取消申请是一个DELETE请求
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
             },
             credentials: 'include',
             body: JSON.stringify({ pid }),
