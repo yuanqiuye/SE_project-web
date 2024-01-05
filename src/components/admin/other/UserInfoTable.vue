@@ -146,6 +146,7 @@
               alert("修改成功 !");
               break;
           }
+          window.location.reload(); // force reload
         }
         this.editingPoint.account = null; // 重置
       },

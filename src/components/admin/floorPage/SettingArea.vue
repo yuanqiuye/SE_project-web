@@ -111,7 +111,7 @@ export default {
       this.confirm.enable = true;
       this.periodState[day][period] = !this.periodState[day][period];
     },
-    clickUpdateButton() { // 確認修改時段
+    async clickUpdateButton() { // 確認修改時段
       let enablePeriod = [];
 
       for (let day = 1; day <= 5; day++) {
@@ -135,8 +135,7 @@ export default {
       }
       console.log("classroomInfo:",this.classroomInfo.id);
       console.log("enablePeriodtest:",enablePeriod);
-      setEnablePeriod(this.classroomInfo.id, enablePeriod); // 修改後端某間教室的可借時段
-      this.resetScheduleTable();
+      await setEnablePeriod(this.classroomInfo.id, enablePeriod); // 修改後端某間教室的可借時段
       window.location.reload(); // force reload
     }
   },
