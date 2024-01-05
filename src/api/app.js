@@ -153,6 +153,7 @@ export async function getAllEnablePeriodData() { // 跟後端拿全部教室的�
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({}),
         });
 
