@@ -192,8 +192,8 @@ export async function sendApply(classroomID, selectedPeriod) {
 
         const data = await response.json();
         console.log(data.code)
-        if(data.code=="200") return 200;
-        else if(data.code=="400") return 400;
+        if (data.code == "200") return 200;
+        else if (data.code == "400") return 400;
     } catch (error) {
         console.error('There has been a problem with your fetch operation:', error);
         throw error;
@@ -479,10 +479,9 @@ export async function getUserPoint(userAccount) { // 獲取user的記點狀況 (
     <int>違規點數
 */
 //async
-export async function setUserPoint(account, point) { // 修改user的記點狀況 (admin)
-    // 可修改區 start
+export async function setUserPoint(account, point) {
     try {
-        const response = await fetch('https://qiuye.mooo.com/api/auth/setUserPoint', {
+        const response = await fetch('https://qiuye.mooo.com/api/app/setUserPoint', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -493,16 +492,16 @@ export async function setUserPoint(account, point) { // 修改user的記點狀�
         });
 
         if (!response.ok) {
-            throw new Error('请求失败');
+            throw new Error(`请求失败，状态码: ${response.status}`);
         }
 
         return response.status;
     } catch (error) {
-        console.error('设置用户计分数据失败', error);
+        console.error('设置用户计分数据失败', error.message || error);
         throw error;
     }
-    // 可修改區 end
 }
+
 /*
   input:
     account: <string>學號(帳號)
@@ -516,7 +515,7 @@ export async function setUserPoint(account, point) { // 修改user的記點狀�
 export async function setUserBanState(account, state) {
     // 可修改區 start
     try {
-        const response = await fetch('https://qiuye.mooo.com/api/auth/setUserBanState', {
+        const response = await fetch('https://qiuye.mooo.com/api/app/setUserBanState', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
