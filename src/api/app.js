@@ -21,8 +21,41 @@ export async function getUserPeriodData() { // 獲取user的借用資料
         }
 
         const data = await response.json();
-        console.log("getUserPeriodData", data);
-        return data;
+        // 将对象的值转换为数组
+        const dataArray = Object.values(data);
+        //console.log("dataArray",data);
+        const updatedData = await Promise.all(dataArray.map(async(item) => {
+            var startTotalMinutes = getMinutesFromTimeString(item.period.startPeriod);
+            var endTotalMinutes = getMinutesFromTimeString(item.period.endPeriod);
+
+            if (startTotalMinutes <= 480) startTotalMinutes = 481;
+
+            const n1 = Math.ceil((startTotalMinutes - 8 * 60) / 60);
+            const n2 = Math.ceil((endTotalMinutes - 8 * 60) / 60);
+            const day = new Date(item.period.startPeriod); //修正
+            const n3 = day.getDay();
+
+            //console.log(n1);
+            //console.log(n2);
+            // 創建新的 period 物件
+            const newPeriod = {
+                "day": n3, // 星期幾，這裡是示範值，根據實際情況調整
+                "startPeriod": n1, // 開始時間
+                "endPeriod": n2 // 結束時間
+            };
+
+            // 將新的 period 物件替換原來的 period
+            item.period = newPeriod;
+
+            return item;
+        }));
+
+        console.log("getUserPeriodData", updatedData);
+
+        // 回傳處理後的 JSON 物件
+        return updatedData;
+        
+
     } catch (error) {
         console.error(error);
         throw error;

@@ -15,8 +15,8 @@
         insertData: []
       }
     },
-    created(){
-      this.insertData = Object.values(getUserPeriodData());
+    async created(){
+      this.insertData = await getUserPeriodData();
       
     }
   }
