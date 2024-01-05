@@ -60,8 +60,8 @@ export async function getAllUserPeriodData() {
 
             const n1 = Math.ceil((startTotalMinutes - 8 * 60) / 60);
             const n2 = Math.ceil((endTotalMinutes - 8 * 60) / 60);
-            const day = new Date("2024-01-04T03:24:00.000Z");
-            const n3 = day.getDay(); // 返回 1 (星期一)
+            const day = new Date(item.period.startPeriod); //修正
+            const n3 = day.getDay(); 
 
             //console.log(n1);
             //console.log(n2);
@@ -151,9 +151,8 @@ export async function getAllEnablePeriodData() { // 跟後端拿全部教室的�
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
             },
-            body: JSON.stringify({}),
+            credentials: 'include',
         });
 
         if (!response.ok) {
@@ -161,6 +160,7 @@ export async function getAllEnablePeriodData() { // 跟後端拿全部教室的�
         }
 
         const data = await response.json();
+        console.log(data)
         return data;
     } catch (error) {
         console.error(error);
