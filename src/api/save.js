@@ -71,29 +71,36 @@ userAccount: <string>
 */
 
 export async function getAllSave() { // user的全部收藏
-    try {
-        const account = JSON.parse(localStorage.getItem('loggedInAccount'));
-        const response = await fetch('https://qiuye.mooo.com/api/app/getAllSave', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify({ account }),
-        });
 
-        if (!response.ok) {
-            throw new Error('请求失败');
-        }
+    const account = JSON.parse(localStorage.getItem('loggedInAccount'));
+    const response = await fetch('https://qiuye.mooo.com/api/app/getAllSave', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ userAccount: account }),
+    });
 
-        const data = await response.json();
-        console.log(data);
-        return data;
-        
-    } catch (error) {
-        console.error(error);
-        throw error;
+    if (!response.ok) {
+        throw new Error('请求失败');
     }
+
+    const data = await response.json();
+
+    const arr = [];
+
+    // 遍歷 data 中的每個屬性
+    for (const key in data) {
+        // 檢查屬性值是否為 true
+        if (data[key] === true) {
+            // 如果是 true，將該鍵添加到 arr 中
+            arr.push(key);
+        }
+    }
+    console.log(arr);
+    return arr;
+
 
 }
 /*

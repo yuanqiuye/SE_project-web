@@ -1,14 +1,14 @@
 <template>
-  <data-table :insert-data="getinsertData()" />
+  <data-table :insert-data="insertData"/>
 </template>
 
 <script>
-import DataTable from "./other/DataTable.vue";
+import dataTable from "./other/DataTable.vue";
 import { getAllSave } from "@/api/save";
 
 export default {
   components: {
-    "data-table": DataTable
+    "data-table": dataTable
   },
   data() {
     return {
