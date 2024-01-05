@@ -93,17 +93,16 @@ export default {
     },
 
     async resetScheduleTable() {
-      
-      this.periodState = Array.from(Array(1 + 5), () => Array(config.periodTime.length + 1).fill(false));
+      var tmp = Array.from(Array(1 + 5), () => Array(config.periodTime.length + 1).fill(false));
 
       const enablePeriod = await getEnablePeriodData(this.classroomInfo.id);
       console.log('enablePeriod:', enablePeriod);
       if (enablePeriod) {
         for (const p of enablePeriod) {
-          for (let i = p.startPeriod; i <= p.endPeriod; i++) this.periodState[p.day][i] = true;
+          for (let i = p.startPeriod; i <= p.endPeriod; i++) tmp[p.day][i] = true;
         }
       }
-      
+      this.periodState = tmp;
       this.confirm.enable = false;
     },
 
