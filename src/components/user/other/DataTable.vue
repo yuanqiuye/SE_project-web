@@ -318,7 +318,7 @@
             alert(`${resultText}失敗 !`);
             break;
           default: // 未知錯誤
-            alert("未知錯誤");
+            alert(`${resultText}成功 !`);
             break;
         }
       },
