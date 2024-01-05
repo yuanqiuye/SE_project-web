@@ -72,7 +72,7 @@ userAccount: <string>
 
 export async function getAllSave() { // user的全部收藏
 
-    const account = JSON.parse(localStorage.getItem('loggedInAccount'));
+    const account = localStorage.getItem('loggedInAccount');
     const response = await fetch('https://qiuye.mooo.com/api/app/getAllSave', {
         method: 'POST',
         headers: {

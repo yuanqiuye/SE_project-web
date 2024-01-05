@@ -61,7 +61,7 @@ export async function getAllUserPeriodData() {
             const n1 = Math.ceil((startTotalMinutes - 8 * 60) / 60);
             const n2 = Math.ceil((endTotalMinutes - 8 * 60) / 60);
             const day = new Date(item.period.startPeriod); //修正
-            const n3 = day.getDay(); 
+            const n3 = day.getDay();
 
             //console.log(n1);
             //console.log(n2);
@@ -238,8 +238,8 @@ export async function sendApply(classroomID, selectedPeriod) {
 
         const data = await response.json();
         console.log(data.code)
-        if(data.code=="200") return 200;
-        else if(data.code=="400") return 400;
+        if (data.code == "200") return 200;
+        else if (data.code == "400") return 400;
     } catch (error) {
         console.error('There has been a problem with your fetch operation:', error);
         throw error;
@@ -467,15 +467,23 @@ export async function rejectRequest(pid) { // 拒絕一個時段申請 (admin)
 
 export async function getAllUserPoint() { // 獲取所有的user的計點狀況 (admin)
     try {
-        const response = await fetch('https://qiuye.mooo.com/api/app/getAllUserPoint'); // 替换为实际的 API 地址
+        const response = await fetch('https://qiuye.mooo.com/api/app/getAllUserPoint', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({}),
+        });
+
         if (!response.ok) {
-            throw new Error('请求失败');
+            throw new Error('Network response was not ok');
         }
 
-        const userPoints = await response.json();
-        return userPoints;
+        const data = await response.json();
+        return data;
     } catch (error) {
-        console.error('獲取計點狀況失败', error);
+        console.error('There has been a problem with your fetch operation:', error);
         throw error;
     }
 }
@@ -483,12 +491,10 @@ export async function getAllUserPoint() { // 獲取所有的user的計點狀況 
 export async function getUserPoint(userAccount) { // 獲取user的記點狀況 (admin)
     // 可修改區 start
     try {
-        const response = await fetch('https://qiuye.mooo.com/api/auth/getUserPoint', {
+        const response = await fetch('https://qiuye.mooo.com/api/app/getUserPoint', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
-                'Access-Control-Allow-Origin': '*',
             },
             credentials: 'include',
             body: JSON.stringify({ account: userAccount }),
@@ -514,10 +520,9 @@ export async function getUserPoint(userAccount) { // 獲取user的記點狀況 (
     <int>違規點數
 */
 //async
-export async function setUserPoint(account, point) { // 修改user的記點狀況 (admin)
-    // 可修改區 start
+export async function setUserPoint(account, point) {
     try {
-        const response = await fetch('https://qiuye.mooo.com/api/auth/setUserPoint', {
+        const response = await fetch('https://qiuye.mooo.com/api/app/setUserPoint', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -527,16 +532,16 @@ export async function setUserPoint(account, point) { // 修改user的記點狀�
         });
 
         if (!response.ok) {
-            throw new Error('请求失败');
+            throw new Error(`请求失败，状态码: ${response.status}`);
         }
 
         return response.status;
     } catch (error) {
-        console.error('设置用户计分数据失败', error);
+        console.error('设置用户计分数据失败', error.message || error);
         throw error;
     }
-    // 可修改區 end
 }
+
 /*
   input:
     account: <string>學號(帳號)
@@ -550,7 +555,7 @@ export async function setUserPoint(account, point) { // 修改user的記點狀�
 export async function setUserBanState(account, state) {
     // 可修改區 start
     try {
-        const response = await fetch('https://qiuye.mooo.com/api/auth/setUserBanState', {
+        const response = await fetch('https://qiuye.mooo.com/api/app/setUserBanState', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -143,7 +143,7 @@
               alert(`修改失敗 !`);
               break;
             default: // 未知錯誤
-              alert("未知錯誤");
+              alert("修改成功 !");
               break;
           }
         }
@@ -163,7 +163,7 @@
             alert(`${resultText}失敗 !`);
             break;
           default: // 未知錯誤
-            alert("未知錯誤");
+            alert(`${resultText}成功 !`);
             break;
         }
       },
