@@ -191,8 +191,9 @@ export default {
       if (this.sDP.startPeriod == this.sDP.endPeriod) this.confirm.period = startPeriod;
       else this.confirm.period = `${startPeriod}~${endPeriod}`;
     },
-    clickApplyButton() { // 按下申請按鈕
-      const returnCode = sendApply(this.classroomInfo.id, this.sDP);
+    async clickApplyButton() { // 按下申請按鈕
+      const returnCode =await sendApply(this.classroomInfo.id, this.sDP);
+      console.log(returnCode)
       switch (returnCode) {
         case 200:
           alert("申請成功 !\n請至借用紀錄頁面查看最新狀態，管理員將盡速審核你的請求。\n鑰匙歸還期限為借用日後一日系辦關門前。");
