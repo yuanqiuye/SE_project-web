@@ -27,11 +27,13 @@ export default {
         for (let i = p.startPeriod; i <= p.endPeriod; i++) periodState[p.day][i] = true;
       }
 
+
       const allUserPeriodData = await getAllUserPeriodData(); // 使用 await 等待函數完成
 
       for (const p of Object.values(allUserPeriodData)) {
         if (p.classroomID == classroomID && (p.status == 2 || p.status == 3)) {
           for (let i = p.period.startPeriod; i <= p.period.endPeriod; i++) periodState[p.period.day][i] = false;
+
         }
       }
 

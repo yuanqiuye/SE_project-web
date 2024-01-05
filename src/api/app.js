@@ -253,6 +253,7 @@ export async function deletePeriodData(pid) { // 刪除特定狀態的借用紀�
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -288,6 +289,7 @@ export async function LendKey(pid) { // 借出鑰匙 (admin)
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -323,6 +325,7 @@ export async function ReceiveKey(pid) { // 收到歸還的鑰匙 (admin)
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -358,6 +361,7 @@ export async function acceptRequest(pid) { // 接受一個時段申請 (admin)
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -393,6 +397,7 @@ export async function rejectRequest(pid) { // 拒絕一個時段申請 (admin)
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ pid }),
         });
 
@@ -477,6 +482,7 @@ export async function setUserPoint(account, point) { // 修改user的記點狀�
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ account, point }),
         });
 
@@ -510,6 +516,7 @@ export async function setUserBanState(account, state) {
                 'Content-Type': 'application/json',
                 'Origin': 'Origin',
             },
+            credentials: 'include',
             body: JSON.stringify({ account, state }),
         });
 
