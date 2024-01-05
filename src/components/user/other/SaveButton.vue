@@ -25,7 +25,7 @@
         this.isSave = !this.isSave;
         if (this.isSave) addSave(this.classroomID);
         else removeSave(this.classroomID);
-        window.location.reload(); // force reload
+        this.isSave = await getIsSave(this.classroomID);
       }
     },
     watch: {

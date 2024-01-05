@@ -205,7 +205,6 @@ export default {
           break;
       }
       this.resetsDP(); // 重設選取的時段
-      window.location.reload(); //force reload
     }
   },
   watch: {
