@@ -10,9 +10,9 @@
     components: {
       "user-info-table": userInfoTable
     },
-    data(){
+    async data(){
       return {
-        insertData: getAllUserPoint()
+        insertData: await getAllUserPoint()
       }
     }
   }
