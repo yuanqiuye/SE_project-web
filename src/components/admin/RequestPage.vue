@@ -26,7 +26,7 @@ export default {
 
       for (let p of dataArray) {
         p.account = p.pid.slice(0, p.pid.indexOf("-"));
-        if (p.status >= 2 && p.status <= 5) this.insertData.push(p);
+        if (p.status >= 0 && p.status <= 5) this.insertData.push(p);
       }
     } catch (error) {
       console.error('Error fetching user period data:', error);
