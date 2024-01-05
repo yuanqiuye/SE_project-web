@@ -131,10 +131,10 @@
       plusPointButton(){ // 增加點數
         if (this.editingPoint.point < 10) this.editingPoint.point++;
       },
-      confirmPointButton(){ // 確認修改按鈕
+      async confirmPointButton(){ // 確認修改按鈕
         const result = window.confirm(`是否要修改違規點數 ?`); // 彈出式確認框
         if (result){
-          const returnCode = setUserPoint(this.editingPoint.account, this.editingPoint.point); // 執行指定的 api function
+          const returnCode = await setUserPoint(this.editingPoint.account, this.editingPoint.point); // 執行指定的 api function
           switch (returnCode){
             case 200: // api操作執行成功
               alert(`修改成功 !`);
@@ -150,11 +150,11 @@
         this.editingPoint.account = null; // 重置
       },
       
-      runConfirmDialog(questionText, resultText, f_ban, account, state){ // 自定義彈出式確認框
+      async runConfirmDialog(questionText, resultText, f_ban, account, state){ // 自定義彈出式確認框
         const result = window.confirm(`${questionText} ?`); // 彈出式確認框
         if (!result) return; // 按下取消就不執行 api
         
-        const returnCode = f_ban(account, state); // 執行指定的 api function
+        const returnCode = await f_ban(account, state); // 執行指定的 api function
         switch (returnCode){
           case 200: // api操作執行成功
             alert(`${resultText}成功 !`);

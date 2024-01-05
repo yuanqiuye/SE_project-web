@@ -369,13 +369,11 @@ export async function sendApply(classroomID, selectedPeriod) {
 */
 
 export async function cancelApply(pid) {
-    pid
     try {
         const response = await fetch(`https://qiuye.mooo.com/api/app/cancelApply`, {
             method: 'POST', // 假设取消申请是一个DELETE请求
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
             },
             credentials: 'include',
             body: JSON.stringify({ pid }),
@@ -518,10 +516,10 @@ export async function acceptRequest(pid) { // 接受一個時段申請 (admin)
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
             },
             credentials: 'include',
             body: JSON.stringify({ pid }),
+            credentials: 'include',
         });
 
         if (!response.ok) {
@@ -554,7 +552,6 @@ export async function rejectRequest(pid) { // 拒絕一個時段申請 (admin)
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
             },
             credentials: 'include',
             body: JSON.stringify({ pid }),
@@ -644,7 +641,6 @@ export async function setUserPoint(account, point) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
             },
             credentials: 'include',
             body: JSON.stringify({ account, point }),
@@ -654,7 +650,7 @@ export async function setUserPoint(account, point) {
             throw new Error(`请求失败，状态码: ${response.status}`);
         }
 
-        return response.status;
+        return 200;
     } catch (error) {
         console.error('设置用户计分数据失败', error.message || error);
         throw error;
@@ -678,7 +674,6 @@ export async function setUserBanState(account, state) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Origin': 'Origin',
             },
             credentials: 'include',
             body: JSON.stringify({ account, state }),
