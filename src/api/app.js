@@ -84,15 +84,22 @@ export async function getAllUserPeriodData() {
 
             const daystart = new Date(start);
             const dateend = new Date(end);
+            // console.log("分鐘" + dateend.getMinutes())
+            var n = 0;
+            if (dateend.getMinutes() == 55) {
+                n = 9;
+            } else {
+                n = dateend.getHours() - 8;
 
+            }
             // 創建新的 period 物件
             const newPeriod = {
                 "day": daystart.getDay(), // 星期幾，這裡是示範值，根據實際情況調整
                 "startPeriod": daystart.getHours() - 7, // 開始時間
-                "endPeriod": dateend.getHours() - 8 // 結束時間
+                "endPeriod": n // 結束時間
             };
-
-            // 將新的 period 物件替換原來的 period
+            console.log(dateend.getMinutes())
+                // 將新的 period 物件替換原來的 period
             item.period = newPeriod;
             return item;
         });
