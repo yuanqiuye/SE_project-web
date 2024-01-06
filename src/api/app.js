@@ -307,7 +307,7 @@ export async function sendApply(classroomID, selectedPeriod) {
     // console.log(selectedPeriod.day, selectedPeriod.startPeriod, selectedPeriod.endPeriod)
     const result = convertToTimeString(selectedPeriod.day, selectedPeriod.startPeriod, selectedPeriod.endPeriod);
     const apiUrl = 'https://qiuye.mooo.com/api/app/sendApply';
-    const account = JSON.parse(localStorage.getItem('loggedInAccount'));
+    const account = localStorage.getItem('loggedInAccount');
     selectedPeriod = result;
     console.log(selectedPeriod);
     try {
