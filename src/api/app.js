@@ -277,7 +277,7 @@ function convertToTimeString(day, startPeriod, endPeriod) {
     currentMonday.setDate(baseDate.getDate() - daysUntilMonday);
     baseDate = new Date(baseDate);
 
-    if (currentDayOfWeek == 6 || currentDayOfWeek == 7) {
+    if (currentDayOfWeek == 6 || currentDayOfWeek == 0) {
         baseDate.setDate(currentMonday.getDate() + day + 6);
     } else baseDate.setDate(currentMonday.getDate() + day - 1);
     // 计算给定 day、startPeriod 和 endPeriod 对应的时间

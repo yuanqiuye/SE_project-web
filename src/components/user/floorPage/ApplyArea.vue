@@ -135,6 +135,17 @@ export default {
         }
         // 更新狀態表(被自己借用)
 
+        const nowDate = new Date();
+        const nowWeekDay = nowDate.getDay();
+        if(nowWeekDay >= 1 && nowWeekDay <= 5){
+          for(let i = 1; i <= nowWeekDay; i++){
+            for(let j = 1; j <= 9; j++){
+              this.periodState[i][j] = 100;
+            }
+          }
+        }
+        // 更新狀態表(超過時間)
+
         for (let day = 1; day <= 5; day++) { // 依照狀態表,幫表格塗色
           for (let period = 1; period <= this.periodTime.length; period++) {
             this.setCellBgColor(day, period, colorTable[this.periodState[day][period]]);
